@@ -3,6 +3,7 @@
 
     <corners android:radius="@dimen/dip_10"/>
     <gradient android:startColor="@color/colorText"
+
         android:endColor="@color/colorPrimary"/>
 
 </shape>
