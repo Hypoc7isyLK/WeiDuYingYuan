@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.FocusActivity">
+    android:layout_height="match_parent">
 
     <RadioGroup
+        android:id="@+id/mine_radio"
         android:layout_width="@dimen/dp_200"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp_20"
@@ -44,5 +44,11 @@
             android:text="影院"/>
 
     </RadioGroup>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mine_radio"
+        android:layout_margin="@dimen/dp_20"></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
