@@ -21,6 +21,9 @@ public class MineProfileActivity extends BaseActivity {
 
     }
     @OnClick(R.id.back)
+    public void Back(){
+        finish();
+    }
     @Override
     protected void destoryData() {
 

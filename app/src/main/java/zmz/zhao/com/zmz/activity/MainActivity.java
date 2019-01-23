@@ -51,6 +51,9 @@ public class MainActivity extends BaseActivity {
 
 
         if (time != 0) {
+            AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+            alphaAnimation.setDuration(3500);
+            main.startAnimation(alphaAnimation);
             handler.sendEmptyMessageDelayed(0, 1000);
         }
     }
