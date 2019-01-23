@@ -1,5 +1,7 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -45,28 +47,30 @@ public class IntroductionActivity extends BaseActivity {
         for (int i = 0; i < a.length - 1; i++) {
             View view = View.inflate(getBaseContext(), R.layout.activity_introduction_item, null);
             ImageView imageView = view.findViewById(R.id.introd_image);
+            //添加图片
             imageView.setImageResource(a[i]);
             TextView textViewTop = view.findViewById(R.id.introd_textTop);
             textViewTop.setText("一场电影");
             TextView textViewButtom = view.findViewById(R.id.introd_textBottom);
+            //添加文字
             textViewButtom.setText(text[i]);
             views.add(view);
         }
-
+        //获取最后一张布局
         View viewclick = View.inflate(getBaseContext(), R.layout.activity_introduction_item_click, null);
 
         ImageView imageView = viewclick.findViewById(R.id.introd_image);
-
+        //添加图片
         imageView.setImageResource(a[3]);
 
         TextView textViewTop = viewclick.findViewById(R.id.introd_textTop);
 
         TextView textViewButtom = viewclick.findViewById(R.id.introd_textBottom);
-
+        //添加文字
         textViewTop.setText("八维移动通信学院作品");
 
         textViewButtom.setText(text[3]);
-
+        //将布局添加到集合
         views.add(viewclick);
 
         viewPager.setAdapter(new PagerAdapter() {
@@ -138,7 +142,31 @@ public class IntroductionActivity extends BaseActivity {
 
             }
         });
+        viewclick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(IntroductionActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
+        saveData();
+
+    }
+
+    private void saveData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("lk",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        boolean x = sharedPreferences.getBoolean("x",false);
+        if (x) {
+            startActivity(new Intent(IntroductionActivity.this, MainActivity.class));
+            finish();
+        }else {
+            editor.putBoolean("x", true);
+            editor.commit();
+        }
     }
 
     @Override
