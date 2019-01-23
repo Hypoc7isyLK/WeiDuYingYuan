@@ -2,6 +2,7 @@ package zmz.zhao.com.zmz.activity;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 
@@ -47,6 +48,8 @@ public class HomeActivity extends BaseActivity {
                 switch (checkedId) {
                     //主页
                     case R.id.homePage:
+                        AlphaAnimation alphaAnimation = new AlphaAnimation(2.0f, 0.0f);
+
                         FragmentTransaction transaction1 = manager.beginTransaction();
                         transaction1.replace(R.id.frame,homeFragment);
                         transaction1.commit();
