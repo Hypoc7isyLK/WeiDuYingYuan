@@ -15,11 +15,13 @@
         <RadioButton
             android:id="@+id/mine_movie"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_30"
             android:layout_weight="5"
-            android:padding="@dimen/dp_8"
+            android:padding="@dimen/dp_5"
             android:gravity="center"
             android:button="@null"
+            android:checked="true"
+            android:background="@drawable/mine_radio_btn"
             android:textSize="@dimen/sp_14"
             android:text="电影"/>
         <RadioButton
@@ -32,13 +34,14 @@
         <RadioButton
             android:id="@+id/mine_cinema"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dp_8"
+            android:layout_height="@dimen/dp_30"
+            android:background="@drawable/mine_radio_btn"
+            android:padding="@dimen/dp_5"
             android:layout_weight="5"
             android:gravity="center"
             android:button="@null"
             android:textSize="@dimen/sp_14"
-            android:text="电影"/>
+            android:text="影院"/>
 
     </RadioGroup>
 

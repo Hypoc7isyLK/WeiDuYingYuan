@@ -3,6 +3,7 @@
 
     <corners android:radius="@dimen/dp_4" />
     <gradient
+        android:type="linear"
         android:endColor="#440a33"
         android:startColor="#e8179e" />
 </shape>
