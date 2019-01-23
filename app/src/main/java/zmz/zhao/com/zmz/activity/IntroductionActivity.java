@@ -89,6 +89,7 @@ public class IntroductionActivity extends BaseActivity {
             public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
                 View view1 = views.get(position);
+
                 container.addView(view1);
 
                 return view1;
@@ -156,17 +157,13 @@ public class IntroductionActivity extends BaseActivity {
     }
 
     private void saveData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("lk",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("movie", MODE_PRIVATE);
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        boolean x = sharedPreferences.getBoolean("x",false);
-        if (x) {
-            startActivity(new Intent(IntroductionActivity.this, MainActivity.class));
-            finish();
-        }else {
-            editor.putBoolean("x", true);
-            editor.commit();
-        }
+        editor.putBoolean("flag", true);
+
+        editor.commit();
     }
 
     @Override
