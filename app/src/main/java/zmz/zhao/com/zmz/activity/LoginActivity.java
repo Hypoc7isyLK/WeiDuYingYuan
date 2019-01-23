@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +85,11 @@ public class LoginActivity extends BaseActivity {
     private class LoginCall implements DataCall<Result<LoginBean>> {
         @Override
         public void success(Result<LoginBean> result) {
+            if (result.getStatus().equals("0000")){
+                Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
         }
 

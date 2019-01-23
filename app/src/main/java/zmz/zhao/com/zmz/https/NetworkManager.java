@@ -10,8 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkManager {
 
-    private String INSIDE_BASE_URL = "http://172.17.8.100/small/";
-    private String OUTSIDE_BASE_URL = "http://mobile.bwstudent.com/small/";
+    private String INSIDE_BASE_URL = "http://172.17.8.100/movieApi/";
+    private String OUTSIDE_BASE_URL = "http://mobile.bwstudent.com/movieApi/";
     private static NetworkManager instance;
     private Retrofit retrofit;
 
