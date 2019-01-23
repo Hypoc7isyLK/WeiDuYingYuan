@@ -14,11 +14,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bw.movie.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import zmz.zhao.com.zmz.R;
 import zmz.zhao.com.zmz.activity.BaseActivity;
 
 public class IntroductionActivity extends BaseActivity {

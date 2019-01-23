@@ -7,8 +7,9 @@ import android.os.Message;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
+import com.bw.movie.R;
+
 import butterknife.BindView;
-import zmz.zhao.com.zmz.R;
 
 public class MainActivity extends BaseActivity {
 

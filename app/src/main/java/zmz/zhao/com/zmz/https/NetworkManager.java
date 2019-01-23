@@ -30,7 +30,8 @@ public class NetworkManager {
     }
 
     private void init() {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .writeTimeout(20, TimeUnit.SECONDS)

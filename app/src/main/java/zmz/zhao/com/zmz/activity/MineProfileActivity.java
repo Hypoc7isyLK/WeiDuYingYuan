@@ -1,7 +1,9 @@
 package zmz.zhao.com.zmz.activity;
 
+import com.bw.movie.R;
+
 import butterknife.OnClick;
-import zmz.zhao.com.zmz.R;
+
 
 /**
  * date:2019/1/23

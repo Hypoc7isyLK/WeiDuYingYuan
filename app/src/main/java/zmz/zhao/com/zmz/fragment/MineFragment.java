@@ -2,7 +2,8 @@ package zmz.zhao.com.zmz.fragment;
 
 import android.view.View;
 
-import zmz.zhao.com.zmz.R;
+import com.bw.movie.R;
+
 
 public class MineFragment extends BaseFragment{
     @Override

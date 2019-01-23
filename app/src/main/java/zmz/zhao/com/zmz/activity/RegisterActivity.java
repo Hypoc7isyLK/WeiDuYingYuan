@@ -1,22 +1,27 @@
 package zmz.zhao.com.zmz.activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Point;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bw.movie.R;
+
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import zmz.zhao.com.zmz.R;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.RegisterPresenter;
@@ -70,11 +75,12 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
-
-
+        initData();
     }
 
-        public static double getScreenInch(Activity context) {
+
+
+    public static double getScreenInch(Activity context) {
             if (mInch != 0.0d) {
                 return mInch;
             }
@@ -133,6 +139,7 @@ public class RegisterActivity extends BaseActivity {
         }else if (edgender.equals("女")){
             nan = 2;
         }else {
+            nan = 1;
             Toast.makeText(this, "请重新输入男或女", Toast.LENGTH_SHORT).show();
         }
         Log.e("lk","name"+edname);
@@ -174,5 +181,49 @@ public class RegisterActivity extends BaseActivity {
         public void fail(ApiException e) {
 
         }
+    }
+
+    private void initData() {
+        edittextData.setInputType(InputType.TYPE_NULL); //不显示系统输入键盘
+        edittextData.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // TODO Auto-generated method stub
+                if(hasFocus){
+                    Calendar c = Calendar.getInstance();
+                    new DatePickerDialog(RegisterActivity.this, new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            // TODO Auto-generated method stub
+                            edittextData.setText(year+"/"+(monthOfYear+1)+"/"+dayOfMonth);
+                        }
+                    }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+
+                }
+            }
+        });
+
+        edittextData.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Calendar c = Calendar.getInstance();
+                new DatePickerDialog(RegisterActivity.this, new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        edittextData.setText(year+"/"+(monthOfYear+1)+"/"+dayOfMonth);
+                    }
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+
+            }
+        });
+
+
+
     }
 }

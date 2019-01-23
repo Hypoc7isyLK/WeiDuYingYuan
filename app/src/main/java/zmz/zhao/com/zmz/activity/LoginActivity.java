@@ -11,9 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bw.movie.R;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import zmz.zhao.com.zmz.R;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
@@ -80,13 +81,13 @@ public class LoginActivity extends BaseActivity {
         mLoginPresenter.reqeust(edphone,jiaedpwd);
     }
 
-
-
     private class LoginCall implements DataCall<Result<LoginBean>> {
         @Override
         public void success(Result<LoginBean> result) {
             if (result.getStatus().equals("0000")){
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+                finish();
             }else {
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
             }
