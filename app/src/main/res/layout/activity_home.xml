@@ -24,13 +24,15 @@
             android:id="@+id/homePage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center"
             android:button="@null"
-            android:drawableTop="@mipmap/com_icon_film_fault"/>
+            android:drawableTop="@drawable/sele_homepage"/>
         <RadioButton
             android:id="@+id/homeMovie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center"
             android:button="@null"
             android:drawableTop="@mipmap/com_icon_film_fault"/>
@@ -38,6 +40,7 @@
             android:id="@+id/mine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center"
             android:button="@null"
             android:drawableTop="@mipmap/com_icon_film_fault"/>
