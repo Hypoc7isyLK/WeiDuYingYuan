@@ -28,7 +28,7 @@ public class MainActivity extends BaseActivity {
                 boolean flag = sharedPreferences.getBoolean("flag", false);
 
                 if (flag){
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                     return;
                 }

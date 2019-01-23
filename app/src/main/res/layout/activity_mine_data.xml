@@ -17,14 +17,6 @@
                 android:id="@+id/minetext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/mine_quit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_10"
-                    android:layout_margin="@dimen/dp_10"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/common_nav_btn_back_r"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
