@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/dp_10"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_10"
+    android:background="@drawable/sele_entry_circular"
+    android:fitsSystemWindows="true">
+
+    <ImageView
+        android:id="@+id/movie_image"
+        android:layout_width="@dimen/dp_103"
+        android:layout_height="@dimen/dp_128"
+        android:layout_margin="@dimen/dp_10"
+        android:src="@mipmap/ic_launcher_round"/>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="铁血战士"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/colorTextColor"
+        android:layout_toRightOf="@+id/movie_image"
+        android:padding="@dimen/dp_5"/>
+    <TextView
+        android:id="@+id/movie_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/movie_image"
+        android:textColor="@color/colorTextColor"
+        android:padding="@dimen/dp_5"
+        android:maxLines="5"
+        android:ellipsize="end"
+        android:textSize="@dimen/sp_12"
+        android:layout_below="@+id/title"
+        android:text="00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/movie_image"
+        android:textColor="@color/colorTextColor"
+        android:padding="@dimen/dp_5"
+        android:textSize="@dimen/sp_12"
+        android:layout_below="@+id/movie_text"
+        android:text="2019.1.11"/>
+</RelativeLayout>

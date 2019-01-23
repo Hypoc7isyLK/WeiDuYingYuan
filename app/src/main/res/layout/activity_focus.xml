@@ -45,10 +45,22 @@
 
     </RadioGroup>
 
-    <android.support.v7.widget.RecyclerView
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/movie_recycle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/mine_radio"
-        android:layout_margin="@dimen/dp_20"></android.support.v7.widget.RecyclerView>
+        android:layout_margin="@dimen/dp_20">
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/cinema_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mine_radio"
+        android:layout_margin="@dimen/dp_20">
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
 </RelativeLayout>
