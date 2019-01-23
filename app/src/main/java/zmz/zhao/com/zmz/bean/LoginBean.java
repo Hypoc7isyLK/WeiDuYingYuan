@@ -37,35 +37,35 @@ public class LoginBean {
 
     public static class UserInfoBean {
 
-        private long birthday;
-        private int id;
-        private long lastLoginTime;
+        private String birthday;
+        private String id;
+        private String lastLoginTime;
         private String nickName;
         private String phone;
-        private int sex;
+        private String sex;
         private String headPic;
 
-        public long getBirthday() {
+        public String getBirthday() {
             return birthday;
         }
 
-        public void setBirthday(long birthday) {
+        public void setBirthday(String birthday) {
             this.birthday = birthday;
         }
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 
-        public long getLastLoginTime() {
+        public String getLastLoginTime() {
             return lastLoginTime;
         }
 
-        public void setLastLoginTime(long lastLoginTime) {
+        public void setLastLoginTime(String lastLoginTime) {
             this.lastLoginTime = lastLoginTime;
         }
 
@@ -85,11 +85,11 @@ public class LoginBean {
             this.phone = phone;
         }
 
-        public int getSex() {
+        public String getSex() {
             return sex;
         }
 
-        public void setSex(int sex) {
+        public void setSex(String sex) {
             this.sex = sex;
         }
 

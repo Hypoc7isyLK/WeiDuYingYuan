@@ -1,7 +1,11 @@
 package zmz.zhao.com.zmz.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,11 +16,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.greendao.gen.UserDaoDao;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import zmz.zhao.com.zmz.app.MyApplication;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.LoginPresenter;
 import zmz.zhao.com.zmz.util.EncryptUtil;
@@ -43,9 +53,30 @@ public class LoginActivity extends BaseActivity {
     private String edphone;
     private String edpwd;
     private String jiaedpwd;
+    private boolean isHideFirst;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor mEdit;
+    private UserDaoDao mUserDaoDao;
+    private UserDao mUserDao;
+    private List<UserDao> mUserDaos;
+    private boolean iszd;
+
 
     @Override
     protected int getLayoutId() {
+
+        UserDaoDao userDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
+        List<UserDao> userDaos = userDaoDao.loadAll();
+
+                if(userDaos.size()>0) {
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
+                }
+
+
+
+
         return R.layout.activity_login;
     }
 
@@ -64,31 +95,102 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initData() {
+        sharedPreferences = getSharedPreferences("lk", MODE_PRIVATE);
+        mEdit = sharedPreferences.edit();
+        iszd = sharedPreferences.getBoolean("iszd", false);
+        /*if (iszd){
+
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                finish();
+            *//**
+             * 有问题
+             *//*
+
+        }*/
+        boolean ismain_check_remember = sharedPreferences.getBoolean("isjzmm", false);
+        String username = sharedPreferences.getString("phone", "");
+        String password = sharedPreferences.getString("pwd", "");
+        if (ismain_check_remember) {
+            checkRemember.setChecked(true);
+            edittextPhone.setText(username);
+            edittextPwd.setText(password);
+        }
+
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
             }
         });
+
     }
 
     private void login() {
         edphone = edittextPhone.getText().toString().trim();
         edpwd = edittextPwd.getText().toString().trim();
         jiaedpwd = EncryptUtil.encrypt(edpwd);
-        Log.e("lk","加密"+jiaedpwd);
+        Log.e("lk", "加密" + jiaedpwd);
+
+        if (checkRemember.isChecked()) {
+            mEdit.putString("phone", edphone);
+            mEdit.putString("pwd", edpwd);
+            mEdit.putBoolean("isjzmm", true);
+            mEdit.commit();
+        }else {
+            mEdit.putString("phone", "");
+            mEdit.putString("pwd", "");
+            mEdit.putBoolean("isjzmm", false);
+            mEdit.commit();
+        }
+        if (checkAutologin.isChecked()){
+            mEdit = sharedPreferences.edit();
+            mEdit.putBoolean("iszd", true);
+            mEdit.commit();
+        }
         mLoginPresenter = new LoginPresenter(new LoginCall());
-        mLoginPresenter.reqeust(edphone,jiaedpwd);
+        mLoginPresenter.reqeust(edphone, jiaedpwd);
+    }
+
+
+
+    @OnClick(R.id.imageview_click)
+    public void onViewClicked() {
+        if (isHideFirst) {
+            //密文
+            HideReturnsTransformationMethod method1 = HideReturnsTransformationMethod.getInstance();
+            edittextPwd.setTransformationMethod(method1);
+            isHideFirst = false;
+            imageviewClick.setImageResource(R.mipmap.biyan);
+        } else {
+            //密文
+            TransformationMethod method = PasswordTransformationMethod.getInstance();
+            edittextPwd.setTransformationMethod(method);
+            isHideFirst = true;
+            imageviewClick.setImageResource(R.mipmap.log_icon_eye_default);
+        }
+        // 光标的位置
+        int index = edittextPwd.getText().toString().length();
+        edittextPwd.setSelection(index);
     }
 
     private class LoginCall implements DataCall<Result<LoginBean>> {
+
+        private LoginBean mResult;
+
         @Override
         public void success(Result<LoginBean> result) {
-            if (result.getStatus().equals("0000")){
+            if (result.getStatus().equals("0000")) {
+                mResult = result.getResult();
+                mUserDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
+                mUserDao = new UserDao(result.getResult().getSessionId(), mResult.getUserId(), mResult.getUserInfo().getBirthday(), mResult.getUserInfo().getHeadPic(), mResult.getUserInfo().getId(), mResult.getUserInfo().getLastLoginTime(), mResult.getUserInfo().getNickName(), mResult.getUserInfo().getPhone(), mResult.getUserInfo().getSex());
+                mUserDaos = mUserDaoDao.loadAll();
+                mUserDaoDao.insert(mUserDao);
+
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();
-            }else {
+            } else {
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
@@ -99,6 +201,7 @@ public class LoginActivity extends BaseActivity {
 
         }
     }
+
     @Override
     protected void destoryData() {
         mLoginPresenter = null;

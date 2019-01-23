@@ -140,7 +140,7 @@ public class RegisterActivity extends BaseActivity {
             nan = 2;
         }else {
             nan = 1;
-            Toast.makeText(this, "请重新输入男或女", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "默认为男", Toast.LENGTH_SHORT).show();
         }
         Log.e("lk","name"+edname);
         Log.e("lk","name"+edgender+"变为"+nan);
