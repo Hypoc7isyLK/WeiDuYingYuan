@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
@@ -26,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
+            android:checked="true"
             android:button="@null"
             android:drawableTop="@drawable/sele_homepage"/>
         <RadioButton
@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:button="@null"
-            android:drawableTop="@mipmap/com_icon_film_fault"/>
+            android:drawableTop="@drawable/sele_movie"/>
         <RadioButton
             android:id="@+id/mine"
             android:layout_width="wrap_content"
@@ -43,8 +43,7 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:button="@null"
-            android:drawableTop="@mipmap/com_icon_film_fault"/>
-
+            android:drawableTop="@drawable/sele_mine_inage"/>
     </RadioGroup>
 
 </RelativeLayout>
