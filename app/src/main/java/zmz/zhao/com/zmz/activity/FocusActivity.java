@@ -3,7 +3,8 @@ package zmz.zhao.com.zmz.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import zmz.zhao.com.zmz.R;
+import com.bw.movie.R;
+
 
 public class FocusActivity extends AppCompatActivity {
 
