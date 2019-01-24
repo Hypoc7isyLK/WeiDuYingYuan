@@ -265,6 +265,13 @@
 
     </ScrollView>
 
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="@dimen/dp_58"
+        android:layout_height="@dimen/dp_58"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/dp_20"
+        android:src="@mipmap/com_back"/>
 
 </RelativeLayout>
 
