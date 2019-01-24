@@ -12,11 +12,13 @@ import android.widget.Adapter;
 import android.widget.RadioGroup;
 
 import com.bw.movie.R;
+import com.greendao.gen.DaoSession;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import zmz.zhao.com.zmz.adapter.MineMovieAdapter;
+import zmz.zhao.com.zmz.app.MyApplication;
 import zmz.zhao.com.zmz.bean.Attention;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
@@ -37,6 +39,8 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
     MineMoviePresenter moviePresenter;
     private MineMovieAdapter movieAdapter;
+    private int userId;
+    private String sessionId;
 
     @Override
     protected int getLayoutId() {
@@ -51,6 +55,8 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
     }
 
     private void initDataView() {
+        userId = USERDAO.getUserId();
+        sessionId = USERDAO.getSessionId();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -123,7 +129,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
             return;
         }
-        moviePresenter.reqeust(4634,"15482473651874634",true);
+        moviePresenter.reqeust(userId,sessionId,true);
     }
 
     @Override
@@ -134,7 +140,8 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
             return;
         }
-        moviePresenter.reqeust(4634,"15482473651874634",false);
+
+        moviePresenter.reqeust(userId,sessionId,false);
 
     }
 
