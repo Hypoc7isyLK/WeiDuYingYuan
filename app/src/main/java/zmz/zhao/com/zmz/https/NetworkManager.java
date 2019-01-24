@@ -41,7 +41,7 @@ public class NetworkManager {
 
         retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl(INSIDE_BASE_URL)
+                .baseUrl(OUTSIDE_BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

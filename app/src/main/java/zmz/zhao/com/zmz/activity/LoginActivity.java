@@ -70,8 +70,8 @@ public class LoginActivity extends BaseActivity {
         List<UserDao> userDaos = userDaoDao.loadAll();
 
                 if(userDaos.size()>0) {
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                    finish();
+                    //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    //finish();
                 }
 
 
@@ -184,11 +184,11 @@ public class LoginActivity extends BaseActivity {
                 mResult = result.getResult();
                 mUserDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
                 mUserDao = new UserDao(result.getResult().getSessionId(), mResult.getUserId(), mResult.getUserInfo().getBirthday(), mResult.getUserInfo().getHeadPic(), mResult.getUserInfo().getId(), mResult.getUserInfo().getLastLoginTime(), mResult.getUserInfo().getNickName(), mResult.getUserInfo().getPhone(), mResult.getUserInfo().getSex());
-                mUserDaos = mUserDaoDao.loadAll();
-                mUserDaoDao.insert(mUserDao);
+                mUserDaoDao.deleteAll();
 
+                mUserDaoDao.insertOrReplace(mUserDao);
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                startActivity(new Intent(LoginActivity.this, FocusActivity.class));
                 finish();
             } else {
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();

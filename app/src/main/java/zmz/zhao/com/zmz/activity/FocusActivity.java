@@ -13,7 +13,10 @@ import android.widget.RadioGroup;
 
 import com.bw.movie.R;
 import com.greendao.gen.DaoSession;
+import com.greendao.gen.UserDaoDao;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
@@ -21,6 +24,7 @@ import zmz.zhao.com.zmz.adapter.MineMovieAdapter;
 import zmz.zhao.com.zmz.app.MyApplication;
 import zmz.zhao.com.zmz.bean.Attention;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.MineMoviePresenter;
 import zmz.zhao.com.zmz.util.SpaceItemDecoration;
@@ -33,12 +37,14 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
     XRecyclerView movie_recycle;
 
     @BindView(R.id.cinema_recycle)
-    RecyclerView cinema_recycle;
+    XRecyclerView cinema_recycle;
     @BindView(R.id.mine_radio)
     RadioGroup mine_radio;
 
     MineMoviePresenter moviePresenter;
+
     private MineMovieAdapter movieAdapter;
+
     private int userId;
     private String sessionId;
 
@@ -49,21 +55,40 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
     @Override
     protected void initView() {
-        moviePresenter = new MineMoviePresenter(new MovieCall());
-        initData();
-        initDataView();
-    }
 
-    private void initDataView() {
-        userId = USERDAO.getUserId();
-        sessionId = USERDAO.getSessionId();
+        moviePresenter = new MineMoviePresenter(new MovieCall());
+        cinema_recycle.setVisibility(View.GONE);
+        UserDaoDao userDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
+
+        List<UserDao> userDaos = userDaoDao.loadAll();
+        if (userDaos != null && userDaos.size()>0){
+            UserDao userDao = userDaos.get(0);
+            userId = userDao.getUserId();
+            sessionId = userDao.getSessionId();
+        }
+
+        moviePresenter.reqeust(userId, sessionId, true);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        movie_recycle.addItemDecoration(new SpaceItemDecoration(R.dimen.dip_10));
+        movie_recycle.addItemDecoration(new SpaceItemDecoration(20));
 
         movie_recycle.setLayoutManager(linearLayoutManager);
-        movieAdapter = new MineMovieAdapter();
+
+        movieAdapter = new MineMovieAdapter(FocusActivity.this);
+
+        movie_recycle.setAdapter(movieAdapter);
+
+        initData();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        moviePresenter.reqeust(4634, sessionId, true);
     }
 
     private void initData() {
@@ -74,13 +99,13 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
                     cinema_recycle.setVisibility(View.GONE);//隐藏
                     movie_recycle.setVisibility(View.VISIBLE);//显示
-
+                    int width = movie_recycle.getMeasuredWidth();
                     //平移
-                    TranslateAnimation translateAnimation = new TranslateAnimation(-movie_recycle.getMeasuredWidth(), 0.0f, 0.0f, 0.0f);
-                    translateAnimation.setDuration(2000);
+                    TranslateAnimation translateAnimation = new TranslateAnimation(width, 0.0f, 0.0f, 0.0f);
+                    translateAnimation.setDuration(500);
                     //透明度
                     AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
-                    alphaAnimation.setDuration(2000);
+                    alphaAnimation.setDuration(1000);
                     //组合动画
                     AnimationSet animationSet = new AnimationSet(true);
                     animationSet.addAnimation(translateAnimation);
@@ -93,11 +118,11 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
                     movie_recycle.setVisibility(View.GONE);
 
                     //平移
-                    TranslateAnimation translateAnimation = new TranslateAnimation(-movie_recycle.getMeasuredWidth(), 0.0f, 0.0f, 0.0f);
-                    translateAnimation.setDuration(2000);
+                    TranslateAnimation translateAnimation = new TranslateAnimation(movie_recycle.getMeasuredWidth(), 0.0f, 0.0f, 0.0f);
+                    translateAnimation.setDuration(500);
                     //透明度
                     AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
-                    alphaAnimation.setDuration(2000);
+                    alphaAnimation.setDuration(1000);
                     //组合动画
                     AnimationSet animationSet = new AnimationSet(true);
                     animationSet.addAnimation(translateAnimation);
@@ -107,19 +132,20 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
                 }
             }
         });
-    }
 
-    @Override
-    protected void destoryData() {
-        moviePresenter.unBind();
     }
 
     /**
      * @作者 啊哈
-     * @date 2019/1/23
-     *
-     * "sessionId":"15482473651874634","userId":4634
+     * @date 2019/1/24
+     * <p>
+     * 交给基类统一释放
      */
+    @Override
+    protected void destoryData() {
+
+    }
+
 
     @Override
     public void onRefresh() {
@@ -129,7 +155,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
             return;
         }
-        moviePresenter.reqeust(userId,sessionId,true);
+        moviePresenter.reqeust(userId, sessionId, true);
     }
 
     @Override
@@ -141,18 +167,26 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
             return;
         }
 
-        moviePresenter.reqeust(userId,sessionId,false);
+        moviePresenter.reqeust(userId, sessionId, false);
 
     }
 
-    private class MovieCall implements DataCall<Result<Attention>> {
+    private class MovieCall implements DataCall<Result<List<Attention>>> {
 
         @Override
-        public void success(Result<Attention> result) {
+        public void success(Result<List<Attention>> result) {
             if (result.getStatus().equals("0000")) {
-                Attention attention = result.getResult();
 
+                if (moviePresenter.isResresh()) {
 
+                    movieAdapter.clearList();
+                }
+
+                List<Attention> attentions = result.getResult();
+
+                movieAdapter.addAll(attentions);
+
+                movieAdapter.notifyDataSetChanged();
             }
         }
 
