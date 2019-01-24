@@ -94,6 +94,7 @@ public class MineFragment extends BaseFragment {
                 mBuilder = new AlertDialog.Builder(getActivity());
                 mBuilder.setIcon(R.mipmap.ic_launcher);
                 mBuilder.setTitle("提示");
+                mBuilder.setMessage("确定要退出吗？");
                 mBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
