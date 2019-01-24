@@ -21,10 +21,8 @@ public abstract class BasePresenter {
         this.dataCall = dataCall;
     }
 
-    protected abstract Observable observable(Object... args);
-
-    @SuppressLint("CheckResult")
-    public void reqeust(Object... args) {
+    protected abstract Observable observable(Object...args);
+    public void reqeust(Object...args) {
 
         if (running ) {
             return;

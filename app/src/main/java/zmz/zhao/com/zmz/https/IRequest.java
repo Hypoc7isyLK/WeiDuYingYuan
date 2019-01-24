@@ -1,5 +1,7 @@
 package zmz.zhao.com.zmz.https;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -25,9 +27,9 @@ public interface IRequest {
 
     //我的关注
     @GET("movie/v1/verify/findMoviePageList")
-    Observable<Result<Attention>> attention(@Header("userId")int userId,
-                                            @Header("sessionId")String sessionId,
-                                            @Query("page")int page,
-                                            @Query("count")int count);
+    Observable<Result<List<Attention>>> attention(@Header("userId")int userId,
+                                                  @Header("sessionId")String sessionId,
+                                                  @Query("page")int page,
+                                                  @Query("count")int count);
 }
 

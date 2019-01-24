@@ -28,6 +28,7 @@
         <activity android:name="zmz.zhao.com.zmz.activity.RegisterActivity" />
         <activity android:name="zmz.zhao.com.zmz.activity.HomeActivity" />
         <activity android:name="zmz.zhao.com.zmz.activity.ChooseActivity"></activity>
+        <activity android:name="zmz.zhao.com.zmz.activity.FocusActivity"/>
     </application>
 
 </manifest>

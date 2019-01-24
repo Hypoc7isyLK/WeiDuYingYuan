@@ -1,5 +1,7 @@
 package zmz.zhao.com.zmz.presenter;
 
+import android.util.Log;
+
 import io.reactivex.Observable;
 import zmz.zhao.com.zmz.https.IRequest;
 import zmz.zhao.com.zmz.https.NetworkManager;
@@ -13,7 +15,7 @@ import zmz.zhao.com.zmz.view.DataCall;
 public class MineMoviePresenter extends BasePresenter{
 
     private int page = 1;
-    private int count = 5;
+    private int count = 10;
     private boolean isRefresh = true;
 
     public MineMoviePresenter(DataCall dataCall) {
@@ -22,7 +24,8 @@ public class MineMoviePresenter extends BasePresenter{
 
     @Override
     protected Observable observable(Object...args) {
-        isRefresh = (boolean) args[1];
+
+        isRefresh = (boolean) args[2];
 
         if (isRefresh) {
             page = 1;
@@ -31,7 +34,9 @@ public class MineMoviePresenter extends BasePresenter{
         }
         IRequest iRequest = NetworkManager.getInstance().create(IRequest.class);
 
-        return iRequest.attention((int)args[0],(String)args[1],page,10);
+        Log.e("zmz","====="+args[0]+"====="+args[1]);
+
+        return iRequest.attention((int)args[0],(String)args[1],page,count);
     }
     public boolean isResresh() {
 
