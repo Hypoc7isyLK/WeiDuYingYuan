@@ -44,15 +44,13 @@ public class MineMovieAdapter extends RecyclerView.Adapter<MineMovieAdapter.Mine
     @Override
     public void onBindViewHolder(@NonNull MineHolder holder, int i) {
         Attention attention = list.get(i);
-        Log.e("zmz","适配器"+attention);
+
         holder.simple.setImageURI(Uri.parse(attention.getImageUrl()));
         try {
             holder.date.setText(DateUtils.dateFormat(new Date(attention.getReleaseTime()),DateUtils.MINUTE_PATTERN));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Log.e("zmz","适配器"+attention.getName());
-        Log.e("zmz","适配器"+attention.getSummary());
         holder.movie_text.setText(attention.getSummary());
         holder.title.setText(attention.getName());
 

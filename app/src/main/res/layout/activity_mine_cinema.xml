@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_10"
+    android:background="@drawable/sele_entry_circular"
+    android:fitsSystemWindows="true"
+    android:padding="@dimen/dp_10">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/cinema_image"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_70"
+        android:layout_margin="@dimen/dp_10"/>
+
+    <TextView
+        android:id="@+id/cinema_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_toRightOf="@+id/cinema_image"
+        android:padding="@dimen/dp_5"
+        android:text="铁血战士"
+        android:textColor="@color/colorTextColor"
+        android:textSize="@dimen/sp_14" />
+
+    <TextView
+        android:id="@+id/cinema_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cinema_title"
+        android:layout_toRightOf="@+id/cinema_image"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:padding="@dimen/dp_5"
+        android:text="2019.1.11"
+        android:textColor="@color/colorTextColor"
+        android:textSize="@dimen/sp_12" />
+</RelativeLayout>

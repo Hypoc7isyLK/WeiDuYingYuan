@@ -188,7 +188,7 @@ public class LoginActivity extends BaseActivity {
 
                 mUserDaoDao.insertOrReplace(mUserDao);
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this, FocusActivity.class));
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();
             } else {
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
