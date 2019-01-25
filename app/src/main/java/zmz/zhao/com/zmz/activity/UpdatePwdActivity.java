@@ -1,6 +1,7 @@
 package zmz.zhao.com.zmz.activity;
 
 import android.content.Intent;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.bw.movie.R;
@@ -18,7 +19,7 @@ import zmz.zhao.com.zmz.view.DataCall;
 /**
  * date:2019/1/25 11:44
  * author:赵明珠(啊哈)
- * function:
+ * function:修改密码
  */
 public class UpdatePwdActivity extends BaseActivity {
 
@@ -45,6 +46,7 @@ public class UpdatePwdActivity extends BaseActivity {
         userid = USERDAO.getUserId();
 
         sessionId = USERDAO.getSessionId();
+        Log.e("zmz","=========="+sessionId);
         pwdPresenter = new UpdatePwdPresenter(new PwdCall());
     }
     @OnClick(R.id.updatePwd)
@@ -53,7 +55,7 @@ public class UpdatePwdActivity extends BaseActivity {
         String new_pwd = newpwd.getText().toString().trim();
         String current_pwd = current.getText().toString().trim();
 
-
+        Log.e("zmz","=========="+sessionId);
         pwdPresenter.reqeust(userid,sessionId,old_pwd,new_pwd,current_pwd);
     }
     @Override

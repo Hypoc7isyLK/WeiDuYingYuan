@@ -128,7 +128,7 @@ public interface IRequest {
      * @method:修改密码
      */
     @FormUrlEncoded
-    @POST("tool/v1/verify/recordFeedBack")
+    @POST("user/v1/verify/modifyUserPwd")
     Observable<Result> Updatepwd(@Header("userId") int userId,
                                  @Header("sessionId") String sessionId,
                                  @Field("oldPwd") String oldPwd,

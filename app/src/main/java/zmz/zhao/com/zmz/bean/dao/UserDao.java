@@ -2,6 +2,7 @@ package zmz.zhao.com.zmz.bean.dao;
 
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -13,7 +14,8 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class UserDao {
 
-
+    @Id(autoincrement = true)
+    private long DaoId;
     private String sessionId;
 
     private int userId;
@@ -35,10 +37,12 @@ public class UserDao {
     private boolean login_flag;
     private String pwd;
     private int status;
-    @Generated(hash = 718353972)
-    public UserDao(String sessionId, int userId, String birthday, String headPic,
-            String id, String lastLoginTime, String nickName, String phone,
-            String sex, boolean flag, boolean login_flag, String pwd, int status) {
+    @Generated(hash = 1543485709)
+    public UserDao(long DaoId, String sessionId, int userId, String birthday,
+            String headPic, String id, String lastLoginTime, String nickName,
+            String phone, String sex, boolean flag, boolean login_flag, String pwd,
+            int status) {
+        this.DaoId = DaoId;
         this.sessionId = sessionId;
         this.userId = userId;
         this.birthday = birthday;
@@ -55,6 +59,12 @@ public class UserDao {
     }
     @Generated(hash = 917059161)
     public UserDao() {
+    }
+    public long getDaoId() {
+        return this.DaoId;
+    }
+    public void setDaoId(long DaoId) {
+        this.DaoId = DaoId;
     }
     public String getSessionId() {
         return this.sessionId;
@@ -134,6 +144,5 @@ public class UserDao {
     public void setStatus(int status) {
         this.status = status;
     }
-
-
+    
 }
