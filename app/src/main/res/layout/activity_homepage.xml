@@ -46,6 +46,7 @@
         android:layout_marginTop="@dimen/dp_65"
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24">
+
     </recycler.coverflow.RecyclerCoverFlow>
 
 
