@@ -24,6 +24,7 @@ import zmz.zhao.com.zmz.activity.FocusActivity;
 import zmz.zhao.com.zmz.activity.LoginActivity;
 import zmz.zhao.com.zmz.activity.MainActivity;
 import zmz.zhao.com.zmz.activity.MineProfileActivity;
+import zmz.zhao.com.zmz.activity.MyOpinion;
 import zmz.zhao.com.zmz.app.MyApplication;
 
 
@@ -87,6 +88,8 @@ public class MineFragment extends BaseFragment {
             case R.id.my_goupiao:
                 break;
             case R.id.my_tickling:
+                Intent intent2 = new Intent(getContext(), MyOpinion.class);
+                startActivity(intent2);
                 break;
             case R.id.my_new_versions:
                 break;

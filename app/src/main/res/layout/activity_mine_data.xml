@@ -5,29 +5,45 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+
+    <RelativeLayout
+        android:id="@+id/minetext"
+        android:layout_width="match_parent"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:text="用户信息"/>
+
+
+        <TextView
+            android:id="@+id/update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:text="修改信息"/>
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/minetext">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:id="@+id/minetext"
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_10"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentTop="true"
-                    android:text="用户信息"/>
-
-            </RelativeLayout>
-
             <LinearLayout
                 android:id="@+id/data"
                 android:layout_width="match_parent"
@@ -38,7 +54,6 @@
                 android:paddingRight="@dimen/dp_10"
                 android:paddingBottom="-10dp"
                 android:orientation="vertical"
-                android:layout_below="@+id/minetext"
                 android:background="@drawable/sele_circular">
 
                 <RelativeLayout

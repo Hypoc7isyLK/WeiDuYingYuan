@@ -34,8 +34,6 @@ public class MineMoviePresenter extends BasePresenter{
         }
         IRequest iRequest = NetworkManager.getInstance().create(IRequest.class);
 
-        Log.e("zmz","====="+args[0]+"====="+args[1]);
-
         return iRequest.attention((int)args[0],(String)args[1],page,count);
     }
     public boolean isResresh() {

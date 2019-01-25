@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingBottom="-10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:layout_margin="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/new_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="用户昵称:"
+                android:textSize="@dimen/sp_14" />
+
+            <EditText
+                android:id="@+id/newname"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_toRightOf="@+id/new_name"
+                android:background="@android:color/transparent"
+                android:hint="请输入新昵称……"
+                android:inputType="text"
+                android:textSize="@dimen/sp_14" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="#ededed" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:layout_margin="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/new_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="用户性别："
+                android:textSize="@dimen/sp_14" />
+
+            <RadioGroup
+                android:id="@+id/sex_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/new_sex"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    android:text="男"
+                    android:textSize="@dimen/sp_15" />
+
+                <RadioButton
+                    android:id="@+id/woman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    android:text="女"
+                    android:textSize="@dimen/sp_15" />
+
+            </RadioGroup>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="#ededed" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:layout_margin="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/new_box"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="邮         箱:"
+                android:textSize="@dimen/sp_14" />
+
+            <EditText
+                android:id="@+id/newbox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_toRightOf="@+id/new_box"
+                android:background="@android:color/transparent"
+                android:hint="请输入新邮箱……"
+                android:inputType="text"
+                android:textSize="@dimen/sp_14" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="#ededed" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+
+

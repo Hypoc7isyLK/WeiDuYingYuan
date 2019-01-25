@@ -1,7 +1,14 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +28,7 @@ import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.MinePresenter;
+import zmz.zhao.com.zmz.presenter.UpdatePresenter;
 import zmz.zhao.com.zmz.util.DaoUtils;
 import zmz.zhao.com.zmz.util.DateUtils;
 import zmz.zhao.com.zmz.view.DataCall;
@@ -34,6 +42,7 @@ import zmz.zhao.com.zmz.view.DataCall;
 public class MineProfileActivity extends BaseActivity {
 
     MinePresenter minePresenter;
+    UpdatePresenter presenter;
 
     @BindView(R.id.heard_image)
     SimpleDraweeView heard_image;
@@ -56,6 +65,11 @@ public class MineProfileActivity extends BaseActivity {
     @BindView(R.id.nickpwd)
     ImageView nickpwd;
 
+    int sex = 0;
+    private int userid;
+    private String sessionId;
+    private MyMessage myMessage;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_mine_data;
@@ -64,18 +78,73 @@ public class MineProfileActivity extends BaseActivity {
     @Override
     protected void initView() {
         minePresenter = new MinePresenter(new MineCall());
+        presenter = new UpdatePresenter(new UpdateCall());
 
-        int userid = DaoUtils.USERID();
+        userid = DaoUtils.USERID();
 
-        String sessionId = DaoUtils.SessionId();
+        sessionId = DaoUtils.SessionId();
 
-        minePresenter.reqeust(userid,sessionId);
+        minePresenter.reqeust(userid, sessionId);
 
     }
-    @OnClick(R.id.back)
-    public void Back(){
-        finish();
+
+    @OnClick({R.id.back, R.id.update})
+    public void OnClick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                //返回
+                finish();
+
+                break;
+
+            /**
+             * @作者 啊哈
+             * @date 2019/1/24
+             * 修改信息
+             */
+            case R.id.update:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                final View view1 = View.inflate(this, R.layout.activity_mine_dialog, null);
+
+
+                builder.setTitle("修改信息");
+                builder.setView(view1);
+                builder.setPositiveButton("修改", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText newName = view1.findViewById(R.id.newname);
+                        EditText newBox = view1.findViewById(R.id.newbox);
+
+                        RadioButton man = view1.findViewById(R.id.man);
+                        RadioButton woman = view1.findViewById(R.id.woman);
+
+                        if (man.isChecked()){
+                            sex = 1;
+                        }
+                        if (woman.isChecked()){
+                            sex = 2;
+                        }
+
+                        String name = newName.getText().toString().trim();
+                        String box = newBox.getText().toString().trim();
+
+                        presenter.reqeust(userid, sessionId, name, sex, box);
+
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+
+                break;
+
+        }
     }
+
     @Override
     protected void destoryData() {
 
@@ -86,19 +155,19 @@ public class MineProfileActivity extends BaseActivity {
         public void success(Result<MyMessage> result) {
             if (result.getStatus().equals("0000")) {
 
-                MyMessage myMessage = result.getResult();
+                myMessage = result.getResult();
 
                 heard_image.setImageURI(Uri.parse(myMessage.getHeadPic()));
                 nickname.setText(myMessage.getNickName());
                 nickphone.setText(myMessage.getPhone());
-                if (myMessage.getSex() == 1){
+                if (myMessage.getSex() == 1) {
                     minesex.setText("男");
-                }else {
+                } else {
                     minesex.setText("女");
                 }
 
                 try {
-                    minedate.setText(DateUtils.dateFormat(new Date(myMessage.getBirthday()),DateUtils.DATE_PATTERN));
+                    minedate.setText(DateUtils.dateFormat(new Date(myMessage.getBirthday()), DateUtils.DATE_PATTERN));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -106,6 +175,18 @@ public class MineProfileActivity extends BaseActivity {
             }
 
 
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+
+    private class UpdateCall implements DataCall<Result<MyMessage>> {
+        @Override
+        public void success(Result<MyMessage> result) {
+            minePresenter.reqeust(userid, sessionId);
         }
 
         @Override

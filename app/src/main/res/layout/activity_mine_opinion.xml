@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+   <TextView
+       android:id="@+id/op"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="@dimen/dp_30"
+       android:layout_marginLeft="@dimen/dp_24"
+       android:text="意见反馈"/>
+
+    <RelativeLayout
+        android:id="@+id/opion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_below="@+id/op">
+
+        <EditText
+            android:id="@+id/mine_opinion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_24"
+            android:layout_marginRight="@dimen/dp_24"
+            android:textSize="@dimen/sp_12"
+            android:hint="写一下您对产品的感受，工作人员将会在第一时间评估处理"
+            android:background="@drawable/sele_mine_btn_circular"
+            android:padding="@dimen/dp_20"/>
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="@dimen/dp_30"
+            android:background="@drawable/btn_radio"
+            android:textSize="@dimen/sp_12"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_24"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/mine_opinion"
+            android:text="提交"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/opion_hide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_below="@+id/op">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_75"
+            android:src="@mipmap/opinion"/>
+        <TextView
+            android:id="@+id/text_opinion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_16"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/image"
+            android:textColor="@color/colorTextColor"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="反馈成功"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_12"
+            android:padding="@dimen/dp_2"
+            android:gravity="center"
+            android:textColor="@color/common"
+            android:layout_below="@+id/text_opinion"
+            android:layout_margin="@dimen/dp_20"
+            android:text="感谢您对维度影院的关注与支持，我们会认真处理您的反馈，尽快修复和完善相关功能。"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/opinion_back"
+        android:layout_width="@dimen/dp_58"
+        android:layout_height="@dimen/dp_58"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/dp_20"
+        android:src="@mipmap/com_back"/>
+
+</RelativeLayout>
+
+
+

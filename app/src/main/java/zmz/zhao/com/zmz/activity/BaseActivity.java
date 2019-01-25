@@ -10,6 +10,9 @@ import butterknife.ButterKnife;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
+
+
+    private static String mailbox = "";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
