@@ -6,6 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.DaoSession;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import zmz.zhao.com.zmz.util.WechatUtil;
 
 /**
  * date:2019/1/22
@@ -13,6 +17,10 @@ import com.greendao.gen.DaoSession;
  * function:
  */
 public class MyApplication extends Application {
+    // APP_ID 替换为你的应用从官方网站申请到的合法appID
+    public static final String APP_ID = "wxb3852e6a6b7d9516";
+    // IWXAPI 是第三方app和微信通信的openApi接口
+    public static IWXAPI api;
 
     private DaoMaster.DevOpenHelper mHelper;
     private SQLiteDatabase db;
@@ -23,9 +31,12 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        WechatUtil.init(this);
         instances = this;
         setDatabase();
         Fresco.initialize(this);
+        //微信
+        registToWX();
     }
     public static MyApplication getInstances(){
         return instances;
@@ -49,5 +60,13 @@ public class MyApplication extends Application {
     }
     public SQLiteDatabase getDb() {
         return db;
+    }
+
+    private void registToWX() {
+        // 通过WXAPIFactory工厂，获取IWXAPI的实例
+        api = WXAPIFactory.createWXAPI(this, APP_ID, true);
+
+        // 将应用的appId注册到微信
+        api.registerApp(APP_ID);
     }
 }
