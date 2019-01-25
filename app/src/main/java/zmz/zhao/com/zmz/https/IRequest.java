@@ -15,6 +15,7 @@ import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.MyMessage;
 import zmz.zhao.com.zmz.bean.Record;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.ShowLunBoBean;
 
 public interface IRequest {
 
@@ -124,5 +125,15 @@ public interface IRequest {
                               @Field("oldPwd") String oldPwd,
                                 @Field("newPwd") String newPwd,
                                 @Field("newPwd2") String newPwd2);
+
+
+    /**
+     * 首页轮播
+     */
+    @GET("movie/v1/findHotMovieList")
+    Observable<Result<List<ShowLunBoBean>>> showLunbo(@Header("userId") int userId,
+                                                      @Header("sessionId") String sessionId,
+                                                      @Query("page") String page,
+                                                      @Query("count") String count);
 }
 
