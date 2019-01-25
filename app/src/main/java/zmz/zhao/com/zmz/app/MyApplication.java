@@ -1,6 +1,7 @@
 package zmz.zhao.com.zmz.app;
 
 import android.app.Application;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -10,6 +11,11 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import zmz.zhao.com.zmz.util.WechatUtil;
+import com.greendao.gen.UserDaoDao;
+
+import java.util.List;
+
+import zmz.zhao.com.zmz.bean.dao.UserDao;
 
 /**
  * date:2019/1/22
@@ -34,6 +40,7 @@ public class MyApplication extends Application {
         WechatUtil.init(this);
         instances = this;
         setDatabase();
+
         Fresco.initialize(this);
         //微信
         registToWX();

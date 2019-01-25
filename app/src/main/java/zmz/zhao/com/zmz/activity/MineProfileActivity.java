@@ -2,6 +2,7 @@ package zmz.zhao.com.zmz.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -18,18 +19,15 @@ import com.greendao.gen.UserDaoDao;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import zmz.zhao.com.zmz.app.MyApplication;
+
 import zmz.zhao.com.zmz.bean.MyMessage;
 import zmz.zhao.com.zmz.bean.Result;
-import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.MinePresenter;
 import zmz.zhao.com.zmz.presenter.UpdatePresenter;
-import zmz.zhao.com.zmz.util.DaoUtils;
 import zmz.zhao.com.zmz.util.DateUtils;
 import zmz.zhao.com.zmz.view.DataCall;
 
@@ -77,10 +75,10 @@ public class MineProfileActivity extends BaseActivity {
         minePresenter = new MinePresenter(new MineCall());
         presenter = new UpdatePresenter(new UpdateCall());
 
-        userid = DaoUtils.USERID();
+        userid = USERDAO.getUserId();
 
-        sessionId = DaoUtils.SessionId();
-
+        sessionId = USERDAO.getSessionId();
+        Log.e("zmz",sessionId +"=========="+userid);
         minePresenter.reqeust(userid, sessionId);
 
     }
@@ -143,7 +141,8 @@ public class MineProfileActivity extends BaseActivity {
                  * 重置密码
                  */
             case R.id.nickpwd:
-
+                Intent intent = new Intent(MineProfileActivity.this, UpdatePwdActivity.class);
+                startActivity(intent);
                 break;
 
         }

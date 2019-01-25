@@ -3,6 +3,7 @@ package zmz.zhao.com.zmz.presenter;
 import io.reactivex.Observable;
 import zmz.zhao.com.zmz.https.IRequest;
 import zmz.zhao.com.zmz.https.NetworkManager;
+import zmz.zhao.com.zmz.util.EncryptUtil;
 import zmz.zhao.com.zmz.view.DataCall;
 
 /**
@@ -20,6 +21,10 @@ public class UpdatePwdPresenter extends BasePresenter{
 
         IRequest iRequest = NetworkManager.getInstance().create(IRequest.class);
 
-        return iRequest.Updatepwd((int)args[0],(String)args[1],(String)args[2],(String)args[3],(String)args[4]);
+        String oldpwd = EncryptUtil.encrypt((String) args[2]);
+        String newpwd = EncryptUtil.encrypt((String) args[3]);
+        String newpwd2 = EncryptUtil.encrypt((String) args[4]);
+
+        return iRequest.Updatepwd((int)args[0],(String)args[1],oldpwd,newpwd,newpwd2);
     }
 }

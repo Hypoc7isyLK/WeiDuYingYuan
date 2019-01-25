@@ -4,11 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,27 +13,20 @@ import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.DaoSession;
 import com.greendao.gen.UserDaoDao;
 
 import java.text.ParseException;
 import java.util.Date;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import zmz.zhao.com.zmz.activity.FocusActivity;
 import zmz.zhao.com.zmz.activity.LoginActivity;
-import zmz.zhao.com.zmz.activity.MainActivity;
 import zmz.zhao.com.zmz.activity.MineProfileActivity;
 import zmz.zhao.com.zmz.activity.MyOpinion;
-import zmz.zhao.com.zmz.app.MyApplication;
 import zmz.zhao.com.zmz.bean.Result;
-import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.SignPresenter;
-import zmz.zhao.com.zmz.util.DaoUtils;
 import zmz.zhao.com.zmz.util.DateUtils;
 import zmz.zhao.com.zmz.view.DataCall;
 
@@ -73,8 +62,8 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        userid = DaoUtils.USERID();
-        sessionId = DaoUtils.SessionId();
+        userid = USERDAO.getUserId();
+        sessionId = USERDAO.getSessionId();
 
         sharedPreferences = getActivity().getSharedPreferences(String.valueOf(userid), getActivity().MODE_PRIVATE);
         signPresenter = new SignPresenter(new SignCall());
@@ -157,9 +146,9 @@ public class MineFragment extends BaseFragment {
                         //Intent清除栈FLAG_ACTIVITY_CLEAR_TASK会把当前栈内所有Activity清空；
                         //FLAG_ACTIVITY_NEW_TASK配合使用，才能完成跳转
 
-                        DaoSession daoSession = DaoMaster.newDevSession(getActivity(), UserDaoDao.TABLENAME);
-                        UserDaoDao daoDao = daoSession.getUserDaoDao();
-                        daoDao.deleteAll();
+                        UserDaoDao userDaoDao = DaoMaster.newDevSession(getActivity(),UserDaoDao.TABLENAME).getUserDaoDao();
+
+                        userDaoDao.deleteAll();
 
                         Intent intent = new Intent(getActivity(),LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
