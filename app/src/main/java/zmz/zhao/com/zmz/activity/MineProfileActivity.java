@@ -78,12 +78,11 @@ public class MineProfileActivity extends BaseActivity {
         userid = USERDAO.getUserId();
 
         sessionId = USERDAO.getSessionId();
-        Log.e("zmz",sessionId +"=========="+userid);
         minePresenter.reqeust(userid, sessionId);
 
     }
 
-    @OnClick({R.id.back, R.id.update})
+    @OnClick({R.id.back, R.id.update,R.id.newpwd})
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.back:

@@ -21,7 +21,7 @@ import zmz.zhao.com.zmz.bean.dao.UserDao;
 public interface IRequest {
 
     /**
-     *登陆
+     * 登陆
      */
     @POST("user/v1/login")
     @FormUrlEncoded
@@ -29,7 +29,7 @@ public interface IRequest {
                                             @Field("pwd") String pwd);
 
     /**
-     *注册
+     * 注册
      */
     @POST("user/v1/registerUser")
     @FormUrlEncoded
@@ -55,6 +55,15 @@ public interface IRequest {
                                                   @Header("sessionId") String sessionId,
                                                   @Query("page") int page,
                                                   @Query("count") int count);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/1/25
+     * @method：签到
+     */
+    @GET("movie/v1/verify/findMoviePageList")
+    Observable<Result<List<Attention>>> sign(@Header("userId") int userId,
+                                             @Header("sessionId") String sessionId);
 
     /**
      * @作者 啊哈
@@ -101,8 +110,6 @@ public interface IRequest {
                                @Field("content") String content);
 
 
-
-
     /**
      * @作者 啊哈
      * @date 2019/1/25
@@ -111,21 +118,22 @@ public interface IRequest {
     @GET("user/v1/verify/findUserBuyTicketRecordList")
     Observable<Result<List<Record>>> record(@Header("userId") int userId,
                                             @Header("sessionId") String sessionId,
-                                            @Query("page")int page,
-                                            @Query("count")int count,
-                                            @Query("status")int status);
-   /**
-    * @作者 啊哈
-    * @date 2019/1/25
-    * @method:修改密码
-    */
-   @FormUrlEncoded
-   @POST("tool/v1/verify/recordFeedBack")
-   Observable<Result> Updatepwd(@Header("userId") int userId,
-                              @Header("sessionId") String sessionId,
-                              @Field("oldPwd") String oldPwd,
-                                @Field("newPwd") String newPwd,
-                                @Field("newPwd2") String newPwd2);
+                                            @Query("page") int page,
+                                            @Query("count") int count,
+                                            @Query("status") int status);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/1/25
+     * @method:修改密码
+     */
+    @FormUrlEncoded
+    @POST("tool/v1/verify/recordFeedBack")
+    Observable<Result> Updatepwd(@Header("userId") int userId,
+                                 @Header("sessionId") String sessionId,
+                                 @Field("oldPwd") String oldPwd,
+                                 @Field("newPwd") String newPwd,
+                                 @Field("newPwd2") String newPwd2);
 
 
     /**
