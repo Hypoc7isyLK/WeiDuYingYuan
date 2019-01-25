@@ -30,6 +30,8 @@ import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.LoginPresenter;
 import zmz.zhao.com.zmz.util.EncryptUtil;
+import zmz.zhao.com.zmz.util.StringUtils;
+import zmz.zhao.com.zmz.util.SystemUtil;
 import zmz.zhao.com.zmz.view.DataCall;
 
 public class LoginActivity extends BaseActivity {
@@ -61,6 +63,7 @@ public class LoginActivity extends BaseActivity {
     private UserDao mUserDao;
     private List<UserDao> mUserDaos;
     private boolean iszd;
+    private boolean mEmpty;
 
 
     @Override

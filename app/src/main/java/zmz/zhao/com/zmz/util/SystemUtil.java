@@ -63,6 +63,7 @@ public class SystemUtil {
      * @return  手机IMEI
      */
     public static String getIMEI(Context ctx) {
+
         TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Activity.TELEPHONY_SERVICE);
         if (tm != null) {
             return tm.getDeviceId();
