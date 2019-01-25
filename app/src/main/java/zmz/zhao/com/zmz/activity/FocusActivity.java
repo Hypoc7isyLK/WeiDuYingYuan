@@ -1,19 +1,14 @@
 package zmz.zhao.com.zmz.activity;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.widget.Adapter;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bw.movie.R;
-import com.greendao.gen.UserDaoDao;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.List;
@@ -22,15 +17,12 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import zmz.zhao.com.zmz.adapter.CinemaAdapter;
 import zmz.zhao.com.zmz.adapter.MineMovieAdapter;
-import zmz.zhao.com.zmz.app.MyApplication;
 import zmz.zhao.com.zmz.bean.Address;
 import zmz.zhao.com.zmz.bean.Attention;
 import zmz.zhao.com.zmz.bean.Result;
-import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.MineMoviePresenter;
 import zmz.zhao.com.zmz.presenter.MyCinemaPresenter;
-import zmz.zhao.com.zmz.util.DaoUtils;
 import zmz.zhao.com.zmz.util.SpaceItemDecoration;
 import zmz.zhao.com.zmz.view.DataCall;
 
@@ -67,8 +59,8 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         cinema_recycle.setVisibility(View.GONE);
 
-        userId = DaoUtils.USERID();
-        sessionId = DaoUtils.SessionId();
+        userId = USERDAO.getUserId();
+        sessionId = USERDAO.getSessionId();
 
         moviePresenter.reqeust(userId, this.sessionId, true);
 

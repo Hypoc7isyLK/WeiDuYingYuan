@@ -1,17 +1,18 @@
 package zmz.zhao.com.zmz.activity;
 
-import android.widget.Button;
+import android.content.Intent;
 import android.widget.EditText;
 
 import com.bw.movie.R;
+import com.greendao.gen.DaoMaster;
+import com.greendao.gen.DaoSession;
+import com.greendao.gen.UserDaoDao;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.UpdatePwdPresenter;
-import zmz.zhao.com.zmz.util.DaoUtils;
-import zmz.zhao.com.zmz.util.EncryptUtil;
 import zmz.zhao.com.zmz.view.DataCall;
 
 /**
@@ -40,8 +41,10 @@ public class UpdatePwdActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        userid = DaoUtils.USERID();
-        sessionId = DaoUtils.SessionId();
+
+        userid = USERDAO.getUserId();
+
+        sessionId = USERDAO.getSessionId();
         pwdPresenter = new UpdatePwdPresenter(new PwdCall());
     }
     @OnClick(R.id.updatePwd)
@@ -50,11 +53,8 @@ public class UpdatePwdActivity extends BaseActivity {
         String new_pwd = newpwd.getText().toString().trim();
         String current_pwd = current.getText().toString().trim();
 
-        String jmold_pwd = EncryptUtil.encrypt(old_pwd);
-        String jmnew_pwd = EncryptUtil.encrypt(new_pwd);
-        String jmcurrent_pwd = EncryptUtil.encrypt(current_pwd);
 
-        pwdPresenter.reqeust(userid,sessionId,jmold_pwd,jmnew_pwd,jmcurrent_pwd);
+        pwdPresenter.reqeust(userid,sessionId,old_pwd,new_pwd,current_pwd);
     }
     @Override
     protected void destoryData() {
@@ -64,7 +64,15 @@ public class UpdatePwdActivity extends BaseActivity {
     private class PwdCall implements DataCall<Result> {
         @Override
         public void success(Result result) {
+            if (result.getStatus().equals("0000")){
+                DaoSession daoSession = DaoMaster.newDevSession(UpdatePwdActivity.this, UserDaoDao.TABLENAME);
+                UserDaoDao daoDao = daoSession.getUserDaoDao();
+                daoDao.deleteAll();
 
+                Intent intent = new Intent(UpdatePwdActivity.this,LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         }
 
         @Override

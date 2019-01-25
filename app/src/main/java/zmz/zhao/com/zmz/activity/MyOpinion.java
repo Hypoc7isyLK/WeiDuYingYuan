@@ -11,7 +11,6 @@ import butterknife.OnClick;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.OpinionPresenter;
-import zmz.zhao.com.zmz.util.DaoUtils;
 import zmz.zhao.com.zmz.view.DataCall;
 
 /**
@@ -53,9 +52,9 @@ public class MyOpinion extends BaseActivity {
                 break;
             case R.id.submit:
                 String opinion = mine_opinion.getText().toString().trim();
-                int userid = DaoUtils.USERID();
+                int userid = USERDAO.getUserId();
 
-                String sessionId = DaoUtils.SessionId();
+                String sessionId = USERDAO.getSessionId();
 
                 presenter.reqeust(userid,sessionId,opinion);
                 break;

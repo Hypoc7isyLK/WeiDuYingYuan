@@ -13,39 +13,32 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class UserDao {
 
-    @Property(nameInDb = "SESSIONID")
+
     private String sessionId;
 
-    @Property(nameInDb = "USERID")
     private int userId;
 
-    @Property(nameInDb = "BIRTHDAY")
     private String birthday;
 
-    @Property(nameInDb = "HEADPIC")
     private String headPic;
 
-    @Property(nameInDb = "ID")
     private String id;
 
-    @Property(nameInDb = "LASTLOGINTIME")
     private String lastLoginTime;
-
-    @Property(nameInDb = "NICKNAME")
+    
     private String nickName;
 
-    @Property(nameInDb = "PHONE")
     private String phone;
 
-    @Property(nameInDb = "SEX")
     private String sex;
     private boolean flag;
     private boolean login_flag;
     private String pwd;
-    @Generated(hash = 240748791)
+    private int status;
+    @Generated(hash = 718353972)
     public UserDao(String sessionId, int userId, String birthday, String headPic,
             String id, String lastLoginTime, String nickName, String phone,
-            String sex, boolean flag, boolean login_flag, String pwd) {
+            String sex, boolean flag, boolean login_flag, String pwd, int status) {
         this.sessionId = sessionId;
         this.userId = userId;
         this.birthday = birthday;
@@ -58,6 +51,7 @@ public class UserDao {
         this.flag = flag;
         this.login_flag = login_flag;
         this.pwd = pwd;
+        this.status = status;
     }
     @Generated(hash = 917059161)
     public UserDao() {
@@ -133,6 +127,12 @@ public class UserDao {
     }
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+    public int getStatus() {
+        return this.status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
     }
 
 

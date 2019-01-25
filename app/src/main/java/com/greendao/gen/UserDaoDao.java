@@ -24,18 +24,19 @@ public class UserDaoDao extends AbstractDao<UserDao, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property SessionId = new Property(0, String.class, "sessionId", false, "SESSIONID");
-        public final static Property UserId = new Property(1, int.class, "userId", false, "USERID");
+        public final static Property SessionId = new Property(0, String.class, "sessionId", false, "SESSION_ID");
+        public final static Property UserId = new Property(1, int.class, "userId", false, "USER_ID");
         public final static Property Birthday = new Property(2, String.class, "birthday", false, "BIRTHDAY");
-        public final static Property HeadPic = new Property(3, String.class, "headPic", false, "HEADPIC");
+        public final static Property HeadPic = new Property(3, String.class, "headPic", false, "HEAD_PIC");
         public final static Property Id = new Property(4, String.class, "id", false, "ID");
-        public final static Property LastLoginTime = new Property(5, String.class, "lastLoginTime", false, "LASTLOGINTIME");
-        public final static Property NickName = new Property(6, String.class, "nickName", false, "NICKNAME");
+        public final static Property LastLoginTime = new Property(5, String.class, "lastLoginTime", false, "LAST_LOGIN_TIME");
+        public final static Property NickName = new Property(6, String.class, "nickName", false, "NICK_NAME");
         public final static Property Phone = new Property(7, String.class, "phone", false, "PHONE");
         public final static Property Sex = new Property(8, String.class, "sex", false, "SEX");
         public final static Property Flag = new Property(9, boolean.class, "flag", false, "FLAG");
         public final static Property Login_flag = new Property(10, boolean.class, "login_flag", false, "LOGIN_FLAG");
         public final static Property Pwd = new Property(11, String.class, "pwd", false, "PWD");
+        public final static Property Status = new Property(12, int.class, "status", false, "STATUS");
     }
 
 
@@ -51,18 +52,19 @@ public class UserDaoDao extends AbstractDao<UserDao, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER_DAO\" (" + //
-                "\"SESSIONID\" TEXT," + // 0: sessionId
-                "\"USERID\" INTEGER NOT NULL ," + // 1: userId
+                "\"SESSION_ID\" TEXT," + // 0: sessionId
+                "\"USER_ID\" INTEGER NOT NULL ," + // 1: userId
                 "\"BIRTHDAY\" TEXT," + // 2: birthday
-                "\"HEADPIC\" TEXT," + // 3: headPic
+                "\"HEAD_PIC\" TEXT," + // 3: headPic
                 "\"ID\" TEXT," + // 4: id
-                "\"LASTLOGINTIME\" TEXT," + // 5: lastLoginTime
-                "\"NICKNAME\" TEXT," + // 6: nickName
+                "\"LAST_LOGIN_TIME\" TEXT," + // 5: lastLoginTime
+                "\"NICK_NAME\" TEXT," + // 6: nickName
                 "\"PHONE\" TEXT," + // 7: phone
                 "\"SEX\" TEXT," + // 8: sex
                 "\"FLAG\" INTEGER NOT NULL ," + // 9: flag
                 "\"LOGIN_FLAG\" INTEGER NOT NULL ," + // 10: login_flag
-                "\"PWD\" TEXT);"); // 11: pwd
+                "\"PWD\" TEXT," + // 11: pwd
+                "\"STATUS\" INTEGER NOT NULL );"); // 12: status
     }
 
     /** Drops the underlying database table. */
@@ -122,6 +124,7 @@ public class UserDaoDao extends AbstractDao<UserDao, Void> {
         if (pwd != null) {
             stmt.bindString(12, pwd);
         }
+        stmt.bindLong(13, entity.getStatus());
     }
 
     @Override
@@ -175,6 +178,7 @@ public class UserDaoDao extends AbstractDao<UserDao, Void> {
         if (pwd != null) {
             stmt.bindString(12, pwd);
         }
+        stmt.bindLong(13, entity.getStatus());
     }
 
     @Override
@@ -196,7 +200,8 @@ public class UserDaoDao extends AbstractDao<UserDao, Void> {
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // sex
             cursor.getShort(offset + 9) != 0, // flag
             cursor.getShort(offset + 10) != 0, // login_flag
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // pwd
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // pwd
+            cursor.getInt(offset + 12) // status
         );
         return entity;
     }
@@ -215,6 +220,7 @@ public class UserDaoDao extends AbstractDao<UserDao, Void> {
         entity.setFlag(cursor.getShort(offset + 9) != 0);
         entity.setLogin_flag(cursor.getShort(offset + 10) != 0);
         entity.setPwd(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setStatus(cursor.getInt(offset + 12));
      }
     
     @Override

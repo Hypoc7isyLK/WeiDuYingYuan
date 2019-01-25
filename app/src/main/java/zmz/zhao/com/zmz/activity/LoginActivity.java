@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bw.movie.R;
+import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserDaoDao;
 
 import java.util.List;
@@ -21,13 +22,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import zmz.zhao.com.zmz.app.MyApplication;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.LoginPresenter;
-import zmz.zhao.com.zmz.util.DaoUtils;
+
 import zmz.zhao.com.zmz.view.DataCall;
 
 public class LoginActivity extends BaseActivity {
@@ -53,17 +53,17 @@ public class LoginActivity extends BaseActivity {
     private boolean isHideFirst;
     boolean flag_num = false;
     boolean login_flag = false;
-    private UserDaoDao mUserDaoDao;
-    private UserDao mUserDao;
 
     @Override
     protected int getLayoutId() {
-        boolean loginFlag = DaoUtils.LoginFlag();
-
-        if (loginFlag){
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-            finish();
+        if ( USERDAO!= null){
+            boolean loginFlag = USERDAO.getLogin_flag();
+            if (loginFlag){
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                finish();
+            }
         }
+
         return R.layout.activity_login;
     }
 
@@ -82,14 +82,20 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initData() {
-        boolean flag = DaoUtils.Flag();
 
-        if (flag){
-            Log.e("zmz","======"+flag);
-            edittextPhone.setText(DaoUtils.PHONE());
-            edittextPwd.setText(DaoUtils.PWD());
-            checkRemember.setChecked(flag);
+        if (USERDAO != null){
+            boolean flag = USERDAO.getFlag();
+
+            if (flag){
+                edittextPhone.setText(USERDAO.getPhone());
+                edittextPwd.setText(USERDAO.getPwd());
+                checkRemember.setChecked(flag);
+            }
         }
+
+        flag_num = checkRemember.isChecked();
+        login_flag = checkAutologin.isChecked();
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,30 +144,22 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void success(Result<LoginBean> result) {
             if (result.getStatus().equals("0000")) {
-                mResult = result.getResult();
+
+                result.getResult().getUserInfo().setFlag(flag_num);
+
+                result.getResult().getUserInfo().setLogin_flag(login_flag);
+
+                result.getResult().getUserInfo().setPwd(edpwd);
+
+                result.getResult().getUserInfo().setUserId(result.getResult().getUserId());
+                result.getResult().getUserInfo().setSessionId(result.getResult().getSessionId());
 
 
-                mUserDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
-                mUserDao = new UserDao(result.getResult().getSessionId(),
-                        mResult.getUserId(),
-                        mResult.getUserInfo().getBirthday(),
-                        mResult.getUserInfo().getHeadPic(),
-                        mResult.getUserInfo().getId(),
-                        mResult.getUserInfo().getLastLoginTime(),
-                        mResult.getUserInfo().getNickName(),
-                        mResult.getUserInfo().getPhone(),
-                        mResult.getUserInfo().getSex(),
-                        flag_num,
-                        login_flag,edpwd);
+                result.getResult().getUserInfo().setStatus(1);
 
-                Log.e("zmz","===00==="+flag_num);
+                UserDaoDao userDaoDao = DaoMaster.newDevSession(LoginActivity.this, UserDaoDao.TABLENAME).getUserDaoDao();
 
-                List<UserDao> userDaos = mUserDaoDao.loadAll();
-                if (userDaos.size()>0){
-                    mUserDaoDao.deleteAll();
-                }
-
-                mUserDaoDao.insertOrReplace(mUserDao);
+                userDaoDao.insertOrReplace(result.getResult().getUserInfo());
 
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
 
