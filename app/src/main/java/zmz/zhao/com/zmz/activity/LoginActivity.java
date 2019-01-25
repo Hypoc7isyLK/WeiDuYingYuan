@@ -151,6 +151,7 @@ public class LoginActivity extends BaseActivity {
 
                 result.getResult().getUserInfo().setPwd(edpwd);
 
+
                 result.getResult().getUserInfo().setUserId(result.getResult().getUserId());
                 result.getResult().getUserInfo().setSessionId(result.getResult().getSessionId());
 
@@ -164,6 +165,7 @@ public class LoginActivity extends BaseActivity {
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
 
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
                 finish();
             } else {
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();

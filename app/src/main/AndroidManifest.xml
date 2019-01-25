@@ -33,6 +33,7 @@
         <activity android:name="zmz.zhao.com.zmz.activity.FocusActivity"/>
         <activity android:name="zmz.zhao.com.zmz.activity.MineProfileActivity"/>
         <activity android:name="zmz.zhao.com.zmz.activity.MyOpinion"/>
+        <activity android:name="zmz.zhao.com.zmz.activity.UpdatePwdActivity"/>
     </application>
 
 </manifest>
