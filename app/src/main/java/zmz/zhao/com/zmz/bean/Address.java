@@ -3,7 +3,7 @@ package zmz.zhao.com.zmz.bean;
 /**
  * date:2019/1/24 13:32
  * author:赵明珠(啊哈)
- * function:
+ * function:关注影院
  */
 public class Address {
 

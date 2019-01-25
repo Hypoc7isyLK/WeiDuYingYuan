@@ -30,6 +30,7 @@ import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.MineMoviePresenter;
 import zmz.zhao.com.zmz.presenter.MyCinemaPresenter;
+import zmz.zhao.com.zmz.util.DaoUtils;
 import zmz.zhao.com.zmz.util.SpaceItemDecoration;
 import zmz.zhao.com.zmz.view.DataCall;
 
@@ -66,17 +67,10 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         cinema_recycle.setVisibility(View.GONE);
 
-        UserDaoDao userDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
+        userId = DaoUtils.USERID();
+        sessionId = DaoUtils.SessionId();
 
-        List<UserDao> userDaos = userDaoDao.loadAll();
-        if (userDaos != null && userDaos.size() > 0) {
-            UserDao userDao = userDaos.get(0);
-            userId = userDao.getUserId();
-            sessionId = userDao.getSessionId();
-        }
-
-        moviePresenter.reqeust(userId, sessionId, true);
-
+        moviePresenter.reqeust(userId, this.sessionId, true);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -110,7 +104,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
     @Override
     protected void onResume() {
         super.onResume();
-        moviePresenter.reqeust(4634, sessionId, true);
+        moviePresenter.reqeust(userId, sessionId, true);
     }
     /**
      * @作者 啊哈
@@ -195,11 +189,11 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
     @Override
     public void onRefresh() {
         if (moviePresenter.Running()) {
-
             movie_recycle.refreshComplete();
-
+            cinema_recycle.refreshComplete();
             return;
         }
+
         cinemaPresenter.reqeust(userId, sessionId, true);
         moviePresenter.reqeust(userId, sessionId, true);
     }
@@ -209,7 +203,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
         if (moviePresenter.Running()) {
 
             movie_recycle.loadMoreComplete();
-
+            cinema_recycle.loadMoreComplete();
             return;
         }
 

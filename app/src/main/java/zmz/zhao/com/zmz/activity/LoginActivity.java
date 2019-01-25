@@ -1,8 +1,6 @@
 package zmz.zhao.com.zmz.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
@@ -10,11 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bw.movie.R;
 import com.greendao.gen.UserDaoDao;
 
@@ -29,9 +27,7 @@ import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.LoginPresenter;
-import zmz.zhao.com.zmz.util.EncryptUtil;
-import zmz.zhao.com.zmz.util.StringUtils;
-import zmz.zhao.com.zmz.util.SystemUtil;
+import zmz.zhao.com.zmz.util.DaoUtils;
 import zmz.zhao.com.zmz.view.DataCall;
 
 public class LoginActivity extends BaseActivity {
@@ -54,32 +50,20 @@ public class LoginActivity extends BaseActivity {
     private LoginPresenter mLoginPresenter;
     private String edphone;
     private String edpwd;
-    private String jiaedpwd;
     private boolean isHideFirst;
-
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor mEdit;
+    boolean flag_num = false;
+    boolean login_flag = false;
     private UserDaoDao mUserDaoDao;
     private UserDao mUserDao;
-    private List<UserDao> mUserDaos;
-    private boolean iszd;
-    private boolean mEmpty;
-
 
     @Override
     protected int getLayoutId() {
+        boolean loginFlag = DaoUtils.LoginFlag();
 
-        UserDaoDao userDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
-        List<UserDao> userDaos = userDaoDao.loadAll();
-
-                if(userDaos.size()>0) {
-                    //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                    //finish();
-                }
-
-
-
-
+        if (loginFlag){
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            finish();
+        }
         return R.layout.activity_login;
     }
 
@@ -98,28 +82,14 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initData() {
-        sharedPreferences = getSharedPreferences("lk", MODE_PRIVATE);
-        mEdit = sharedPreferences.edit();
-        iszd = sharedPreferences.getBoolean("iszd", false);
-        /*if (iszd){
+        boolean flag = DaoUtils.Flag();
 
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                finish();
-            *//**
-             * 有问题
-             *//*
-
-        }*/
-        boolean ismain_check_remember = sharedPreferences.getBoolean("isjzmm", false);
-        String username = sharedPreferences.getString("phone", "");
-        String password = sharedPreferences.getString("pwd", "");
-        if (ismain_check_remember) {
-            checkRemember.setChecked(true);
-            edittextPhone.setText(username);
-            edittextPwd.setText(password);
+        if (flag){
+            Log.e("zmz","======"+flag);
+            edittextPhone.setText(DaoUtils.PHONE());
+            edittextPwd.setText(DaoUtils.PWD());
+            checkRemember.setChecked(flag);
         }
-
-
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,31 +100,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void login() {
+
+        flag_num = checkRemember.isChecked();
+        login_flag = checkAutologin.isChecked();
+
         edphone = edittextPhone.getText().toString().trim();
         edpwd = edittextPwd.getText().toString().trim();
-        jiaedpwd = EncryptUtil.encrypt(edpwd);
-        Log.e("lk", "加密" + jiaedpwd);
-
-        if (checkRemember.isChecked()) {
-            mEdit.putString("phone", edphone);
-            mEdit.putString("pwd", edpwd);
-            mEdit.putBoolean("isjzmm", true);
-            mEdit.commit();
-        }else {
-            mEdit.putString("phone", "");
-            mEdit.putString("pwd", "");
-            mEdit.putBoolean("isjzmm", false);
-            mEdit.commit();
-        }
-        if (checkAutologin.isChecked()){
-            mEdit = sharedPreferences.edit();
-            mEdit.putBoolean("iszd", true);
-            mEdit.commit();
-        }
         mLoginPresenter = new LoginPresenter(new LoginCall());
-        mLoginPresenter.reqeust(edphone, jiaedpwd);
+        mLoginPresenter.reqeust(edphone, edpwd);
     }
-
 
 
     @OnClick(R.id.imageview_click)
@@ -185,12 +139,32 @@ public class LoginActivity extends BaseActivity {
         public void success(Result<LoginBean> result) {
             if (result.getStatus().equals("0000")) {
                 mResult = result.getResult();
+
+
                 mUserDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
-                mUserDao = new UserDao(result.getResult().getSessionId(), mResult.getUserId(), mResult.getUserInfo().getBirthday(), mResult.getUserInfo().getHeadPic(), mResult.getUserInfo().getId(), mResult.getUserInfo().getLastLoginTime(), mResult.getUserInfo().getNickName(), mResult.getUserInfo().getPhone(), mResult.getUserInfo().getSex());
-                mUserDaoDao.deleteAll();
+                mUserDao = new UserDao(result.getResult().getSessionId(),
+                        mResult.getUserId(),
+                        mResult.getUserInfo().getBirthday(),
+                        mResult.getUserInfo().getHeadPic(),
+                        mResult.getUserInfo().getId(),
+                        mResult.getUserInfo().getLastLoginTime(),
+                        mResult.getUserInfo().getNickName(),
+                        mResult.getUserInfo().getPhone(),
+                        mResult.getUserInfo().getSex(),
+                        flag_num,
+                        login_flag,edpwd);
+
+                Log.e("zmz","===00==="+flag_num);
+
+                List<UserDao> userDaos = mUserDaoDao.loadAll();
+                if (userDaos.size()>0){
+                    mUserDaoDao.deleteAll();
+                }
 
                 mUserDaoDao.insertOrReplace(mUserDao);
+
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();
             } else {

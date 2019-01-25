@@ -21,7 +21,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import zmz.zhao.com.zmz.activity.BaseActivity;
-
+/**
+ * @作者 啊哈
+ * @date 2019/1/25
+ * 引导页
+ *
+ */
 public class IntroductionActivity extends BaseActivity {
 
     @BindView(R.id.viewPager)

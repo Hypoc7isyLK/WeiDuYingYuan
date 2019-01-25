@@ -3,6 +3,7 @@ package zmz.zhao.com.zmz.presenter;
 import io.reactivex.Observable;
 import zmz.zhao.com.zmz.https.IRequest;
 import zmz.zhao.com.zmz.https.NetworkManager;
+import zmz.zhao.com.zmz.util.EncryptUtil;
 import zmz.zhao.com.zmz.view.DataCall;
 
 /**
@@ -20,7 +21,11 @@ public class LoginPresenter extends BasePresenter{
 
     @Override
     protected Observable observable(Object... args) {
+
         mIRequest = NetworkManager.getInstance().create(IRequest.class);
-        return mIRequest.showLogin((String)args[0],(String)args[1]);
+
+        String jmpwd = EncryptUtil.encrypt((String) args[1]);
+
+        return mIRequest.showLogin((String)args[0],jmpwd);
     }
 }

@@ -100,5 +100,28 @@ public interface IRequest {
 
 
 
+    /**
+     * @作者 啊哈
+     * @date 2019/1/25
+     * 购票记录
+     */
+    @GET("user/v1/verify/findUserBuyTicketRecordList")
+    Observable<Result<List<Record>>> record(@Header("userId") int userId,
+                                            @Header("sessionId") String sessionId,
+                                            @Query("page")int page,
+                                            @Query("count")int count,
+                                            @Query("status")int status);
+   /**
+    * @作者 啊哈
+    * @date 2019/1/25
+    * @method:修改密码
+    */
+   @FormUrlEncoded
+   @POST("tool/v1/verify/recordFeedBack")
+   Observable<Result> Updatepwd(@Header("userId") int userId,
+                              @Header("sessionId") String sessionId,
+                              @Field("oldPwd") String oldPwd,
+                                @Field("newPwd") String newPwd,
+                                @Field("newPwd2") String newPwd2);
 }
 
