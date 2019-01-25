@@ -20,8 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import zmz.zhao.com.zmz.activity.FocusActivity;
 import zmz.zhao.com.zmz.activity.LoginActivity;
 import zmz.zhao.com.zmz.activity.MainActivity;
+import zmz.zhao.com.zmz.activity.MineProfileActivity;
 import zmz.zhao.com.zmz.app.MyApplication;
 
 
@@ -75,8 +77,12 @@ public class MineFragment extends BaseFragment {
             case R.id.my_sign:
                 break;
             case R.id.my_message:
+                Intent intent = new Intent(getContext(), MineProfileActivity.class);
+                startActivity(intent);
                 break;
             case R.id.my_attention:
+                Intent intent1 = new Intent(getContext(), FocusActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.my_goupiao:
                 break;
