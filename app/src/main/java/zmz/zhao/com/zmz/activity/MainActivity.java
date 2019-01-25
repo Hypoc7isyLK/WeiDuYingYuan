@@ -10,7 +10,11 @@ import android.widget.RelativeLayout;
 import com.bw.movie.R;
 
 import butterknife.BindView;
-
+/**
+ * @作者 啊哈
+ * @date 2019/1/25
+ * 启动页
+ */
 public class MainActivity extends BaseActivity {
 
     private int time = 3;

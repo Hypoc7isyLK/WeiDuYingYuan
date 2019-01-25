@@ -37,7 +37,7 @@ import zmz.zhao.com.zmz.view.DataCall;
 /**
  * date:2019/1/23
  * author:赵明珠(啊哈)
- * function:
+ * function:我的信息
  */
 public class MineProfileActivity extends BaseActivity {
 
@@ -61,9 +61,6 @@ public class MineProfileActivity extends BaseActivity {
 
     @BindView(R.id.nickmailbox)
     TextView nickmailbox;
-
-    @BindView(R.id.nickpwd)
-    ImageView nickpwd;
 
     int sex = 0;
     private int userid;
@@ -94,7 +91,6 @@ public class MineProfileActivity extends BaseActivity {
             case R.id.back:
                 //返回
                 finish();
-
                 break;
 
             /**
@@ -141,6 +137,14 @@ public class MineProfileActivity extends BaseActivity {
                 builder.show();
 
                 break;
+                /**
+                 * @作者 啊哈
+                 * @date 2019/1/25
+                 * 重置密码
+                 */
+            case R.id.nickpwd:
+
+                break;
 
         }
     }
@@ -160,6 +164,7 @@ public class MineProfileActivity extends BaseActivity {
                 heard_image.setImageURI(Uri.parse(myMessage.getHeadPic()));
                 nickname.setText(myMessage.getNickName());
                 nickphone.setText(myMessage.getPhone());
+                nickmailbox.setText(myMessage.getEmail());
                 if (myMessage.getSex() == 1) {
                     minesex.setText("男");
                 } else {

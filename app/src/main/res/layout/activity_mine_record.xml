@@ -1,9 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@android:color/white">
 
+    <RadioGroup
+        android:id="@+id/record_radio"
+        android:layout_width="@dimen/dp_240"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_20"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content">
 
-</LinearLayout>
+        <RadioButton
+            android:id="@+id/record_unfinished"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_30"
+            android:layout_weight="5"
+            android:padding="@dimen/dp_5"
+            android:gravity="center"
+            android:button="@null"
+            android:checked="true"
+            android:background="@drawable/mine_radio_btn"
+            android:textSize="@dimen/sp_14"
+            android:text="待付款"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_8"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:button="@null" />
+        <RadioButton
+            android:id="@+id/record_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_30"
+            android:background="@drawable/mine_radio_btn"
+            android:padding="@dimen/dp_5"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:button="@null"
+            android:textSize="@dimen/sp_14"
+            android:text="已完成"/>
+
+    </RadioGroup>
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/finish_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/record_radio"
+        android:layout_margin="@dimen/dp_10">
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/unfinish_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/record_radio"
+        android:layout_margin="@dimen/dp_10">
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+    <ImageView
+        android:id="@+id/Focus_back"
+        android:layout_width="@dimen/dp_58"
+        android:layout_height="@dimen/dp_58"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/dp_20"
+        android:src="@mipmap/com_back"/>
+
+</RelativeLayout>

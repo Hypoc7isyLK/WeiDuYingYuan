@@ -3,7 +3,9 @@ package zmz.zhao.com.zmz.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.greendao.gen.DaoMaster;
+import com.greendao.gen.DaoSession;
 import com.greendao.gen.UserDaoDao;
+
+import java.text.ParseException;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +33,13 @@ import zmz.zhao.com.zmz.activity.MainActivity;
 import zmz.zhao.com.zmz.activity.MineProfileActivity;
 import zmz.zhao.com.zmz.activity.MyOpinion;
 import zmz.zhao.com.zmz.app.MyApplication;
+import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.dao.UserDao;
+import zmz.zhao.com.zmz.exception.ApiException;
+import zmz.zhao.com.zmz.presenter.SignPresenter;
+import zmz.zhao.com.zmz.util.DaoUtils;
+import zmz.zhao.com.zmz.util.DateUtils;
+import zmz.zhao.com.zmz.view.DataCall;
 
 
 public class MineFragment extends BaseFragment {
@@ -43,29 +57,59 @@ public class MineFragment extends BaseFragment {
     LinearLayout myGoupiao;
     @BindView(R.id.my_tickling)
     LinearLayout myTickling;
+
     @BindView(R.id.my_new_versions)
     LinearLayout myNewVersions;
+
     @BindView(R.id.my_finish)
     LinearLayout myFinish;
-    Unbinder unbinder;
+
+    SignPresenter signPresenter;
+
     private AlertDialog.Builder mBuilder;
+    private SharedPreferences sharedPreferences;
+    private int userid;
+    private String sessionId;
 
     @Override
     public void initView(View view) {
-        unbinder = ButterKnife.bind(this, view);
+        userid = DaoUtils.USERID();
+        sessionId = DaoUtils.SessionId();
+
+        sharedPreferences = getActivity().getSharedPreferences(String.valueOf(userid), getActivity().MODE_PRIVATE);
+        signPresenter = new SignPresenter(new SignCall());
+        boolean sign = sharedPreferences.getBoolean("sign", false);
+        int olduserId = sharedPreferences.getInt("userId", 0);
+        String olddate = sharedPreferences.getString("date", "");
+        try {
+            String date = DateUtils.dateFormat(new Date(System.currentTimeMillis()), DateUtils.DATE_PATTERN);
+
+            if (date.equals(olddate) && userid == olduserId) {
+                if (sign) {
+                    mySign.setText("已签到");
+                }
+
+            } else {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("sign", false);
+                editor.commit();
+            }
+
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+
+
     }
 
     @Override
     public void initData(View view) {
-
     }
 
     @Override
     public int getContent() {
         return R.layout.activity_mine;
     }
-
-
 
 
     @OnClick({R.id.my_pic, R.id.my_name, R.id.my_sign, R.id.my_message, R.id.my_attention, R.id.my_goupiao, R.id.my_tickling, R.id.my_new_versions, R.id.my_finish})
@@ -76,6 +120,14 @@ public class MineFragment extends BaseFragment {
             case R.id.my_name:
                 break;
             case R.id.my_sign:
+                boolean sign = sharedPreferences.getBoolean("sign", false);
+                if (sign) {
+                    Toast.makeText(getContext(), "今日已签到", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    signPresenter.reqeust(userid, sessionId);
+                }
+
                 break;
             case R.id.my_message:
                 Intent intent = new Intent(getContext(), MineProfileActivity.class);
@@ -101,10 +153,14 @@ public class MineFragment extends BaseFragment {
                 mBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        UserDaoDao userDaoDao = MyApplication.getInstances().getDaoSession().getUserDaoDao();
-                        userDaoDao.deleteAll();
+
                         //Intent清除栈FLAG_ACTIVITY_CLEAR_TASK会把当前栈内所有Activity清空；
                         //FLAG_ACTIVITY_NEW_TASK配合使用，才能完成跳转
+
+                        DaoSession daoSession = DaoMaster.newDevSession(getActivity(), UserDaoDao.TABLENAME);
+                        UserDaoDao daoDao = daoSession.getUserDaoDao();
+                        daoDao.deleteAll();
+
                         Intent intent = new Intent(getActivity(),LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -120,10 +176,32 @@ public class MineFragment extends BaseFragment {
         }
     }
 
+    private class SignCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+            if (result.getStatus().equals("0000")) {
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+                try {
+                    String date = DateUtils.dateFormat(new Date(System.currentTimeMillis()), DateUtils.DATE_PATTERN);
+                    Toast.makeText(getContext(), "签到成功", Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("sign", true);
+                    editor.putInt("userId", userid);
+                    editor.putString("date", date);
+                    editor.commit();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                mySign.setText("已签到");
+            }
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+
+        }
     }
 }

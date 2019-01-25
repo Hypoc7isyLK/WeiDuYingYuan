@@ -13,6 +13,7 @@ import zmz.zhao.com.zmz.bean.Address;
 import zmz.zhao.com.zmz.bean.Attention;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.MyMessage;
+import zmz.zhao.com.zmz.bean.Record;
 import zmz.zhao.com.zmz.bean.Result;
 
 public interface IRequest {
@@ -60,6 +61,16 @@ public interface IRequest {
 
     /**
      * @作者 啊哈
+     * @date 2019/1/25
+     * 用户签到
+     */
+    @GET("user/v1/verify/userSignIn")
+    Observable<Result> sign(@Header("userId") int userId,
+                            @Header("sessionId") String sessionId);
+
+
+    /**
+     * @作者 啊哈
      * @date 2019/1/24
      * 修改我的信息
      */
@@ -81,6 +92,28 @@ public interface IRequest {
     Observable<Result> opinion(@Header("userId") int userId,
                                @Header("sessionId") String sessionId,
                                @Field("content") String content);
-
+    /**
+     * @作者 啊哈
+     * @date 2019/1/25
+     * 购票记录
+     */
+    @GET("user/v1/verify/findUserBuyTicketRecordList")
+    Observable<Result<List<Record>>> record(@Header("userId") int userId,
+                                            @Header("sessionId") String sessionId,
+                                            @Query("page")int page,
+                                            @Query("count")int count,
+                                            @Query("status")int status);
+   /**
+    * @作者 啊哈
+    * @date 2019/1/25
+    * @method:修改密码
+    */
+   @FormUrlEncoded
+   @POST("tool/v1/verify/recordFeedBack")
+   Observable<Result> Updatepwd(@Header("userId") int userId,
+                              @Header("sessionId") String sessionId,
+                              @Field("oldPwd") String oldPwd,
+                                @Field("newPwd") String newPwd,
+                                @Field("newPwd2") String newPwd2);
 }
 
