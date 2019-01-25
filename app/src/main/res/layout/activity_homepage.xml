@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     >
     <ImageView
         android:layout_width="match_parent"
@@ -9,6 +10,7 @@
         android:src="@mipmap/homebg"/>
 
     <RelativeLayout
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -48,6 +50,45 @@
         android:layout_marginRight="@dimen/dp_24">
 
     </recycler.coverflow.RecyclerCoverFlow>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3"
+        android:layout_marginLeft="@dimen/dp_24"
+        android:layout_marginRight="@dimen/dp_24"
+        android:layout_below="@id/list"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/shadow">
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/movie_text_xian"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3"
+        android:layout_below="@id/list"
+        android:layout_marginLeft="@dimen/dp_80"
+        android:layout_marginRight="@dimen/dp_80"
+        android:layout_marginTop="@dimen/dp_20"
+         />
+    <TextView
+        android:id="@+id/movie_text_dong"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="@dimen/dp_3"
+        android:layout_below="@id/list"
+        android:layout_centerHorizontal="false"
+        android:layout_marginLeft="@dimen/dp_80"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/moviefragment_shu" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_below="@id/movie_text_xian"
+        android:layout_marginTop="@dimen/dp_20">
+
+    </RelativeLayout>
+
 
 
 
