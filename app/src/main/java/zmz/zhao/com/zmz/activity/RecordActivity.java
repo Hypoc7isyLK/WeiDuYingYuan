@@ -67,8 +67,8 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
 
         recordPresenter = new RecordPresenter(new RecordCall());
         donePresenter = new RecordPresenter(new DoneCall());
-        userId = USERDAO.getUserId();
-        sessionId = USERDAO.getSessionId();
+        userId = USER_INFO.getUserId();
+        sessionId = USER_INFO.getSessionId();
 
         initData();
         record_unfinished.setTextColor(getResources().getColorStateList(R.color.white));

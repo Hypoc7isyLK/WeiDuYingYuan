@@ -72,8 +72,8 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        mSessionId = USERDAO.getSessionId();
-        mUserId = USERDAO.getUserId();
+        mSessionId = USER_INFO.getSessionId();
+        mUserId = USER_INFO.getUserId();
 
         unbinder = ButterKnife.bind(this, view);
         mCarouselAdapter = new CarouselAdapter(getActivity());

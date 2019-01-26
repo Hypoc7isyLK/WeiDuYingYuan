@@ -1,8 +1,6 @@
 package zmz.zhao.com.zmz.bean;
 
-import org.greenrobot.greendao.annotation.Entity;
-
-import zmz.zhao.com.zmz.bean.dao.UserDao;
+import zmz.zhao.com.zmz.bean.dao.UserInfo;
 
 /**
  * date:2019/1/23
@@ -14,7 +12,7 @@ public class LoginBean {
 
     private String sessionId;
     private int userId;
-    private UserDao userInfo;
+    private UserInfo userInfo;
 
     public String getSessionId() {
         return sessionId;
@@ -32,11 +30,11 @@ public class LoginBean {
         this.userId = userId;
     }
 
-    public UserDao getUserInfo() {
+    public UserInfo getUserInfo() {
         return userInfo;
     }
 
-    public void setUserInfo(UserDao userInfo) {
+    public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
     }
 }

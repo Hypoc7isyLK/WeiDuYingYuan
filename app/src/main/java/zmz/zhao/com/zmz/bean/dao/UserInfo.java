@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * function:
  */
 @Entity
-public class UserDao {
+public class UserInfo {
 
     @Id(autoincrement = true)
     private long DaoId;
@@ -37,8 +37,8 @@ public class UserDao {
     private boolean login_flag;
     private String pwd;
     private int status;
-    @Generated(hash = 1543485709)
-    public UserDao(long DaoId, String sessionId, int userId, String birthday,
+    @Generated(hash = 1865686431)
+    public UserInfo(long DaoId, String sessionId, int userId, String birthday,
             String headPic, String id, String lastLoginTime, String nickName,
             String phone, String sex, boolean flag, boolean login_flag, String pwd,
             int status) {
@@ -57,8 +57,8 @@ public class UserDao {
         this.pwd = pwd;
         this.status = status;
     }
-    @Generated(hash = 917059161)
-    public UserDao() {
+    @Generated(hash = 1279772520)
+    public UserInfo() {
     }
     public long getDaoId() {
         return this.DaoId;

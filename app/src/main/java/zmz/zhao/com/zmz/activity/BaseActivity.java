@@ -7,27 +7,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDaoDao;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
-import zmz.zhao.com.zmz.bean.dao.UserDao;
+import zmz.zhao.com.zmz.bean.dao.UserInfo;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    public UserDao USERDAO;
+    public UserInfo USER_INFO;
+    private static BaseActivity mForegroundActivity = null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UserDaoDao userDaoDao = DaoMaster.newDevSession(this, UserDaoDao.TABLENAME).getUserDaoDao();
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
 
-        List<UserDao> userDaoList = userDaoDao.queryBuilder().where(UserDaoDao.Properties.Status.eq(1)).list();
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
-        if (userDaoList != null && userDaoList.size()>0) {
-            USERDAO = userDaoList.get(0);
+        if (userInfoList != null && userInfoList.size()>0) {
+            USER_INFO = userInfoList.get(0);
         }
 
 
@@ -59,5 +61,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         destoryData();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mForegroundActivity = this;
+    }
+
+
+    public static BaseActivity getForegroundActivity() {
+        return mForegroundActivity;
     }
 }
