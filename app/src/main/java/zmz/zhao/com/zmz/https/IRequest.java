@@ -3,6 +3,8 @@ package zmz.zhao.com.zmz.https;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -144,5 +146,15 @@ public interface IRequest {
                                                       @Header("sessionId") String sessionId,
                                                       @Query("page") String page,
                                                       @Query("count") String count);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/1/26
+     * @method：上传头像
+     */
+    @POST("user/v1/verify/uploadHeadPic")
+    Observable<Result> heard(@Header("userId") int userid,
+                                 @Header("sessionId") String session,
+                                 @Body MultipartBody image);
 }
 
