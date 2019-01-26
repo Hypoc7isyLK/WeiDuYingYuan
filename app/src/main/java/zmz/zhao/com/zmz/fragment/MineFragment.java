@@ -220,7 +220,6 @@ public class MineFragment extends BaseFragment {
                 popWindow.dismiss();
             }
         });
-
         //相册
         album.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,7 +240,6 @@ public class MineFragment extends BaseFragment {
 
             }
         });
-
         //相机
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,14 +289,11 @@ public class MineFragment extends BaseFragment {
                     // 4.0以上平台会自动关闭cursor,所以加上版本判断,OK
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
                         actualimagecursor.close();
-
                     headPresenter.reqeust(userid, sessionId, img_path);
                     break;
             }
         }
-
     }
-
     private class SignCall implements DataCall<Result> {
         @Override
         public void success(Result result) {
