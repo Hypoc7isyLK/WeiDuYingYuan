@@ -6,7 +6,7 @@
 
     <RadioGroup
         android:id="@+id/mine_radio"
-        android:layout_width="@dimen/dp_200"
+        android:layout_width="@dimen/dp_240"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp_20"
         android:orientation="horizontal"
@@ -17,19 +17,18 @@
             android:id="@+id/mine_movie"
             android:layout_width="@dimen/dp_83"
             android:layout_height="@dimen/dp_25"
-            android:layout_weight="5"
             android:gravity="center"
+            android:layout_weight="5"
             android:button="@null"
             android:checked="true"
             android:textColor="@color/colorTextColor"
             android:background="@drawable/mine_radio_btn"
             android:textSize="@dimen/sp_14"
             android:text="电影"/>
-        <RadioButton
-            android:layout_width="wrap_content"
+        <View
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_8"
-            android:layout_weight="3"
             android:gravity="center"
             android:button="@null" />
         <RadioButton
@@ -38,8 +37,8 @@
             android:layout_height="@dimen/dp_25"
             android:background="@drawable/mine_radio_btn"
             android:textColor="@color/colorTextColor"
-            android:layout_weight="5"
             android:gravity="center"
+            android:layout_weight="5"
             android:button="@null"
             android:textSize="@dimen/sp_14"
             android:text="影院"/>

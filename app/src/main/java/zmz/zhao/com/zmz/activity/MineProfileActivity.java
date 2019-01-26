@@ -4,18 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.greendao.gen.UserDaoDao;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -75,9 +70,9 @@ public class MineProfileActivity extends BaseActivity {
         minePresenter = new MinePresenter(new MineCall());
         presenter = new UpdatePresenter(new UpdateCall());
 
-        userid = USERDAO.getUserId();
+        userid = USER_INFO.getUserId();
 
-        sessionId = USERDAO.getSessionId();
+        sessionId = USER_INFO.getSessionId();
         minePresenter.reqeust(userid, sessionId);
 
     }

@@ -9,13 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDaoDao;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import zmz.zhao.com.zmz.bean.dao.UserDao;
+import zmz.zhao.com.zmz.bean.dao.UserInfo;
 
 /**
  * date:2019/1/22
@@ -26,19 +27,20 @@ public abstract class BaseFragment extends Fragment {
 
 
     private Unbinder unbinder;
-    public UserDao USERDAO;
+    public UserInfo USER_INFO;
+    public UserInfoDao userInfoDao;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(getContent(), container, false);
         unbinder = ButterKnife.bind(this, view);
-        UserDaoDao userDaoDao = DaoMaster.newDevSession(getActivity(), UserDaoDao.TABLENAME).getUserDaoDao();
+        userInfoDao = DaoMaster.newDevSession(getActivity(), UserDao.TABLENAME).getUserInfoDao();
 
-        List<UserDao> userDaoList = userDaoDao.queryBuilder().where(UserDaoDao.Properties.Status.eq(1)).list();
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
-        if (userDaoList != null && userDaoList.size()>0) {
-            USERDAO = userDaoList.get(0);
+        if (userInfoList != null && userInfoList.size()>0) {
+            USER_INFO = userInfoList.get(0);
         }
 
         initView(view);

@@ -64,8 +64,8 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         cinema_recycle.setVisibility(View.GONE);
 
-        userId = USERDAO.getUserId();
-        sessionId = USERDAO.getSessionId();
+        userId = USER_INFO.getUserId();
+        sessionId = USER_INFO.getSessionId();
 
         moviePresenter.reqeust(userId, this.sessionId, true);
 

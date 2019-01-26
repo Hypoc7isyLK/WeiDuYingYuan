@@ -4,27 +4,23 @@ import android.content.Intent;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDaoDao;
-
-import java.util.List;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.Result;
-import zmz.zhao.com.zmz.bean.dao.UserDao;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.LoginPresenter;
 
@@ -56,8 +52,8 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        if ( USERDAO!= null){
-            boolean loginFlag = USERDAO.getLogin_flag();
+        if ( USER_INFO!= null){
+            boolean loginFlag = USER_INFO.getLogin_flag();
             if (loginFlag){
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();
@@ -83,12 +79,12 @@ public class LoginActivity extends BaseActivity {
 
     private void initData() {
 
-        if (USERDAO != null){
-            boolean flag = USERDAO.getFlag();
+        if (USER_INFO != null){
+            boolean flag = USER_INFO.getFlag();
 
             if (flag){
-                edittextPhone.setText(USERDAO.getPhone());
-                edittextPwd.setText(USERDAO.getPwd());
+                edittextPhone.setText(USER_INFO.getPhone());
+                edittextPwd.setText(USER_INFO.getPwd());
                 checkRemember.setChecked(flag);
             }
         }
@@ -158,9 +154,9 @@ public class LoginActivity extends BaseActivity {
 
                 result.getResult().getUserInfo().setStatus(1);
 
-                UserDaoDao userDaoDao = DaoMaster.newDevSession(LoginActivity.this, UserDaoDao.TABLENAME).getUserDaoDao();
+                UserInfoDao userInfoDao = DaoMaster.newDevSession(LoginActivity.this, UserDao.TABLENAME).getUserInfoDao();
 
-                userDaoDao.insertOrReplace(result.getResult().getUserInfo());
+                userInfoDao.insertOrReplace(result.getResult().getUserInfo());
 
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
 

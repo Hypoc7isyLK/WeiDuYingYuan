@@ -2,20 +2,14 @@ package zmz.zhao.com.zmz.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.greendao.gen.DaoMaster;
-import com.greendao.gen.DaoSession;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import zmz.zhao.com.zmz.util.WechatUtil;
-import com.greendao.gen.UserDaoDao;
-
-import java.util.List;
-
-import zmz.zhao.com.zmz.bean.dao.UserDao;
 
 /**
  * date:2019/1/22
@@ -23,6 +17,21 @@ import zmz.zhao.com.zmz.bean.dao.UserDao;
  * function:
  */
 public class MyApplication extends Application {
+
+    /** 主线程ID */
+    private static int mMainThreadId = -1;
+    /** 主线程ID */
+    private static Thread mMainThread;
+    /** 主线程Handler */
+    private static Handler mMainThreadHandler;
+    /** 主线程Looper */
+    private static Looper mMainLooper;
+
+    /**
+     * context 全局唯一的上下文
+     */
+    private static Context context;
+
     // APP_ID 替换为你的应用从官方网站申请到的合法appID
     public static final String APP_ID = "wxb3852e6a6b7d9516";
     // IWXAPI 是第三方app和微信通信的openApi接口
@@ -33,6 +42,11 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        context=this;
+        mMainThreadId = android.os.Process.myTid();
+        mMainThread = Thread.currentThread();
+        mMainThreadHandler = new Handler();
+        mMainLooper = getMainLooper();
         WechatUtil.init(this);
 
         Fresco.initialize(this);
@@ -51,5 +65,28 @@ public class MyApplication extends Application {
 
         // 将应用的appId注册到微信
         api.registerApp(APP_ID);
+    }
+    public static Context getContext() {
+        return context;
+    }
+
+    /** 获取主线程ID */
+    public static int getMainThreadId() {
+        return mMainThreadId;
+    }
+
+    /** 获取主线程 */
+    public static Thread getMainThread() {
+        return mMainThread;
+    }
+
+    /** 获取主线程的handler */
+    public static Handler getMainThreadHandler() {
+        return mMainThreadHandler;
+    }
+
+    /** 获取主线程的looper */
+    public static Looper getMainThreadLooper() {
+        return mMainLooper;
     }
 }

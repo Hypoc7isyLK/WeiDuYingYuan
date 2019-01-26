@@ -7,7 +7,8 @@ import android.widget.EditText;
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.DaoSession;
-import com.greendao.gen.UserDaoDao;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,9 +44,9 @@ public class UpdatePwdActivity extends BaseActivity {
     @Override
     protected void initView() {
 
-        userid = USERDAO.getUserId();
+        userid = USER_INFO.getUserId();
 
-        sessionId = USERDAO.getSessionId();
+        sessionId = USER_INFO.getSessionId();
         Log.e("zmz","=========="+sessionId);
         pwdPresenter = new UpdatePwdPresenter(new PwdCall());
     }
@@ -67,9 +68,9 @@ public class UpdatePwdActivity extends BaseActivity {
         @Override
         public void success(Result result) {
             if (result.getStatus().equals("0000")){
-                DaoSession daoSession = DaoMaster.newDevSession(UpdatePwdActivity.this, UserDaoDao.TABLENAME);
-                UserDaoDao daoDao = daoSession.getUserDaoDao();
-                daoDao.deleteAll();
+                DaoSession daoSession = DaoMaster.newDevSession(UpdatePwdActivity.this, UserDao.TABLENAME);
+                UserInfoDao userInfoDao = daoSession.getUserInfoDao();
+                userInfoDao.deleteAll();
 
                 Intent intent = new Intent(UpdatePwdActivity.this,LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -52,9 +52,9 @@ public class MyOpinion extends BaseActivity {
                 break;
             case R.id.submit:
                 String opinion = mine_opinion.getText().toString().trim();
-                int userid = USERDAO.getUserId();
+                int userid = USER_INFO.getUserId();
 
-                String sessionId = USERDAO.getSessionId();
+                String sessionId = USER_INFO.getSessionId();
 
                 presenter.reqeust(userid,sessionId,opinion);
                 break;

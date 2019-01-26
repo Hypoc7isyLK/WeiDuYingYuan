@@ -10,16 +10,15 @@ import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -29,7 +28,8 @@ import android.widget.Toast;
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDaoDao;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 
 import java.io.File;
 import java.text.ParseException;
@@ -43,10 +43,12 @@ import zmz.zhao.com.zmz.activity.MineProfileActivity;
 import zmz.zhao.com.zmz.activity.MyOpinion;
 import zmz.zhao.com.zmz.activity.RecordActivity;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.dao.UserInfo;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.HeadPresenter;
 import zmz.zhao.com.zmz.presenter.SignPresenter;
 import zmz.zhao.com.zmz.util.DateUtils;
+import zmz.zhao.com.zmz.util.FileUtils;
 import zmz.zhao.com.zmz.view.DataCall;
 
 
@@ -84,15 +86,29 @@ public class MineFragment extends BaseFragment {
     private SharedPreferences sharedPreferences;
     private int userid;
     private String sessionId;
+    private boolean image;
 
     @Override
     public void initView(View view) {
-        userid = USERDAO.getUserId();
-        sessionId = USERDAO.getSessionId();
-        String headPic = USERDAO.getHeadPic();
+        userid = USER_INFO.getUserId();
+        sessionId = USER_INFO.getSessionId();
+        String headPic = USER_INFO.getHeadPic();
         headPresenter = new HeadPresenter(new HeadCall());
         myPic.setImageURI(Uri.parse(headPic));
-        myName.setText(USERDAO.getNickName());
+        myName.setText(USER_INFO.getNickName());
+
+        if(Build.VERSION.SDK_INT>=23){
+            if(ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    !=PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(getActivity(),new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE},100);
+            }else {
+                image = FileUtils.createDirs("/image/bimap");
+            }
+        }else {
+            image = FileUtils.createDirs("/image/bimap");
+        }
 
 
         sharedPreferences = getActivity().getSharedPreferences(String.valueOf(userid), getActivity().MODE_PRIVATE);
@@ -189,11 +205,9 @@ public class MineFragment extends BaseFragment {
                         //Intent清除栈FLAG_ACTIVITY_CLEAR_TASK会把当前栈内所有Activity清空；
                         //FLAG_ACTIVITY_NEW_TASK配合使用，才能完成跳转
 
-                        UserDaoDao userDaoDao = DaoMaster.newDevSession(getActivity(),UserDaoDao.TABLENAME).getUserDaoDao();
+                        userInfoDao.deleteAll();
 
-                        userDaoDao.deleteAll();
-
-                        Intent intent = new Intent(getActivity(),LoginActivity.class);
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
@@ -226,11 +240,11 @@ public class MineFragment extends BaseFragment {
             public void onClick(View v) {
 
 
-                if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     //权限还没有授予，需要在这里写申请权限的代码
                     ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CHOOSE_PICTURE);
-                }else {
+                } else {
                     Intent openAlbumIntent = new Intent(
                             Intent.ACTION_PICK);
                     openAlbumIntent.setType("image/*");
@@ -244,13 +258,22 @@ public class MineFragment extends BaseFragment {
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+
                 Intent openCameraIntent = new Intent(
                         MediaStore.ACTION_IMAGE_CAPTURE);
-                tempUri = Uri.fromFile(new File(Environment
-                        .getExternalStorageDirectory(), "temp_image.jpg"));
-                // 将拍照所得的相片保存到SD卡根目录
+
+                tempUri = Uri.parse(FileUtils.getDir("/image/bimap")+"1.jpg");
+
+                Log.e("zmz","====="+tempUri);
+
+                //启动相机程序
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
-                startActivityForResult(openCameraIntent, TAKE_PICTURE);
+                startActivityForResult(intent, TAKE_PICTURE);
+
             }
         });
 
@@ -266,11 +289,12 @@ public class MineFragment extends BaseFragment {
             switch (requestCode) {
                 case TAKE_PICTURE:
 
-                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + "temp_image.jpg");
+                    File imageFile = FileUtils.getImageFile();
+                    String path = imageFile.getPath();
 
-                    String path = file.getPath();
+                    Log.e("zmz","====="+path);
 
-                    headPresenter.reqeust(userid,sessionId,path);
+                    headPresenter.reqeust(userid, sessionId,path);
 
                     break;
                 case CHOOSE_PICTURE:
@@ -294,6 +318,7 @@ public class MineFragment extends BaseFragment {
             }
         }
     }
+
     private class SignCall implements DataCall<Result> {
         @Override
         public void success(Result result) {
@@ -326,6 +351,11 @@ public class MineFragment extends BaseFragment {
     private class HeadCall implements DataCall<Result> {
         @Override
         public void success(Result result) {
+            result.getResult();
+            USER_INFO.setHeadPic(result.getHeadPath());
+
+            userInfoDao.update(USER_INFO);
+
             myPic.setImageURI(Uri.parse(result.getHeadPath()));
         }
 
