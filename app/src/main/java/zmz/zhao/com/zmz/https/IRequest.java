@@ -137,12 +137,30 @@ public interface IRequest {
 
 
     /**
-     * 首页轮播
+     * 首页轮播+热门电影
      */
     @GET("movie/v1/findHotMovieList")
     Observable<Result<List<ShowLunBoBean>>> showLunbo(@Header("userId") int userId,
                                                       @Header("sessionId") String sessionId,
                                                       @Query("page") String page,
                                                       @Query("count") String count);
+
+    /**
+     * 正在热映
+     */
+    @GET("movie/v1/findReleaseMovieList")
+    Observable<Result<List<ShowLunBoBean>>> hotShowing(@Header("userId") int userId,
+                                                      @Header("sessionId") String sessionId,
+                                                      @Query("page") String page,
+                                                      @Query("count") String count);
+
+    /**
+     * 即将上映
+     */
+    @GET("movie/v1/findComingSoonMovieList")
+    Observable<Result<List<ShowLunBoBean>>> commingSun(@Header("userId") int userId,
+                                                       @Header("sessionId") String sessionId,
+                                                       @Query("page") String page,
+                                                       @Query("count") String count);
 }
 
