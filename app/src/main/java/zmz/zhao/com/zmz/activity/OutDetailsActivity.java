@@ -63,8 +63,8 @@ public class OutDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
-        mSessionId = USERDAO.getSessionId();
-        mUserId = USERDAO.getUserId();
+        mSessionId = USER_INFO.getSessionId();
+        mUserId = USER_INFO.getUserId();
         mOutDetailsAdapter = new OutDetailsAdapter(this);
         mHei = getIntent().getStringExtra("hei");
         if (mHei.equals("1")){
