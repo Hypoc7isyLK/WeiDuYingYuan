@@ -169,7 +169,7 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
             if (result.getStatus().equals("0000") && result.getResult().size()>0) {
                 List<Record> records = result.getResult();
                 if (recordPresenter.isResresh()) {
-                    undoneAdapter.clear();
+                    undoneAdapter.clearList();
                 }
 
                 undoneAdapter.addAll(records);
@@ -195,7 +195,7 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
                 List<Record> records = result.getResult();
 
                 if (donePresenter.isResresh()) {
-                    doneAdapter.clear();
+                    doneAdapter.clearList();
                 }
                 Record record = new Record(1,"14:30:00","eee",15225423354L,"16:30:00",1,"啊哈","21616546163161",325.0,"发送",2,1703);
                 records.add(record);

@@ -12,6 +12,7 @@
         android:background="@mipmap/my_bg">
 
         <ImageView
+            android:id="@+id/system"
             android:layout_width="@dimen/dp_24"
             android:layout_height="@dimen/dp_24"
             android:layout_alignParentLeft="true"

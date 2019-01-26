@@ -67,7 +67,7 @@ public class UndoneAdapter extends XRecyclerView.Adapter<UndoneAdapter.MyHolder>
         list.addAll(records);
     }
 
-    public void clear() {
+    public void clearList() {
         list.clear();
     }
 

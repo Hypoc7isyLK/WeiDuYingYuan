@@ -71,7 +71,7 @@ public class DoneAdapter extends XRecyclerView.Adapter<DoneAdapter.MyHolder> {
         list.addAll(records);
     }
 
-    public void clear() {
+    public void clearList() {
         list.clear();
     }
     class MyHolder extends RecyclerView.ViewHolder {
