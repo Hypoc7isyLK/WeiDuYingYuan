@@ -27,7 +27,7 @@
             android:text="待付款"/>
         <View
             android:layout_width="32dp"
-            android:layout_height="wrap_content"
+            android:layout_height="1dp"
             android:padding="@dimen/dp_8"
             android:gravity="center"
             android:button="@null" />
