@@ -1,6 +1,7 @@
 package zmz.zhao.com.zmz.fragment;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -22,6 +23,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import recycler.coverflow.CoverFlowLayoutManger;
 import recycler.coverflow.RecyclerCoverFlow;
+import zmz.zhao.com.zmz.activity.OutDetailsActivity;
 import zmz.zhao.com.zmz.adapter.CarouselAdapter;
 import zmz.zhao.com.zmz.adapter.CommingSunAdapter;
 import zmz.zhao.com.zmz.adapter.HotShowingAdapter;
@@ -128,24 +130,30 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
+
 
 
 
     @OnClick({R.id.rmdy, R.id.zzry, R.id.jjsy,R.id.dingwei})
     public void onViewClicked(View view) {
+        Intent intent = new Intent(getActivity(),OutDetailsActivity.class);
         switch (view.getId()) {
             case R.id.dingwei:
                 break;
             case R.id.rmdy:
+
+                intent.putExtra("hei","1");
+                startActivity(intent);
                 break;
             case R.id.zzry:
+
+                intent.putExtra("hei","2");
+                startActivity(intent);
                 break;
             case R.id.jjsy:
+
+                intent.putExtra("hei","3");
+                startActivity(intent);
                 break;
         }
     }
@@ -202,5 +210,14 @@ public class HomeFragment extends BaseFragment {
         public void fail(ApiException e) {
 
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+        mHotShowingPresenter = null;
+        mShowLunBoPresenter = null;
+        mCommingSunPresenter = null;
     }
 }
