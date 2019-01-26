@@ -29,12 +29,13 @@
         <activity android:name="zmz.zhao.com.zmz.activity.LoginActivity" />
         <activity android:name="zmz.zhao.com.zmz.activity.RegisterActivity" />
         <activity android:name="zmz.zhao.com.zmz.activity.HomeActivity" />
-        <activity android:name="zmz.zhao.com.zmz.activity.ChooseActivity"></activity>
-        <activity android:name="zmz.zhao.com.zmz.activity.FocusActivity"/>
-        <activity android:name="zmz.zhao.com.zmz.activity.MineProfileActivity"/>
-        <activity android:name="zmz.zhao.com.zmz.activity.MyOpinion"/>
-        <activity android:name="zmz.zhao.com.zmz.activity.UpdatePwdActivity"/>
-        <activity android:name="zmz.zhao.com.zmz.activity.RecordActivity"/>
+        <activity android:name="zmz.zhao.com.zmz.activity.ChooseActivity" />
+        <activity android:name="zmz.zhao.com.zmz.activity.FocusActivity" />
+        <activity android:name="zmz.zhao.com.zmz.activity.MineProfileActivity" />
+        <activity android:name="zmz.zhao.com.zmz.activity.MyOpinion" />
+        <activity android:name="zmz.zhao.com.zmz.activity.UpdatePwdActivity" />
+        <activity android:name="zmz.zhao.com.zmz.activity.RecordActivity" />
+        <activity android:name="zmz.zhao.com.zmz.activity.OutDetailsActivity"></activity>
     </application>
 
 </manifest>
