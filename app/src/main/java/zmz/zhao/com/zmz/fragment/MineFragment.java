@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserDaoDao;
 
@@ -24,6 +26,7 @@ import zmz.zhao.com.zmz.activity.FocusActivity;
 import zmz.zhao.com.zmz.activity.LoginActivity;
 import zmz.zhao.com.zmz.activity.MineProfileActivity;
 import zmz.zhao.com.zmz.activity.MyOpinion;
+import zmz.zhao.com.zmz.activity.RecordActivity;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.SignPresenter;
@@ -33,7 +36,7 @@ import zmz.zhao.com.zmz.view.DataCall;
 
 public class MineFragment extends BaseFragment {
     @BindView(R.id.my_pic)
-    ImageView myPic;
+    SimpleDraweeView myPic;
     @BindView(R.id.my_name)
     TextView myName;
     @BindView(R.id.my_sign)
@@ -64,6 +67,10 @@ public class MineFragment extends BaseFragment {
     public void initView(View view) {
         userid = USERDAO.getUserId();
         sessionId = USERDAO.getSessionId();
+        String headPic = USERDAO.getHeadPic();
+
+        myPic.setImageURI(Uri.parse(headPic));
+        myName.setText(USERDAO.getNickName());
 
         sharedPreferences = getActivity().getSharedPreferences(String.valueOf(userid), getActivity().MODE_PRIVATE);
         signPresenter = new SignPresenter(new SignCall());
@@ -127,6 +134,8 @@ public class MineFragment extends BaseFragment {
                 startActivity(intent1);
                 break;
             case R.id.my_goupiao:
+                Intent intent3 = new Intent(getContext(), RecordActivity.class);
+                startActivity(intent3);
                 break;
             case R.id.my_tickling:
                 Intent intent2 = new Intent(getContext(), MyOpinion.class);

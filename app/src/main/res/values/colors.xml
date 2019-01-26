@@ -7,4 +7,5 @@
     <color name="colorTextColor">#333333</color>
     <color name="common">#666666</color>
     <color name="choosecolor">#80ffffff</color>
+    <color name="startTime">#f77421</color>
 </resources>

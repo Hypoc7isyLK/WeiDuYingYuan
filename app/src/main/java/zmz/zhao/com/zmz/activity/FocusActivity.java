@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -37,6 +38,10 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
     @BindView(R.id.mine_radio)
     RadioGroup mine_radio;
+    @BindView(R.id.mine_movie)
+    RadioButton mine_movie;
+    @BindView(R.id.mine_cinema)
+    RadioButton mine_cinema;
 
     MineMoviePresenter moviePresenter;
     MyCinemaPresenter cinemaPresenter;
@@ -64,6 +69,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         moviePresenter.reqeust(userId, this.sessionId, true);
 
+        mine_movie.setTextColor(getResources().getColorStateList(R.color.white));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
@@ -109,9 +115,12 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.mine_movie) {
 
-
                     movie_recycle.setVisibility(View.VISIBLE);//显示
                     int width = movie_recycle.getMeasuredWidth();
+
+                    mine_movie.setTextColor(getResources().getColorStateList(R.color.white));
+                    mine_cinema.setTextColor(getResources().getColorStateList(R.color.colorTextColor));
+
 
                     //平移
                     TranslateAnimation translateAnimation = new TranslateAnimation(width, 0.0f, 0.0f, 0.0f);
@@ -135,6 +144,8 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
                     cinema_recycle.setVisibility(View.VISIBLE);
 
+                    mine_movie.setTextColor(getResources().getColorStateList(R.color.colorTextColor));
+                    mine_cinema.setTextColor(getResources().getColorStateList(R.color.white));
 
                     //平移
                     TranslateAnimation translateAnimation = new TranslateAnimation(movie_recycle.getMeasuredWidth(), 0.0f, 0.0f, 0.0f);
@@ -208,6 +219,10 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         @Override
         public void success(Result<List<Attention>> result) {
+            movie_recycle.refreshComplete();
+
+            movie_recycle.loadMoreComplete();
+
             if (result.getStatus().equals("0000")) {
 
                 if (moviePresenter.isResresh()) {
@@ -232,6 +247,11 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
     private class CinemaCall implements DataCall<Result<List<Address>>> {
         @Override
         public void success(Result<List<Address>> result) {
+
+            cinema_recycle.refreshComplete();
+
+            cinema_recycle.loadMoreComplete();
+
             if (result.getStatus().equals("0000")) {
 
                 if (cinemaPresenter.isResresh()) {

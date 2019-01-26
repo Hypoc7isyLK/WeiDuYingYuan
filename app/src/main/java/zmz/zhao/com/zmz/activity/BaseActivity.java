@@ -21,6 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         UserDaoDao userDaoDao = DaoMaster.newDevSession(this, UserDaoDao.TABLENAME).getUserDaoDao();
 
         List<UserDao> userDaoList = userDaoDao.queryBuilder().where(UserDaoDao.Properties.Status.eq(1)).list();
@@ -28,6 +29,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (userDaoList != null && userDaoList.size()>0) {
             USERDAO = userDaoList.get(0);
         }
+
+
         setContentView(getLayoutId());
         ButterKnife.bind(this);
 

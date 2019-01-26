@@ -8,10 +8,10 @@ package zmz.zhao.com.zmz.bean;
 public class Record {
 
     private int amount;
-    private long beginTime;
+    private String beginTime;
     private String cinemaName;
     private long createTime;
-    private long endTime;
+    private String endTime;
     private int id;
     private String movieName;
     private String orderId;
@@ -19,6 +19,21 @@ public class Record {
     private String screeningHall;
     private int status;
     private int userId;
+
+    public Record(int amount, String beginTime, String cinemaName, long createTime, String endTime, int id, String movieName, String orderId, double price, String screeningHall, int status, int userId) {
+        this.amount = amount;
+        this.beginTime = beginTime;
+        this.cinemaName = cinemaName;
+        this.createTime = createTime;
+        this.endTime = endTime;
+        this.id = id;
+        this.movieName = movieName;
+        this.orderId = orderId;
+        this.price = price;
+        this.screeningHall = screeningHall;
+        this.status = status;
+        this.userId = userId;
+    }
 
     public int getAmount() {
         return amount;
@@ -28,11 +43,11 @@ public class Record {
         this.amount = amount;
     }
 
-    public long getBeginTime() {
+    public String getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(long beginTime) {
+    public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
     }
 
@@ -52,11 +67,11 @@ public class Record {
         this.createTime = createTime;
     }
 
-    public long getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(long endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

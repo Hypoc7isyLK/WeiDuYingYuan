@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="@dimen/dp_10"
+    android:background="@drawable/sele_circular"
+    android:padding="@dimen/dp_10">
+
+    <RelativeLayout
+        android:id="@+id/rela"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_5">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="特写"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/colorTextColor"
+            android:padding="@dimen/dp_5"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:orientation="vertical"
+        android:layout_below="@+id/rela">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/startTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:padding="@dimen/dp_5"
+                android:textColor="@color/startTime"
+                android:text="14:30:00"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/startTime"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_toRightOf="@+id/startTime"
+                android:text="-"/>
+            <TextView
+                android:id="@+id/endTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:padding="@dimen/dp_5"
+                android:layout_toRightOf="@+id/startTime"
+                android:textColor="@color/startTime"
+                android:text="16:30:00"/>
+            <TextView
+                android:id="@+id/start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:padding="@dimen/dp_5"
+                android:layout_below="@+id/startTime"
+                android:textColor="@color/startTime"
+                android:text="开始时间"/>
+            <TextView
+                android:id="@+id/end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:padding="@dimen/dp_5"
+                android:layout_below="@+id/startTime"
+                android:layout_toRightOf="@+id/start"
+                android:textColor="@color/startTime"
+                android:text="结束时间"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:padding="@dimen/dp_5">
+
+            <TextView
+                android:id="@+id/indent_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="订单号："/>
+            <TextView
+                android:id="@+id/indent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/indent_text"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="1254635251556"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:padding="@dimen/dp_5">
+
+            <TextView
+                android:id="@+id/order_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="下单时间："/>
+            <TextView
+                android:id="@+id/order_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/order_text"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="1254635251556"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:padding="@dimen/dp_5">
+
+            <TextView
+                android:id="@+id/theatre_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="影院："/>
+            <TextView
+                android:id="@+id/theatre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/theatre_text"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="1254635251556"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:padding="@dimen/dp_5">
+
+            <TextView
+                android:id="@+id/hall_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="影厅："/>
+            <TextView
+                android:id="@+id/hall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/hall_text"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="1254635251556"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:padding="@dimen/dp_5">
+
+            <TextView
+                android:id="@+id/amount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="数量："/>
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/amount_text"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="1254635251556"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_5"
+            android:padding="@dimen/dp_5">
+
+            <TextView
+                android:id="@+id/money_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="金额："/>
+            <TextView
+                android:id="@+id/money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/money_text"
+                android:textColor="@color/common"
+                android:textSize="@dimen/sp_12"
+                android:text="1254635251556"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+
+

@@ -82,7 +82,7 @@ public class MineProfileActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.back, R.id.update,R.id.newpwd})
+    @OnClick({R.id.back, R.id.update,R.id.nickpwd})
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.back:
