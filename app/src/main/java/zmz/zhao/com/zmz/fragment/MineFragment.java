@@ -268,7 +268,6 @@ public class MineFragment extends BaseFragment {
             switch (requestCode) {
                 case TAKE_PICTURE:
 
-
                     File file = new File(Environment.getExternalStorageDirectory() + File.separator + "temp_image.jpg");
 
                     String path = file.getPath();
@@ -278,9 +277,6 @@ public class MineFragment extends BaseFragment {
                     break;
                 case CHOOSE_PICTURE:
                     Uri uri = data.getData();
-
-
-                    //Log.e("zmz","============"+uri);
 
                     String[] proj = {MediaStore.Images.Media.DATA};
 
