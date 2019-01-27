@@ -42,10 +42,13 @@ import zmz.zhao.com.zmz.activity.LoginActivity;
 import zmz.zhao.com.zmz.activity.MineProfileActivity;
 import zmz.zhao.com.zmz.activity.MyOpinion;
 import zmz.zhao.com.zmz.activity.RecordActivity;
+import zmz.zhao.com.zmz.activity.SystemMassageActivity;
+import zmz.zhao.com.zmz.bean.MineMassage;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.dao.UserInfo;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.HeadPresenter;
+import zmz.zhao.com.zmz.presenter.MessagePresenter;
 import zmz.zhao.com.zmz.presenter.SignPresenter;
 import zmz.zhao.com.zmz.util.DateUtils;
 import zmz.zhao.com.zmz.util.FileUtils;
@@ -78,60 +81,48 @@ public class MineFragment extends BaseFragment {
 
     SignPresenter signPresenter;
     HeadPresenter headPresenter;
+    MessagePresenter messagePresenter;
     PopupWindow popWindow;
     private static final int CHOOSE_PICTURE = 1000;
     private static final int TAKE_PICTURE = 1500;
 
     private AlertDialog.Builder mBuilder;
-    private SharedPreferences sharedPreferences;
     private int userid;
     private String sessionId;
     private boolean image;
 
     @Override
     public void initView(View view) {
+
         userid = USER_INFO.getUserId();
+
         sessionId = USER_INFO.getSessionId();
+
         String headPic = USER_INFO.getHeadPic();
+
         headPresenter = new HeadPresenter(new HeadCall());
+
+        signPresenter = new SignPresenter(new SignCall());
+
+        messagePresenter = new MessagePresenter(new MassageCall());
+
+        messagePresenter.reqeust(userid, sessionId);
+
         myPic.setImageURI(Uri.parse(headPic));
+
         myName.setText(USER_INFO.getNickName());
 
-        if(Build.VERSION.SDK_INT>=23){
-            if(ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    !=PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(getActivity(),new String[]{
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE},100);
-            }else {
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+            } else {
                 image = FileUtils.createDirs("/image/bimap");
             }
-        }else {
+        } else {
             image = FileUtils.createDirs("/image/bimap");
-        }
-
-
-        sharedPreferences = getActivity().getSharedPreferences(String.valueOf(userid), getActivity().MODE_PRIVATE);
-        signPresenter = new SignPresenter(new SignCall());
-        boolean sign = sharedPreferences.getBoolean("sign", false);
-        int olduserId = sharedPreferences.getInt("userId", 0);
-        String olddate = sharedPreferences.getString("date", "");
-        try {
-            String date = DateUtils.dateFormat(new Date(System.currentTimeMillis()), DateUtils.DATE_PATTERN);
-
-            if (date.equals(olddate) && userid == olduserId) {
-                if (sign) {
-                    mySign.setText("已签到");
-                }
-
-            } else {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("sign", false);
-                editor.commit();
-            }
-
-        } catch (ParseException e1) {
-            e1.printStackTrace();
         }
 
 
@@ -149,7 +140,7 @@ public class MineFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.my_pic, R.id.my_sign, R.id.my_message, R.id.my_attention, R.id.my_goupiao, R.id.my_tickling, R.id.my_new_versions, R.id.my_finish})
+    @OnClick({R.id.my_pic, R.id.my_sign,R.id.system, R.id.my_message, R.id.my_attention, R.id.my_goupiao, R.id.my_tickling, R.id.my_new_versions, R.id.my_finish})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.my_pic:
@@ -168,32 +159,31 @@ public class MineFragment extends BaseFragment {
                 initPop(popView);
                 break;
             case R.id.my_sign:
-                boolean sign = sharedPreferences.getBoolean("sign", false);
-                if (sign) {
-                    Toast.makeText(getContext(), "今日已签到", Toast.LENGTH_SHORT).show();
-                } else {
 
-                    signPresenter.reqeust(userid, sessionId);
-                }
+
+                signPresenter.reqeust(userid, sessionId);
 
                 break;
             case R.id.my_message:
-                Intent intent = new Intent(getContext(), MineProfileActivity.class);
-                startActivity(intent);
+                Intent datum = new Intent(getContext(), MineProfileActivity.class);
+                startActivity(datum);
                 break;
             case R.id.my_attention:
-                Intent intent1 = new Intent(getContext(), FocusActivity.class);
-                startActivity(intent1);
+                Intent attention = new Intent(getContext(), FocusActivity.class);
+                startActivity(attention);
                 break;
             case R.id.my_goupiao:
-                Intent intent3 = new Intent(getContext(), RecordActivity.class);
-                startActivity(intent3);
+                Intent buy = new Intent(getContext(), RecordActivity.class);
+                startActivity(buy);
                 break;
             case R.id.my_tickling:
-                Intent intent2 = new Intent(getContext(), MyOpinion.class);
-                startActivity(intent2);
+                Intent tickling = new Intent(getContext(), MyOpinion.class);
+                startActivity(tickling);
                 break;
-            case R.id.my_new_versions:
+            case R.id.system:
+                Intent intent_system = new Intent(getContext(), SystemMassageActivity.class);
+                startActivity(intent_system);
+
                 break;
             case R.id.my_finish:
                 mBuilder = new AlertDialog.Builder(getActivity());
@@ -262,14 +252,12 @@ public class MineFragment extends BaseFragment {
             public void onClick(View v) {
 
 
-
-
                 Intent openCameraIntent = new Intent(
                         MediaStore.ACTION_IMAGE_CAPTURE);
 
-                tempUri = Uri.parse(FileUtils.getDir("/image/bimap")+"1.jpg");
+                tempUri = Uri.parse(FileUtils.getDir("/image/bimap") + "1.jpg");
 
-                Log.e("zmz","====="+tempUri);
+                Log.e("zmz", "=====" + tempUri);
 
                 //启动相机程序
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
@@ -294,9 +282,9 @@ public class MineFragment extends BaseFragment {
                     File imageFile = FileUtils.getImageFile();
                     String path = imageFile.getPath();
 
-                    Log.e("zmz","====="+path);
+                    Log.e("zmz", "=====" + path);
 
-                    headPresenter.reqeust(userid, sessionId,path);
+                    headPresenter.reqeust(userid, sessionId, path);
 
                     break;
                 case CHOOSE_PICTURE:
@@ -326,18 +314,7 @@ public class MineFragment extends BaseFragment {
         public void success(Result result) {
             if (result.getStatus().equals("0000")) {
 
-                try {
-                    String date = DateUtils.dateFormat(new Date(System.currentTimeMillis()), DateUtils.DATE_PATTERN);
-                    Toast.makeText(getContext(), "签到成功", Toast.LENGTH_SHORT).show();
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("sign", true);
-                    editor.putInt("userId", userid);
-                    editor.putString("date", date);
-                    editor.commit();
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Toast.makeText(getContext(), "签到成功", Toast.LENGTH_SHORT).show();
 
                 mySign.setText("已签到");
             }
@@ -359,6 +336,24 @@ public class MineFragment extends BaseFragment {
             userInfoDao.update(USER_INFO);
 
             myPic.setImageURI(Uri.parse(result.getHeadPath()));
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+
+    private class MassageCall implements DataCall<Result<MineMassage>> {
+        @Override
+        public void success(Result<MineMassage> result) {
+            MineMassage mineMassage = result.getResult();
+
+            if (mineMassage.getUserSignStatus() == 2) {
+                mySign.setText("已签到");
+            } else {
+                mySign.setText("签到");
+            }
         }
 
         @Override

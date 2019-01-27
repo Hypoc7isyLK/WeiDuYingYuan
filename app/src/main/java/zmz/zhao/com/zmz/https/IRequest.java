@@ -14,10 +14,12 @@ import retrofit2.http.Query;
 import zmz.zhao.com.zmz.bean.Address;
 import zmz.zhao.com.zmz.bean.Attention;
 import zmz.zhao.com.zmz.bean.LoginBean;
+import zmz.zhao.com.zmz.bean.MineMassage;
 import zmz.zhao.com.zmz.bean.MyMessage;
 import zmz.zhao.com.zmz.bean.Record;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.ShowLunBoBean;
+import zmz.zhao.com.zmz.bean.SystemMassage;
 
 public interface IRequest {
 
@@ -62,9 +64,9 @@ public interface IRequest {
      * @date 2019/1/25
      * @method：签到
      */
-    @GET("movie/v1/verify/findMoviePageList")
-    Observable<Result<List<Attention>>> sign(@Header("userId") int userId,
-                                             @Header("sessionId") String sessionId);
+    @GET("user/v1/verify/userSignIn")
+    Observable<Result> sign(@Header("userId") int userId,
+                            @Header("sessionId") String sessionId);
 
     /**
      * @作者 啊哈
@@ -153,17 +155,17 @@ public interface IRequest {
      */
     @POST("user/v1/verify/uploadHeadPic")
     Observable<Result> heard(@Header("userId") int userid,
-                                 @Header("sessionId") String session,
-                                 @Body MultipartBody image);
+                             @Header("sessionId") String session,
+                             @Body MultipartBody image);
 
     /**
      * 正在热映
      */
     @GET("movie/v1/findReleaseMovieList")
     Observable<Result<List<ShowLunBoBean>>> hotShowing(@Header("userId") int userId,
-                                                      @Header("sessionId") String sessionId,
-                                                      @Query("page") String page,
-                                                      @Query("count") String count);
+                                                       @Header("sessionId") String sessionId,
+                                                       @Query("page") String page,
+                                                       @Query("count") String count);
 
     /**
      * 即将上映
@@ -173,5 +175,26 @@ public interface IRequest {
                                                        @Header("sessionId") String sessionId,
                                                        @Query("page") String page,
                                                        @Query("count") String count);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/1/26
+     * @method：个人状态信息
+     */
+    @GET("user/v1/verify/findUserHomeInfo")
+    Observable<Result<MineMassage>> minemassage(@Header("userId") int userId,
+                                                @Header("sessionId") String sessionId);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/1/26
+     * @method：系统消息
+     */
+    @GET("tool/v1/verify/findAllSysMsgList")
+    Observable<Result<List<SystemMassage>>> systemmassage(@Header("userId") int userId,
+                                                          @Header("sessionId") String sessionId,
+                                                          @Query("page")int page,
+                                                          @Query("count")int count);
+
 }
 

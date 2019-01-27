@@ -1,6 +1,7 @@
 package zmz.zhao.com.zmz.activity;
 
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
@@ -65,6 +66,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
         cinema_recycle.setVisibility(View.GONE);
 
         userId = USER_INFO.getUserId();
+
         sessionId = USER_INFO.getSessionId();
 
         moviePresenter.reqeust(userId, this.sessionId, true);
