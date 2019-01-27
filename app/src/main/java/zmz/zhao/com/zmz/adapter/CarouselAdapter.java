@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -44,9 +45,20 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         viewHolder.carousel_simple.setImageURI(mShowLunBoBeans.get(i).getImageUrl());
         viewHolder.move_name.setText(mShowLunBoBeans.get(i).getName());
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int id = mShowLunBoBeans.get(i).getId();
+                Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
+                hotOnClickListener.Onclick(id);
+            }
+        });
+
     }
 
     @Override
@@ -66,5 +78,14 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.ViewHo
             move_name = itemView.findViewById(R.id.move_name);
 
         }
+    }
+
+    public interface HotOnClickListener{
+        void Onclick(int id);
+    }
+    private HotOnClickListener hotOnClickListener;
+
+    public void setHotOnClickListener(HotOnClickListener hotOnClickListener) {
+        this.hotOnClickListener = hotOnClickListener;
     }
 }

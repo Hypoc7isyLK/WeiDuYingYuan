@@ -62,7 +62,6 @@ public class HotShowingAdapter extends RecyclerView.Adapter<HotShowingAdapter.Vi
             public void onClick(View v) {
 
                 int id = mBeanList.get(i).getId();
-                Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
                 hotOnClickListener.Onclick(id);
             }
         });

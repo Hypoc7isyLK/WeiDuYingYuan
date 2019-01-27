@@ -1,10 +1,12 @@
 package zmz.zhao.com.zmz.fragment;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -32,6 +34,7 @@ import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.CommingSunPresenter;
 import zmz.zhao.com.zmz.presenter.HotShowingPresenter;
 import zmz.zhao.com.zmz.presenter.ShowLunBoPresenter;
+import zmz.zhao.com.zmz.view.BackNum;
 import zmz.zhao.com.zmz.view.DataCall;
 
 
@@ -59,6 +62,7 @@ public class HomeFragment extends BaseFragment {
     RecyclerView recyclerviewCommingsun;
     @BindView(R.id.details_search)
     SearchView search;
+
     private ShowLunBoPresenter mShowLunBoPresenter;
     private String mSessionId;
     private int mUserId;
@@ -73,6 +77,12 @@ public class HomeFragment extends BaseFragment {
 
     private HotShowingAdapter mCommingSunAdapter;
     private CommingSunPresenter mCommingSunPresenter;
+
+    private BackNum backNum;
+
+    public void setBackNum(BackNum backNum) {
+        this.backNum = backNum;
+    }
 
     @Override
     public void initView(View view) {
@@ -150,31 +160,26 @@ public class HomeFragment extends BaseFragment {
         mHotShowingAdapter.setHotOnClickListener(new HotShowingAdapter.HotOnClickListener() {
             @Override
             public void Onclick(int id) {
-                Intent intent = new Intent(getContext(), InsideDetailsActivity.class);
+                backNum.getNum(id);
 
-                intent.putExtra("id",id);
-
-                startActivity(intent);
+            }
+        });
+        mCarouselAdapter.setHotOnClickListener(new CarouselAdapter.HotOnClickListener() {
+            @Override
+            public void Onclick(int id) {
+                backNum.getNum(id);
             }
         });
         mPopularAdapter.setHotOnClickListener(new HotShowingAdapter.HotOnClickListener() {
             @Override
             public void Onclick(int id) {
-                Intent intent = new Intent(getContext(), InsideDetailsActivity.class);
-
-                intent.putExtra("id",id);
-
-                startActivity(intent);
+                backNum.getNum(id);
             }
         });
         mCommingSunAdapter.setHotOnClickListener(new HotShowingAdapter.HotOnClickListener() {
             @Override
             public void Onclick(int id) {
-                Intent intent = new Intent(getContext(), InsideDetailsActivity.class);
-
-                intent.putExtra("id",id);
-
-                startActivity(intent);
+                backNum.getNum(id);
             }
         });
 
@@ -277,6 +282,13 @@ public class HomeFragment extends BaseFragment {
 
         }
     }
+
+   @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        backNum = (BackNum) context;
+    }
+
 
     @Override
     public void onDestroyView() {

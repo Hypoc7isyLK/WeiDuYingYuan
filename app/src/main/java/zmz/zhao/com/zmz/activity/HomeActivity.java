@@ -1,7 +1,9 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
@@ -12,8 +14,9 @@ import butterknife.BindView;
 import zmz.zhao.com.zmz.fragment.HomeFragment;
 import zmz.zhao.com.zmz.fragment.MineFragment;
 import zmz.zhao.com.zmz.fragment.MovieFragment;
+import zmz.zhao.com.zmz.view.BackNum;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements BackNum {
 
 
     @BindView(R.id.frame)
@@ -76,5 +79,15 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void destoryData() {
 
+    }
+
+    @Override
+    public void getNum(int id) {
+        Intent intent = new Intent(HomeActivity.this, InsideDetailsActivity.class);
+
+        intent.putExtra("id",id+"");
+        Log.e("zmz","========="+id);
+
+        startActivity(intent);
     }
 }
