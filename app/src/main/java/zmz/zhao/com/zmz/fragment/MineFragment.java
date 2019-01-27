@@ -137,6 +137,8 @@ public class MineFragment extends BaseFragment {
 
     }
 
+
+
     @Override
     public void initData(View view) {
     }

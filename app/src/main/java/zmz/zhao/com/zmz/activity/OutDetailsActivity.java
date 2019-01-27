@@ -1,5 +1,6 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SearchView;
 
 import com.bw.movie.R;
 
@@ -17,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import zmz.zhao.com.zmz.adapter.OutDetailsAdapter;
-import zmz.zhao.com.zmz.adapter.PopularAdapter;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.ShowLunBoBean;
 import zmz.zhao.com.zmz.exception.ApiException;
@@ -47,6 +48,8 @@ public class OutDetailsActivity extends BaseActivity {
     ImageView FocusBack;
     @BindView(R.id.move_radio)
     RadioGroup moveRadio;
+    @BindView(R.id.details_search)
+    SearchView detailsSearch;
     private String mSessionId;
     private int mUserId;
     private ShowLunBoPresenter mShowLunBoPresenter;
@@ -67,17 +70,17 @@ public class OutDetailsActivity extends BaseActivity {
         mUserId = USER_INFO.getUserId();
         mOutDetailsAdapter = new OutDetailsAdapter(this);
         mHei = getIntent().getStringExtra("hei");
-        if (mHei.equals("1")){
+        if (mHei.equals("1")) {
             rmdy();
-        }else if (mHei.equals("2")){
+        } else if (mHei.equals("2")) {
             zzry();
-        }else {
+        } else {
             jjsy();
         }
         moveRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.move_rmdy:
                         rmdy();
                         break;
@@ -88,6 +91,17 @@ public class OutDetailsActivity extends BaseActivity {
                         jjsy();
                         break;
                 }
+            }
+        });
+
+        mOutDetailsAdapter.setOnclicklitener(new OutDetailsAdapter.Onclicklitener() {
+            @Override
+            public void success(String imageUrl, String name, int followMovie) {
+                Intent intent = new Intent(OutDetailsActivity.this,InsideDetailsActivity.class);
+                intent.putExtra("image",imageUrl);
+                intent.putExtra("name",name);
+                intent.putExtra("follow",followMovie);
+                startActivity(intent);
             }
         });
     }
@@ -135,9 +149,11 @@ public class OutDetailsActivity extends BaseActivity {
     }
 
 
-
     @Override
     protected void destoryData() {
+        mCommingSunPresenter = null;
+        mHotShowingPresenter = null;
+        mShowLunBoPresenter = null;
 
     }
 
@@ -152,6 +168,8 @@ public class OutDetailsActivity extends BaseActivity {
                 break;
         }
     }
+
+
 
     private class ShowLunboCall implements DataCall<Result<List<ShowLunBoBean>>> {
 
@@ -171,6 +189,7 @@ public class OutDetailsActivity extends BaseActivity {
 
     private class HotShowingCall implements DataCall<Result<List<ShowLunBoBean>>> {
         private List<ShowLunBoBean> mResult;
+
         @Override
         public void success(Result<List<ShowLunBoBean>> result) {
             mResult = result.getResult();
@@ -185,6 +204,7 @@ public class OutDetailsActivity extends BaseActivity {
 
     private class CommingSunCall implements DataCall<Result<List<ShowLunBoBean>>> {
         private List<ShowLunBoBean> mResult;
+
         @Override
         public void success(Result<List<ShowLunBoBean>> result) {
             mResult = result.getResult();

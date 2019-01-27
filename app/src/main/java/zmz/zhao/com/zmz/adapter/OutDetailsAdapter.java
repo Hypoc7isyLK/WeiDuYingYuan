@@ -25,6 +25,8 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
     Context context;
     List<ShowLunBoBean> mBeanList;
     private int mFollowMovie;
+    private String mImageUrl;
+    private String mName;
 
 
     public OutDetailsAdapter(Context context) {
@@ -48,8 +50,10 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.details_simple.setImageURI(mBeanList.get(i).getImageUrl());
-        viewHolder.details_title.setText(mBeanList.get(i).getName());
+        mImageUrl = mBeanList.get(i).getImageUrl();
+        mName = mBeanList.get(i).getName();
+        viewHolder.details_simple.setImageURI(mImageUrl);
+        viewHolder.details_title.setText(mName);
         viewHolder.details_message.setText(mBeanList.get(i).getSummary());
         mFollowMovie = mBeanList.get(i).getFollowMovie();
         if (mFollowMovie == 1){
@@ -57,6 +61,13 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
         }else {
             viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_default);
         }
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mOnclicklitener.success(mImageUrl,mName,mFollowMovie);
+            }
+        });
     }
 
     @Override
@@ -78,5 +89,15 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
             details_message = itemView.findViewById(R.id.details_message);
             xiaoxinxin = itemView.findViewById(R.id.xiaoxinxin);
         }
+    }
+
+    public interface Onclicklitener{
+        void success(String imageUrl, String name, int followMovie);
+    }
+
+    private Onclicklitener mOnclicklitener;
+
+    public void setOnclicklitener(Onclicklitener onclicklitener) {
+        mOnclicklitener = onclicklitener;
     }
 }
