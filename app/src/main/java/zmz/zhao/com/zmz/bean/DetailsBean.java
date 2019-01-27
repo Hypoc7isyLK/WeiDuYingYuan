@@ -1,5 +1,7 @@
 package zmz.zhao.com.zmz.bean;
 
+import java.util.List;
+
 /**
  * date:2019/1/27
  * author:李阔(淡意衬优柔)
@@ -9,13 +11,17 @@ public class DetailsBean  {
 
     private String director;
     private String duration;
-    private double fare;
+    private int followMovie;
     private int id;
     private String imageUrl;
+    private String movieTypes;
     private String name;
     private String placeOrigin;
+    private int rank;
     private String starring;
     private String summary;
+    private List<String> posterList;
+    private List<ShortFilmListBean> shortFilmList;
 
     public String getDirector() {
         return director;
@@ -33,12 +39,12 @@ public class DetailsBean  {
         this.duration = duration;
     }
 
-    public double getFare() {
-        return fare;
+    public int getFollowMovie() {
+        return followMovie;
     }
 
-    public void setFare(double fare) {
-        this.fare = fare;
+    public void setFollowMovie(int followMovie) {
+        this.followMovie = followMovie;
     }
 
     public int getId() {
@@ -57,6 +63,14 @@ public class DetailsBean  {
         this.imageUrl = imageUrl;
     }
 
+    public String getMovieTypes() {
+        return movieTypes;
+    }
+
+    public void setMovieTypes(String movieTypes) {
+        this.movieTypes = movieTypes;
+    }
+
     public String getName() {
         return name;
     }
@@ -73,6 +87,14 @@ public class DetailsBean  {
         this.placeOrigin = placeOrigin;
     }
 
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
     public String getStarring() {
         return starring;
     }
@@ -87,5 +109,47 @@ public class DetailsBean  {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public List<String> getPosterList() {
+        return posterList;
+    }
+
+    public void setPosterList(List<String> posterList) {
+        this.posterList = posterList;
+    }
+
+    public List<ShortFilmListBean> getShortFilmList() {
+        return shortFilmList;
+    }
+
+    public void setShortFilmList(List<ShortFilmListBean> shortFilmList) {
+        this.shortFilmList = shortFilmList;
+    }
+
+    public static class ShortFilmListBean {
+        /**
+         * imageUrl : http://172.17.8.100/images/movie/stills/wbsys/wbsys2.jpg
+         * videoUrl : http://172.17.8.100/video/movie/wbsys/wbsysygp1.ts
+         */
+
+        private String imageUrl;
+        private String videoUrl;
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
+
+        public String getVideoUrl() {
+            return videoUrl;
+        }
+
+        public void setVideoUrl(String videoUrl) {
+            this.videoUrl = videoUrl;
+        }
     }
 }

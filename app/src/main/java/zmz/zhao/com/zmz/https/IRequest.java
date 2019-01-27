@@ -200,7 +200,7 @@ public interface IRequest {
     /**
      * 电影详情
      */
-    @GET("movie/v1/findMoviesById")
+    @GET("movie/v1/findMoviesDetail")
     Observable<Result<DetailsBean>> showDetails(@Header("userId") int userId,
                                                 @Header("sessionId") String sessionId,
                                                 @Query("movieId")String movieId);
