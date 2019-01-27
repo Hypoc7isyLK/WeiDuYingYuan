@@ -13,6 +13,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 import zmz.zhao.com.zmz.bean.Address;
 import zmz.zhao.com.zmz.bean.Attention;
+import zmz.zhao.com.zmz.bean.DetailsBean;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.MineMassage;
 import zmz.zhao.com.zmz.bean.MyMessage;
@@ -195,6 +196,14 @@ public interface IRequest {
                                                           @Header("sessionId") String sessionId,
                                                           @Query("page")int page,
                                                           @Query("count")int count);
+
+    /**
+     * 电影详情
+     */
+    @GET("movie/v1/findMoviesById")
+    Observable<Result<DetailsBean>> showDetails(@Header("userId") int userId,
+                                                @Header("sessionId") String sessionId,
+                                                @Query("movieId")String movieId);
 
 }
 

@@ -14,6 +14,11 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import zmz.zhao.com.zmz.bean.DetailsBean;
+import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.exception.ApiException;
+import zmz.zhao.com.zmz.presenter.DetailsPresenter;
+import zmz.zhao.com.zmz.view.DataCall;
 
 public class InsideDetailsActivity extends BaseActivity {
 
@@ -36,10 +41,11 @@ public class InsideDetailsActivity extends BaseActivity {
     ImageView FocusBack;
     @BindView(R.id.insidetails_buy)
     ImageView insidetailsBuy;
-    private Intent mIntent;
-    private String mImage;
-    private String mName;
-    private String mFollow;
+    private DetailsPresenter mDetailsPresenter;
+    private String mSessionId;
+    private int mUserId;
+    private String mId1;
+
 
     @Override
     protected int getLayoutId() {
@@ -48,24 +54,26 @@ public class InsideDetailsActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        mSessionId = USER_INFO.getSessionId();
+        mUserId = USER_INFO.getUserId();
         ButterKnife.bind(this);
-        mIntent = getIntent();
-        mImage = mIntent.getStringExtra("image");
-        mName = mIntent.getStringExtra("name");
-        mFollow = mIntent.getStringExtra("follow");
-        Log.e("lk","fllow"+mFollow);
-        insidetailsSimple.setImageURI(mImage);
-        insidetailsTitle.setText(mName);
+        Intent mIntent = getIntent();
+        mId1 = mIntent.getStringExtra("id");
+        Log.e("lk","inside"+mId1);
+
         /*if (mFollow == 1){
             xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_selected);
         }else {
             xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_default);
         }*/
+
+        mDetailsPresenter = new DetailsPresenter(new DetailsCall());
+        mDetailsPresenter.reqeust(mUserId,mSessionId,mId1);
     }
 
     @Override
     protected void destoryData() {
-
+        mDetailsPresenter=null;
     }
 
     @OnClick({R.id.xiaoxinxin, R.id.insidetails_details, R.id.insidetails_foreshow, R.id.insidetails_photo, R.id.insidetails_discuss, R.id.Focus_back, R.id.insidetails_buy})
@@ -86,6 +94,23 @@ public class InsideDetailsActivity extends BaseActivity {
                 break;
             case R.id.insidetails_buy:
                 break;
+        }
+    }
+
+    private class DetailsCall implements DataCall<Result<DetailsBean>> {
+
+        private DetailsBean mResult;
+
+        @Override
+        public void success(Result<DetailsBean> result) {
+            mResult = result.getResult();
+            insidetailsSimple.setImageURI(mResult.getImageUrl());
+            insidetailsTitle.setText(mResult.getName());
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
         }
     }
 }

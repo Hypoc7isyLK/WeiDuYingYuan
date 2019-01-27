@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -96,11 +97,10 @@ public class OutDetailsActivity extends BaseActivity {
 
         mOutDetailsAdapter.setOnclicklitener(new OutDetailsAdapter.Onclicklitener() {
             @Override
-            public void success(String imageUrl, String name, int followMovie) {
+            public void success(int id) {
                 Intent intent = new Intent(OutDetailsActivity.this,InsideDetailsActivity.class);
-                intent.putExtra("image",imageUrl);
-                intent.putExtra("name",name);
-                intent.putExtra("follow",followMovie);
+                intent.putExtra("id",id+"");
+                Log.e("lk","outdetailsid"+id);
                 startActivity(intent);
             }
         });

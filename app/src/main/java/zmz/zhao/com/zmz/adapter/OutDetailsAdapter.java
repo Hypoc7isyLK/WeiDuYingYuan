@@ -1,8 +1,10 @@
 package zmz.zhao.com.zmz.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,6 +29,7 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
     private int mFollowMovie;
     private String mImageUrl;
     private String mName;
+    private int mId;
 
 
     public OutDetailsAdapter(Context context) {
@@ -49,13 +52,17 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         mImageUrl = mBeanList.get(i).getImageUrl();
         mName = mBeanList.get(i).getName();
         viewHolder.details_simple.setImageURI(mImageUrl);
         viewHolder.details_title.setText(mName);
         viewHolder.details_message.setText(mBeanList.get(i).getSummary());
         mFollowMovie = mBeanList.get(i).getFollowMovie();
+
+
+        Log.e("lk", "onBindViewHolder: "+mId );
+
         if (mFollowMovie == 1){
             viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_selected);
         }else {
@@ -64,10 +71,12 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mOnclicklitener.success(mImageUrl,mName,mFollowMovie);
+                mId = mBeanList.get(i).getId();
+                mOnclicklitener.success(mId);
+                Log.e("lk", "onBindViewHolder:+session"+mId );
             }
         });
+
     }
 
     @Override
@@ -92,7 +101,7 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
     }
 
     public interface Onclicklitener{
-        void success(String imageUrl, String name, int followMovie);
+        void success(int id);
     }
 
     private Onclicklitener mOnclicklitener;
