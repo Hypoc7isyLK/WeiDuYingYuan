@@ -198,8 +198,8 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
                     doneAdapter.clearList();
                 }
                 Record record = new Record(1,"14:30:00","eee",15225423354L,"16:30:00",1,"啊哈","21616546163161",325.0,"发送",2,1703);
-                records.add(record);
 
+                records.add(record);
 
                 doneAdapter.addAll(records);
 

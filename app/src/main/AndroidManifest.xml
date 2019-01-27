@@ -37,6 +37,7 @@
         <activity android:name="zmz.zhao.com.zmz.activity.RecordActivity" />
         <activity android:name="zmz.zhao.com.zmz.activity.OutDetailsActivity"/>
         <activity android:name="zmz.zhao.com.zmz.activity.InsideDetailsActivity"></activity>
+        <activity android:name="zmz.zhao.com.zmz.activity.SystemMassageActivity"/>
     </application>
 
 </manifest>

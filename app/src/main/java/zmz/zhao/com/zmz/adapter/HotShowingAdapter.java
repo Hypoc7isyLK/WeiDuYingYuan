@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -24,16 +25,22 @@ public class HotShowingAdapter extends RecyclerView.Adapter<HotShowingAdapter.Vi
 
     Context context;
     List<ShowLunBoBean> mBeanList;
+    private HotOnClickListener hotOnClickListener;
+
+    public void setHotOnClickListener(HotOnClickListener hotOnClickListener) {
+        this.hotOnClickListener = hotOnClickListener;
+    }
 
     public HotShowingAdapter(Context context) {
         this.context = context;
         mBeanList = new ArrayList<>();
     }
 
+
+
     public void reset(List<ShowLunBoBean> result) {
-        mBeanList.clear();
+
         mBeanList.addAll(result);
-        notifyDataSetChanged();
     }
 
 
@@ -45,14 +52,30 @@ public class HotShowingAdapter extends RecyclerView.Adapter<HotShowingAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HotShowingAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull HotShowingAdapter.ViewHolder viewHolder, final int i) {
+
         viewHolder.recycler_movie_simp.setImageURI(mBeanList.get(i).getImageUrl());
         viewHolder.recycler_movie_name.setText(mBeanList.get(i).getName());
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int id = mBeanList.get(i).getId();
+                Toast.makeText(context, ""+id, Toast.LENGTH_SHORT).show();
+                hotOnClickListener.Onclick(id);
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return mBeanList.size();
+    }
+
+    public void Clear() {
+        mBeanList.clear();
     }
 
 
@@ -65,4 +88,9 @@ public class HotShowingAdapter extends RecyclerView.Adapter<HotShowingAdapter.Vi
             recycler_movie_name = itemView.findViewById(R.id.recycler_movie_name);
         }
     }
+
+    public interface HotOnClickListener{
+        void Onclick(int id);
+    }
+
 }
