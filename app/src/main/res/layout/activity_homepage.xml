@@ -38,6 +38,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/search"
+            android:queryHint="请输入……"
+            android:maxWidth="@dimen/dp_220"
+            android:searchIcon="@mipmap/com_icon_search_default"
             android:paddingRight="@dimen/dp_10"/>
 
 

@@ -193,8 +193,17 @@ public interface IRequest {
     @GET("tool/v1/verify/findAllSysMsgList")
     Observable<Result<List<SystemMassage>>> systemmassage(@Header("userId") int userId,
                                                           @Header("sessionId") String sessionId,
-                                                          @Query("page")int page,
-                                                          @Query("count")int count);
+                                                          @Query("page") int page,
+                                                          @Query("count") int count);
 
+    /**
+     * @作者 啊哈
+     * @date 2019/1/27
+     * @method：更改消息状态
+     */
+    @GET("tool/v1/verify/changeSysMsgStatus")
+    Observable<Result> change(@Header("userId") int userId,
+                              @Header("sessionId") String sessionId,
+                              @Query("id") int page);
 }
 

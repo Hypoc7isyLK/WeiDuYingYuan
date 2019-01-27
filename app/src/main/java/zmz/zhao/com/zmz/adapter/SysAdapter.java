@@ -9,11 +9,14 @@ import android.widget.TextView;
 import com.bw.movie.R;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import zmz.zhao.com.zmz.activity.SystemMassageActivity;
 import zmz.zhao.com.zmz.bean.SystemMassage;
+import zmz.zhao.com.zmz.util.DateUtils;
 
 /**
  * date:2019/1/26 20:56
@@ -24,6 +27,9 @@ public class SysAdapter extends XRecyclerView.Adapter<SysAdapter.MyHolder>{
 
     private Context context;
     private List<SystemMassage>list = new ArrayList<>();
+    private OnClickListen onClickListen;
+
+
 
     public SysAdapter(Context context) {
         this.context = context;
@@ -39,7 +45,40 @@ public class SysAdapter extends XRecyclerView.Adapter<SysAdapter.MyHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
+    public void onBindViewHolder(@NonNull final MyHolder holder, int i) {
+        final SystemMassage systemMassage = list.get(i);
+
+        holder.title.setText(systemMassage.getTitle());
+        holder.boby.setText(systemMassage.getContent());
+        try {
+
+            String current = DateUtils.dateFormat(new Date(System.currentTimeMillis()), DateUtils.DATE_PATTERN);
+            String oldTime = DateUtils.dateFormat(new Date(systemMassage.getPushTime()), DateUtils.DATE_PATTERN);
+            if (current.equals(oldTime)){
+                holder.time.setText(DateUtils.dateFormat(new Date(systemMassage.getPushTime()), DateUtils.HOUR_MINUTE_ONLY_PATTERN));
+            }else {
+                holder.time.setText(DateUtils.dateFormat(new Date(systemMassage.getPushTime()), DateUtils.HOUR_PATTERN));
+            }
+
+            if (systemMassage.getStatus() == 1){
+                holder.massage.setVisibility(View.GONE);//隐藏
+            }else {
+                holder.massage.setVisibility(View.VISIBLE);//隐藏
+            }
+
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int id = systemMassage.getId();
+                    onClickListen.Onclick(id);
+                }
+            });
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -69,5 +108,13 @@ public class SysAdapter extends XRecyclerView.Adapter<SysAdapter.MyHolder>{
             boby = itemView.findViewById(R.id.boby_text);
             massage = itemView.findViewById(R.id.circle);
         }
+    }
+
+
+    public interface OnClickListen{
+        void Onclick(int id);
+    }
+    public void setOnClickListen(OnClickListen onClickListen) {
+        this.onClickListen = onClickListen;
     }
 }

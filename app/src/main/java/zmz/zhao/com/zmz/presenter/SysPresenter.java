@@ -34,7 +34,7 @@ public class SysPresenter extends BasePresenter{
 
         IRequest iRequest = NetworkManager.getInstance().create(IRequest.class);
 
-        return iRequest.systemmassage((int)args[0],(String)args[0],page,count);
+        return iRequest.systemmassage((int)args[0],(String)args[1],page,count);
     }
 
     public boolean isResresh() {

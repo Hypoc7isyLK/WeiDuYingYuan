@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -10,9 +10,10 @@
         android:layout_marginRight="20dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            app:roundedCornerRadius="@dimen/dp_8"
+            fresco:roundedCornerRadius="@dimen/dp_8"
             android:id="@+id/recycler_movie_simp"
             android:layout_width="@dimen/dp_126"
+            fresco:roundWithOverlayColor="@android:color/white"
             android:layout_height="@dimen/dp_164"/>
 
 
