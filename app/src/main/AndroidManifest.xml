@@ -37,9 +37,24 @@
         <activity android:name="zmz.zhao.com.zmz.activity.MyOpinion" />
         <activity android:name="zmz.zhao.com.zmz.activity.UpdatePwdActivity" />
         <activity android:name="zmz.zhao.com.zmz.activity.RecordActivity" />
-        <activity android:name="zmz.zhao.com.zmz.activity.OutDetailsActivity"/>
-        <activity android:name="zmz.zhao.com.zmz.activity.InsideDetailsActivity"></activity>
-        <activity android:name="zmz.zhao.com.zmz.activity.SystemMassageActivity"/>
+        <activity android:name="zmz.zhao.com.zmz.activity.OutDetailsActivity" />
+        <activity android:name="zmz.zhao.com.zmz.activity.InsideDetailsActivity" />
+        <activity android:name="zmz.zhao.com.zmz.activity.SystemMassageActivity" />
+
+        <activity android:name="zmz.zhao.com.zmz.activity.CinemaActivity"></activity>
+        <!-- 微信支付 -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+        <!--注册微信回调 WXEntryActivity -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent" />
+
     </application>
 
 </manifest>

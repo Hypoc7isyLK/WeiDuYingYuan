@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,9 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bw.movie.R;
+import com.bw.movie.wxapi.WXEntryActivity;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +29,7 @@ import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.LoginPresenter;
 
+import zmz.zhao.com.zmz.presenter.WeChatLoginPresenter;
 import zmz.zhao.com.zmz.view.DataCall;
 
 public class LoginActivity extends BaseActivity {
@@ -50,6 +56,7 @@ public class LoginActivity extends BaseActivity {
     boolean flag_num = false;
     boolean login_flag = false;
     private String isLogin;
+    private WeChatLoginPresenter mWeChatLoginPresenter;
 
     @Override
     protected int getLayoutId() {
@@ -119,8 +126,38 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.imageview_click)
-    public void onViewClicked() {
+    @OnClick({R.id.imageview_click,R.id.login_weixin})
+    public void onViewClicked(View view) {
+        switch (view.getId()){
+            case R.id.imageview_click:
+                xiaoyanjing();
+                break;
+            case R.id.login_weixin:
+                weixin();
+                break;
+        }
+
+    }
+
+    private void weixin() {
+        IWXAPI mApi = WXAPIFactory.createWXAPI(this, WXEntryActivity.WEIXIN_APP_ID, true);
+        mApi.registerApp(WXEntryActivity.WEIXIN_APP_ID);
+        if (mApi != null && mApi.isWXAppInstalled()) {
+            SendAuth.Req req = new SendAuth.Req();
+            req.scope = "snsapi_userinfo";
+            req.state = "wechat_sdk_demo_test_neng";
+            mApi.sendReq(req);
+
+            /*mWeChatLoginPresenter = new WeChatLoginPresenter(new WechatCall());
+            mWeChatLoginPresenter.reqeust(code);*/
+
+
+        } else {
+            Toast.makeText(this, "用户未安装微信", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void xiaoyanjing() {
         if (isHideFirst) {
             //密文
             HideReturnsTransformationMethod method1 = HideReturnsTransformationMethod.getInstance();
@@ -138,6 +175,7 @@ public class LoginActivity extends BaseActivity {
         int index = edittextPwd.getText().toString().length();
         edittextPwd.setSelection(index);
     }
+
 
     private class LoginCall implements DataCall<Result<LoginBean>> {
 
@@ -189,5 +227,45 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void destoryData() {
         mLoginPresenter = null;
+    }
+
+
+    private class WechatCall implements DataCall<Result<LoginBean>> {
+        @Override
+        public void success(Result<LoginBean> result) {
+            if (result.getStatus().equals("0000")) {
+
+                result.getResult().getUserInfo().setFlag(flag_num);
+
+                result.getResult().getUserInfo().setLogin_flag(login_flag);
+
+                result.getResult().getUserInfo().setPwd(edpwd);
+
+
+                result.getResult().getUserInfo().setUserId(result.getResult().getUserId());
+                result.getResult().getUserInfo().setSessionId(result.getResult().getSessionId());
+
+
+                result.getResult().getUserInfo().setStatus(1);
+
+                UserInfoDao userInfoDao = DaoMaster.newDevSession(LoginActivity.this, UserDao.TABLENAME).getUserInfoDao();
+
+                userInfoDao.insertOrReplace(result.getResult().getUserInfo());
+
+                Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+                finish();
+            } else {
+                Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
     }
 }

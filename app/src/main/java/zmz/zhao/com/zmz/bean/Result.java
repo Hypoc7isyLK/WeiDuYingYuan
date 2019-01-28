@@ -12,22 +12,7 @@ public class Result<T> {
     private T result;
     private T orderList;
     private String headPath;
-
-    public String getHeadPath() {
-        return headPath;
-    }
-
-    public T getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(T orderList) {
-        this.orderList = orderList;
-    }
-
-    public void setHeadPath(String headPath) {
-        this.headPath = headPath;
-    }
+    private String orderId;
 
     public String getStatus() {
         return status;
@@ -51,5 +36,29 @@ public class Result<T> {
 
     public void setResult(T result) {
         this.result = result;
+    }
+
+    public T getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(T orderList) {
+        this.orderList = orderList;
+    }
+
+    public String getHeadPath() {
+        return headPath;
+    }
+
+    public void setHeadPath(String headPath) {
+        this.headPath = headPath;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

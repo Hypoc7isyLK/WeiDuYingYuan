@@ -125,7 +125,8 @@
         android:layout_below="@+id/move_radio"
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
-        android:layout_marginTop="@dimen/dp_24">
+        android:layout_marginTop="@dimen/dp_24"
+        android:paddingBottom="@dimen/dp_30">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -136,7 +137,8 @@
         android:layout_below="@+id/move_radio"
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
-        android:layout_marginTop="@dimen/dp_24">
+        android:layout_marginTop="@dimen/dp_24"
+        android:paddingBottom="@dimen/dp_30">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -148,7 +150,8 @@
 
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
-        android:layout_marginTop="@dimen/dp_24">
+        android:layout_marginTop="@dimen/dp_24"
+        android:paddingBottom="@dimen/dp_30">
 
     </android.support.v7.widget.RecyclerView>
     <RelativeLayout
