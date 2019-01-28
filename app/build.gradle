@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
+    signingConfigs {
+        moviekey {
+            keyAlias 'bw_movie'
+            keyPassword '123456'
+            storeFile file('D:/DeskTop/movie.keystore')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.bw.movie"
@@ -10,17 +18,24 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.moviekey
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.moviekey
+        }
+        debug {
+            signingConfig signingConfigs.moviekey
         }
     }
     greendao {
         schemaVersion 1
         daoPackage 'com.greendao.gen'
         targetGenDir 'src/main/java'
+    }
+    productFlavors {
     }
 }
 

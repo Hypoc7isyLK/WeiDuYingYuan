@@ -103,7 +103,6 @@
             android:text="影评"
             android:textSize="@dimen/sp_14"
             android:textColor="#ffffff"
-
             android:layout_marginLeft="@dimen/dp_24"
             android:layout_alignParentRight="true"/>
 

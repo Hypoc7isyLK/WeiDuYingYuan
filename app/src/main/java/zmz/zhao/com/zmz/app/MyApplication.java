@@ -32,10 +32,10 @@ public class MyApplication extends Application {
      */
     private static Context context;
 
-    // APP_ID 替换为你的应用从官方网站申请到的合法appID
+   /* // APP_ID 替换为你的应用从官方网站申请到的合法appID
     public static final String APP_ID = "wxb3852e6a6b7d9516";
     // IWXAPI 是第三方app和微信通信的openApi接口
-    public static IWXAPI api;
+    public static IWXAPI api;*/
 
 
 
@@ -51,7 +51,9 @@ public class MyApplication extends Application {
 
         Fresco.initialize(this);
         //微信
-        registToWX();
+        final IWXAPI msgApi = WXAPIFactory.createWXAPI(context, null);
+        msgApi.registerApp("wxb3852e6a6b7d9516");
+        /*registToWX();*/
     }
 
     /**
@@ -59,13 +61,13 @@ public class MyApplication extends Application {
      */
 
 
-    private void registToWX() {
+    /*private void registToWX() {
         // 通过WXAPIFactory工厂，获取IWXAPI的实例
         api = WXAPIFactory.createWXAPI(this, APP_ID, true);
 
         // 将应用的appId注册到微信
         api.registerApp(APP_ID);
-    }
+    }*/
     public static Context getContext() {
         return context;
     }

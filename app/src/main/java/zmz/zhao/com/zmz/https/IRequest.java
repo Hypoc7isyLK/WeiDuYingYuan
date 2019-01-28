@@ -13,12 +13,15 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 import zmz.zhao.com.zmz.bean.Address;
 import zmz.zhao.com.zmz.bean.Attention;
+import zmz.zhao.com.zmz.bean.CinemaListBean;
 import zmz.zhao.com.zmz.bean.DetailsBean;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.MineMassage;
 import zmz.zhao.com.zmz.bean.MyMessage;
+import zmz.zhao.com.zmz.bean.PayBean;
 import zmz.zhao.com.zmz.bean.Record;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.ScheduleCinemaBean;
 import zmz.zhao.com.zmz.bean.ShowLunBoBean;
 import zmz.zhao.com.zmz.bean.SystemMassage;
 
@@ -214,5 +217,42 @@ public interface IRequest {
     Observable<Result> change(@Header("userId") int userId,
                               @Header("sessionId") String sessionId,
                               @Query("id") int page);
+
+    @GET("cinema/v1/findRecommendCinemas")
+    Observable<Result<List<CinemaListBean>>> showCinema(@Header("userId") int userId,
+                                                        @Header("sessionId") String sessionId,
+                                                        @Query("page") String page,
+                                                        @Query("count") String count);
+
+    @GET("cinema/v1/findNearbyCinemas")
+    Observable<Result<List<CinemaListBean>>> shownearbyCinema(@Header("userId") int userId,
+                                                        @Header("sessionId") String sessionId,
+                                                        @Query("page") String page,
+                                                        @Query("count") String count);
+
+    @GET("movie/v1/findMovieListByCinemaId")
+    Observable<Result<List<ScheduleCinemaBean>>> showScheduleCinema(@Query("cinemaId") String cinemaId);
+
+
+    @POST("movie/v1/verify/buyMovieTicket")
+    @FormUrlEncoded
+    Observable<Result> showXiaDanCinema(@Header("userId") int userId,
+                                        @Header("sessionId") String sessionId,
+                                        @Field("scheduleId") int scheduleId,
+                                        @Field("amount") int amount,
+                                        @Field("sign") String sign);
+
+
+
+    @POST("movie/v1/verify/pay")
+    @FormUrlEncoded
+    Observable<PayBean> pay(@Header("userId") int userId,
+                            @Header("sessionId") String sessionId,
+                            @Field("payType") String payType,
+                            @Field("orderId") String orderId);
+
+    @POST("user/v1/weChatBindingLogin")
+    @FormUrlEncoded
+    Observable<Result> wechatlogin(@Field("code") String code);
 }
 
