@@ -12,7 +12,7 @@ import zmz.zhao.com.zmz.exception.CustomException;
 import zmz.zhao.com.zmz.exception.ResponseTransformer;
 import zmz.zhao.com.zmz.view.DataCall;
 
-public abstract class BasePresenter {
+public abstract class BasePresenter<T> {
     private DataCall dataCall;
 
     boolean running;
@@ -39,9 +39,9 @@ public abstract class BasePresenter {
                                 .observeOn(AndroidSchedulers.mainThread());
                     }
                 })
-                .subscribe(new Consumer<Result>() {
+                .subscribe(new Consumer<T>() {
                     @Override
-                    public void accept(Result result) throws Exception {
+                    public void accept(T result) throws Exception {
                         running = false;
                         dataCall.success(result);
                     }

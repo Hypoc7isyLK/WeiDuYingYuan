@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">维度影院</string>
+    <string name="collapse">收起</string>
+    <string name="expand">全文</string>
 </resources>

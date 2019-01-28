@@ -152,7 +152,7 @@ public class IntroductionActivity extends BaseActivity {
         viewclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(IntroductionActivity.this, LoginActivity.class);
+                Intent intent = new Intent(IntroductionActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }

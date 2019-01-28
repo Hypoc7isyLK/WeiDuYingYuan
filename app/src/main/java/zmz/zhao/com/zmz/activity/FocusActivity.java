@@ -1,5 +1,8 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +14,9 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.greendao.gen.DaoMaster;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.List;
@@ -22,6 +28,7 @@ import zmz.zhao.com.zmz.adapter.MineMovieAdapter;
 import zmz.zhao.com.zmz.bean.Address;
 import zmz.zhao.com.zmz.bean.Attention;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.dao.UserInfo;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.MineMoviePresenter;
 import zmz.zhao.com.zmz.presenter.MyCinemaPresenter;
@@ -62,16 +69,29 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         moviePresenter = new MineMoviePresenter(new MovieCall());
         cinemaPresenter = new MyCinemaPresenter(new CinemaCall());
-
         cinema_recycle.setVisibility(View.GONE);
+        mine_movie.setTextColor(getResources().getColorStateList(R.color.white));
+
+        initRecycle();
+
+        initData();
+        if (USER_INFO == null) {
+            isLogin();
+            return;
+        }
 
         userId = USER_INFO.getUserId();
 
         sessionId = USER_INFO.getSessionId();
 
         moviePresenter.reqeust(userId, this.sessionId, true);
+        cinemaPresenter.reqeust(userId, sessionId, true);
 
-        mine_movie.setTextColor(getResources().getColorStateList(R.color.white));
+
+
+    }
+
+    private void initRecycle() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
@@ -96,15 +116,34 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
         cinemaAdapter = new CinemaAdapter(FocusActivity.this);
 
         cinema_recycle.setAdapter(cinemaAdapter);
-
-        initData();
-
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
+
         super.onResume();
-        moviePresenter.reqeust(userId, sessionId, true);
+
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
+
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+
+        if (userInfoList != null && userInfoList.size() > 0) {
+            UserInfo userInfo = userInfoList.get(0);
+
+            int userids = userInfo.getUserId();
+
+            String sessionIds = userInfo.getSessionId();
+
+            Log.e("zmz"+userids,"============="+sessionIds);
+
+            moviePresenter.reqeust(userids, sessionIds, true);
+            cinemaPresenter.reqeust(userids, sessionIds, true);
+
+            initRecycle();
+
+            initData();
+        }
+
     }
     /**
      * @作者 啊哈
@@ -121,6 +160,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
                     int width = movie_recycle.getMeasuredWidth();
 
                     mine_movie.setTextColor(getResources().getColorStateList(R.color.white));
+
                     mine_cinema.setTextColor(getResources().getColorStateList(R.color.colorTextColor));
 
 
@@ -142,12 +182,14 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
                     movie_recycle.setAnimation(animationSet);
 
                 } else if (checkedId == R.id.mine_cinema) {
-                    cinemaPresenter.reqeust(userId, sessionId, true);
+
+                    mine_movie.setTextColor(getResources().getColorStateList(R.color.colorTextColor));
+
+                    mine_cinema.setTextColor(getResources().getColorStateList(R.color.white));
 
                     cinema_recycle.setVisibility(View.VISIBLE);
 
-                    mine_movie.setTextColor(getResources().getColorStateList(R.color.colorTextColor));
-                    mine_cinema.setTextColor(getResources().getColorStateList(R.color.white));
+
 
                     //平移
                     TranslateAnimation translateAnimation = new TranslateAnimation(movie_recycle.getMeasuredWidth(), 0.0f, 0.0f, 0.0f);
@@ -167,13 +209,46 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
                     calphaAnimation.setDuration(500);
 
                     movie_recycle.setAnimation(calphaAnimation);
+
                     movie_recycle.setVisibility(View.GONE);
+
                     cinema_recycle.setAnimation(animationSet);
                 }
             }
         });
 
     }
+
+    /**
+     * @作者 啊哈
+     * @date 2019/1/28
+     * @method：
+     */
+    public void isLogin() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("提示");
+        builder.setMessage("请先登录");
+        builder.setPositiveButton("去登陆", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent intent = new Intent(FocusActivity.this, LoginActivity.class);
+                intent.putExtra("login", true);
+                startActivity(intent);
+
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(FocusActivity.this, "取消了", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.create().show();
+    }
+
+
 
     /**
      * @作者 啊哈

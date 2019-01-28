@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"/>
 
         <ImageView
-            android:id="@+id/xiaoxinxin"
+            android:id="@+id/xiaoxin"
             android:layout_width="@dimen/dp_24"
             android:layout_height="@dimen/dp_24"
             android:padding="@dimen/dp_4"
@@ -117,7 +117,7 @@
         android:background="@drawable/touming">
 
         <ImageView
-            android:id="@+id/Focus_back"
+            android:id="@+id/movir_back"
             android:layout_width="@dimen/dp_58"
             android:layout_height="@dimen/dp_58"
             android:layout_marginLeft="@dimen/dp_24"

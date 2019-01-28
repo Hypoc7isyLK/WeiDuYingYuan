@@ -4,22 +4,29 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.greendao.gen.DaoMaster;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 import zmz.zhao.com.zmz.bean.MyMessage;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.dao.UserInfo;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.MinePresenter;
 import zmz.zhao.com.zmz.presenter.UpdatePresenter;
@@ -69,11 +76,38 @@ public class MineProfileActivity extends BaseActivity {
     protected void initView() {
         minePresenter = new MinePresenter(new MineCall());
         presenter = new UpdatePresenter(new UpdateCall());
-
+        if (USER_INFO == null) {
+            isLogin();
+            return;
+        }
         userid = USER_INFO.getUserId();
 
         sessionId = USER_INFO.getSessionId();
+
         minePresenter.reqeust(userid, sessionId);
+
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
+
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+
+        if (userInfoList != null && userInfoList.size() > 0) {
+            UserInfo userInfo = userInfoList.get(0);
+
+            int userids = userInfo.getUserId();
+
+            String sessionIds = userInfo.getSessionId();
+
+            Log.e("zmz"+userids,"============="+sessionIds);
+
+            minePresenter.reqeust(userids, sessionIds);
+        }
 
     }
 
@@ -91,6 +125,11 @@ public class MineProfileActivity extends BaseActivity {
              * 修改信息
              */
             case R.id.update:
+
+                if (USER_INFO == null) {
+                    isLogin();
+                    return;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 final View view1 = View.inflate(this, R.layout.activity_mine_dialog, null);
 
@@ -135,11 +174,41 @@ public class MineProfileActivity extends BaseActivity {
                  * 重置密码
                  */
             case R.id.nickpwd:
+                if (USER_INFO == null) {
+                    isLogin();
+                    return;
+                }
+
                 Intent intent = new Intent(MineProfileActivity.this, UpdatePwdActivity.class);
                 startActivity(intent);
                 break;
 
         }
+    }
+
+
+    public void isLogin() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("提示");
+        builder.setMessage("请先登录");
+        builder.setPositiveButton("去登陆", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent intent = new Intent(MineProfileActivity.this, LoginActivity.class);
+                intent.putExtra("login", true);
+                startActivity(intent);
+
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MineProfileActivity.this, "取消了", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.create().show();
     }
 
     @Override

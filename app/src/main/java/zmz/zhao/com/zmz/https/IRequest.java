@@ -154,7 +154,7 @@ public interface IRequest {
      * @date 2019/1/26
      * @method：上传头像
      */
-    @POST("user/v1/verify/uploadHeadPic")
+    @POST("user/v1/verify/uploadHead Pic")
     Observable<Result> heard(@Header("userId") int userid,
                              @Header("sessionId") String session,
                              @Body MultipartBody image);

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/pop_bg_circle"
+    android:layout_height="520dp">
+
+    <TextView
+        android:id="@+id/details_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="剧情介绍" />
+
+    <View
+        android:id="@+id/baioji"
+        android:layout_width="30dp"
+        android:layout_height="3dp"
+        android:layout_marginLeft="@dimen/dp_20"
+
+        android:layout_below="@+id/details_title"
+        android:layout_marginTop="@dimen/dp_6"
+        android:background="@drawable/bg_circle" />
+    <ImageView
+        android:id="@+id/cance"
+        android:layout_width="@dimen/dp_22"
+        android:layout_height="@dimen/dp_18"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:padding="5dp"
+        android:src="@mipmap/cancel_buttom" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/stage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_below="@+id/baioji">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>
+
+
+

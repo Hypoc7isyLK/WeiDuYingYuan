@@ -1,8 +1,12 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bw.movie.R;
 
@@ -40,6 +44,7 @@ public class MyOpinion extends BaseActivity {
     @Override
     protected void initView() {
         presenter = new OpinionPresenter(new OpinionCall());
+
         opion_hide.setVisibility(View.GONE);//隐藏
 
 
@@ -51,6 +56,7 @@ public class MyOpinion extends BaseActivity {
                 finish();
                 break;
             case R.id.submit:
+
                 String opinion = mine_opinion.getText().toString().trim();
                 int userid = USER_INFO.getUserId();
 
@@ -60,6 +66,7 @@ public class MyOpinion extends BaseActivity {
                 break;
         }
     }
+
     @Override
     protected void destoryData() {
         presenter.unBind();

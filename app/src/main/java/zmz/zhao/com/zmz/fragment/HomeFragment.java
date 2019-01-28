@@ -43,7 +43,6 @@ public class HomeFragment extends BaseFragment {
     ImageView dingwei;
     @BindView(R.id.list)
     RecyclerCoverFlow list;
-    Unbinder unbinder;
     @BindView(R.id.movie_text_xian)
     TextView movieTextXian;
     @BindView(R.id.movie_text_dong)
@@ -64,8 +63,6 @@ public class HomeFragment extends BaseFragment {
     SearchView search;
 
     private ShowLunBoPresenter mShowLunBoPresenter;
-    private String mSessionId;
-    private int mUserId;
     private CarouselAdapter mCarouselAdapter;
     private int mWidth;
     private int mItemCount;
@@ -86,10 +83,6 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        mSessionId = USER_INFO.getSessionId();
-        mUserId = USER_INFO.getUserId();
-
-        unbinder = ButterKnife.bind(this, view);
         mCarouselAdapter = new CarouselAdapter(getActivity());
         list.setAdapter(mCarouselAdapter);
 
@@ -106,7 +99,7 @@ public class HomeFragment extends BaseFragment {
 
 
         mShowLunBoPresenter = new ShowLunBoPresenter(new ShowLunboCall());
-        mShowLunBoPresenter.reqeust(mUserId, mSessionId, "1", "20");
+        mShowLunBoPresenter.reqeust(0, "", "1", "20");
 
         recyclerviewMovie.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false));
         mPopularAdapter = new HotShowingAdapter(getActivity());
@@ -114,7 +107,7 @@ public class HomeFragment extends BaseFragment {
 
 
         mHotShowingPresenter = new HotShowingPresenter(new HotShowingCall());
-        mHotShowingPresenter.reqeust(mUserId, mSessionId, "1", "100");
+        mHotShowingPresenter.reqeust(0, "", "1", "100");
 
         recyclerviewHotshowing.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false));
         mHotShowingAdapter = new HotShowingAdapter(getActivity());
@@ -122,7 +115,7 @@ public class HomeFragment extends BaseFragment {
 
 
         mCommingSunPresenter = new CommingSunPresenter(new CommingSunCall());
-        mCommingSunPresenter.reqeust(mUserId, mSessionId, "1", "100");
+        mCommingSunPresenter.reqeust(0, "", "1", "100");
 
         recyclerviewCommingsun.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false));
         mCommingSunAdapter = new HotShowingAdapter(getActivity());
@@ -293,7 +286,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
         mHotShowingPresenter = null;
         mShowLunBoPresenter = null;
         mCommingSunPresenter = null;

@@ -1,12 +1,19 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.greendao.gen.DaoMaster;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.List;
@@ -17,6 +24,7 @@ import zmz.zhao.com.zmz.adapter.DoneAdapter;
 import zmz.zhao.com.zmz.adapter.UndoneAdapter;
 import zmz.zhao.com.zmz.bean.Record;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.dao.UserInfo;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.RecordPresenter;
 import zmz.zhao.com.zmz.util.SpaceItemDecoration;
@@ -67,37 +75,55 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
 
         recordPresenter = new RecordPresenter(new RecordCall());
         donePresenter = new RecordPresenter(new DoneCall());
+
+        record_unfinished.setTextColor(getResources().getColorStateList(R.color.white));
+        initData();
+        if (USER_INFO == null) {
+            isLogin();
+            return;
+        }
+
         userId = USER_INFO.getUserId();
         sessionId = USER_INFO.getSessionId();
 
-        initData();
-        record_unfinished.setTextColor(getResources().getColorStateList(R.color.white));
+
+
+
+    }
+
+    private void initData() {
+
         record_radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.record_unfinished){
+
                     record_unfinished.setTextColor(getResources().getColorStateList(R.color.white));
                     record_finish.setTextColor(getResources().getColorStateList(R.color.colorTextColor));
+
+                    //Toast.makeText(RecordActivity.this, "record_finish", Toast.LENGTH_SHORT).show();
 
                     finish_recycle.setVisibility(View.GONE);
 
                     unfinish_recycle.setVisibility(View.VISIBLE);
 
                 }else if(checkedId == R.id.record_finish){
-                    record_finish.setTextColor(getResources().getColorStateList(R.color.white));
 
-                    record_unfinished.setTextColor(getResources().getColorStateList(R.color.colorTextColor));
+                    //Toast.makeText(RecordActivity.this, "record_finish", Toast.LENGTH_SHORT).show();
 
                     unfinish_recycle.setVisibility(View.GONE);
 
                     finish_recycle.setVisibility(View.VISIBLE);
+
+                    record_finish.setTextColor(getResources().getColorStateList(R.color.white));
+
+                    record_unfinished.setTextColor(getResources().getColorStateList(R.color.colorTextColor));
+
+
                 }
             }
         });
 
-    }
-
-    private void initData() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
@@ -127,6 +153,55 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
 
         donePresenter.reqeust(userId, sessionId, true, 2);
 
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
+
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+
+        if (userInfoList != null && userInfoList.size() > 0) {
+            UserInfo userInfo = userInfoList.get(0);
+
+            int userids = userInfo.getUserId();
+
+            String sessionIds = userInfo.getSessionId();
+
+            Log.e("zmz"+userids,"============="+sessionIds);
+
+            recordPresenter.reqeust(userids, sessionIds, true,1);
+            donePresenter.reqeust(userids, sessionIds, true,2);
+            initData();
+        }
+
+    }
+
+    public void isLogin() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("提示");
+        builder.setMessage("请先登录");
+        builder.setPositiveButton("去登陆", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent intent = new Intent(RecordActivity.this, LoginActivity.class);
+                intent.putExtra("login", true);
+                startActivity(intent);
+
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(RecordActivity.this, "取消了", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.create().show();
     }
 
     @Override

@@ -49,6 +49,7 @@ public class LoginActivity extends BaseActivity {
     private boolean isHideFirst;
     boolean flag_num = false;
     boolean login_flag = false;
+    private String isLogin;
 
     @Override
     protected int getLayoutId() {
@@ -65,6 +66,11 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+
+        Intent intent = getIntent();
+
+        isLogin = intent.getStringExtra("isLogin");
+
         ButterKnife.bind(this);
         textview_register = findViewById(R.id.textview_register);
         textview_register.setOnClickListener(new View.OnClickListener() {
@@ -154,15 +160,20 @@ public class LoginActivity extends BaseActivity {
 
                 result.getResult().getUserInfo().setStatus(1);
 
-                UserInfoDao userInfoDao = DaoMaster.newDevSession(LoginActivity.this, UserDao.TABLENAME).getUserInfoDao();
 
                 userInfoDao.insertOrReplace(result.getResult().getUserInfo());
 
+
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
 
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                if (isLogin != null &&isLogin.equals("1")){
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivity(intent);
+
+                }
 
                 finish();
+
             } else {
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
             }

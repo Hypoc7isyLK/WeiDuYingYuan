@@ -52,6 +52,18 @@ public abstract class BaseFragment extends Fragment {
     public abstract void initData(View view);
 
     @Override
+    public void onResume() {
+        super.onResume();
+        userInfoDao = DaoMaster.newDevSession(getActivity(), UserDao.TABLENAME).getUserInfoDao();
+
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+
+        if (userInfoList != null && userInfoList.size()>0) {
+            USER_INFO = userInfoList.get(0);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();

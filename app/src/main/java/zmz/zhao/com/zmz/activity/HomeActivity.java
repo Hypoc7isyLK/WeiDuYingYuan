@@ -84,10 +84,20 @@ public class HomeActivity extends BaseActivity implements BackNum {
     @Override
     public void getNum(int id) {
         Intent intent = new Intent(HomeActivity.this, InsideDetailsActivity.class);
-
         intent.putExtra("id",id+"");
-        Log.e("zmz","========="+id);
-
         startActivity(intent);
+    }
+
+    @Override
+    public void getLogin(String isLogin) {
+        if (isLogin.equals("1")){
+            Intent intent = new Intent(this, LoginActivity.class);
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.putExtra("isLogin",isLogin);
+
+            startActivity(intent);
+        }else return;
     }
 }

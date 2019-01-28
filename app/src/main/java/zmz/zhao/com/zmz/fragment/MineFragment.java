@@ -2,6 +2,7 @@ package zmz.zhao.com.zmz.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +35,7 @@ import com.greendao.gen.UserInfoDao;
 import java.io.File;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,6 +54,7 @@ import zmz.zhao.com.zmz.presenter.MessagePresenter;
 import zmz.zhao.com.zmz.presenter.SignPresenter;
 import zmz.zhao.com.zmz.util.DateUtils;
 import zmz.zhao.com.zmz.util.FileUtils;
+import zmz.zhao.com.zmz.view.BackNum;
 import zmz.zhao.com.zmz.view.DataCall;
 
 
@@ -87,30 +90,36 @@ public class MineFragment extends BaseFragment {
     private static final int TAKE_PICTURE = 1500;
 
     private AlertDialog.Builder mBuilder;
-    private int userid;
     private String sessionId;
     private boolean image;
+    private BackNum backNum;
+    private int userId;
+
+    public void setBackNum(BackNum backNum) {
+        this.backNum = backNum;
+    }
 
     @Override
     public void initView(View view) {
-
-        userid = USER_INFO.getUserId();
-
-        sessionId = USER_INFO.getSessionId();
-
-        String headPic = USER_INFO.getHeadPic();
-
         headPresenter = new HeadPresenter(new HeadCall());
-
+        messagePresenter = new MessagePresenter(new MassageCall());
         signPresenter = new SignPresenter(new SignCall());
 
-        messagePresenter = new MessagePresenter(new MassageCall());
+        if (USER_INFO == null) {
 
-        messagePresenter.reqeust(userid, sessionId);
+            isLogin();
+            return;
+        }
 
-        myPic.setImageURI(Uri.parse(headPic));
+        userId = USER_INFO.getUserId();
 
-        myName.setText(USER_INFO.getNickName());
+        sessionId = USER_INFO.getSessionId();
+        Log.e("zmz",""+userId);
+        String headPic = USER_INFO.getHeadPic();
+
+
+
+        messagePresenter.reqeust(userId, sessionId);
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -124,11 +133,51 @@ public class MineFragment extends BaseFragment {
         } else {
             image = FileUtils.createDirs("/image/bimap");
         }
+    }
 
+    private void isLogin() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("提示");
+        builder.setMessage("请先登录");
+        builder.setPositiveButton("去登陆", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.putExtra("login", true);
+                startActivity(intent);
+
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "取消", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.create().show();
     }
 
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(getActivity(), UserDao.TABLENAME).getUserInfoDao();
+
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+
+        if (userInfoList != null && userInfoList.size() > 0) {
+            UserInfo userInfo = userInfoList.get(0);
+
+            int userids = userInfo.getUserId();
+
+            String sessionIds = userInfo.getSessionId();
+
+            messagePresenter.reqeust(userids, sessionIds);
+        }
+
+    }
 
     @Override
     public void initData(View view) {
@@ -140,49 +189,78 @@ public class MineFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.my_pic, R.id.my_sign,R.id.system, R.id.my_message, R.id.my_attention, R.id.my_goupiao, R.id.my_tickling, R.id.my_new_versions, R.id.my_finish})
+    @OnClick({R.id.my_pic, R.id.my_sign, R.id.system, R.id.my_message, R.id.my_attention, R.id.my_goupiao, R.id.my_tickling, R.id.my_new_versions, R.id.my_finish})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.my_pic:
-                View popView = View.inflate(getActivity(), R.layout.activity_mine_heard_image, null);
-                popWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT, true);
-                popWindow.setTouchable(true);
-                popWindow.setBackgroundDrawable(new BitmapDrawable());
-                popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                if (USER_INFO == null) {
+                    isLogin();
+                } else {
+                    View popView = View.inflate(getActivity(), R.layout.activity_mine_heard_image, null);
+                    popWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT, true);
+                    popWindow.setTouchable(true);
+                    popWindow.setBackgroundDrawable(new BitmapDrawable());
+                    popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
-                View inflate = LayoutInflater.from(getActivity()).inflate(R.layout.activity_mine, null);
+                    View inflate = LayoutInflater.from(getActivity()).inflate(R.layout.activity_mine, null);
 
-                popWindow.showAtLocation(inflate, Gravity.BOTTOM, 0, 0);
+                    popWindow.showAtLocation(inflate, Gravity.BOTTOM, 0, 0);
 
-                //点击事件
-                initPop(popView);
+                    //点击事件
+                    initPop(popView);
+                }
                 break;
             case R.id.my_sign:
+                if (USER_INFO == null) {
+                    isLogin();
+                } else {
 
+                    userId = USER_INFO.getUserId();
 
-                signPresenter.reqeust(userid, sessionId);
+                    sessionId = USER_INFO.getSessionId();
+
+                    signPresenter.reqeust(userId, sessionId);
+
+                }
 
                 break;
             case R.id.my_message:
-                Intent datum = new Intent(getContext(), MineProfileActivity.class);
-                startActivity(datum);
+
+                    Intent datum = new Intent(getContext(), MineProfileActivity.class);
+                    startActivity(datum);
+
                 break;
             case R.id.my_attention:
-                Intent attention = new Intent(getContext(), FocusActivity.class);
-                startActivity(attention);
+
+                    Intent attention = new Intent(getContext(), FocusActivity.class);
+                    startActivity(attention);
+
                 break;
             case R.id.my_goupiao:
-                Intent buy = new Intent(getContext(), RecordActivity.class);
-                startActivity(buy);
+
+                    Intent buy = new Intent(getContext(), RecordActivity.class);
+                    startActivity(buy);
+
+
                 break;
             case R.id.my_tickling:
-                Intent tickling = new Intent(getContext(), MyOpinion.class);
-                startActivity(tickling);
+                if (USER_INFO == null) {
+                    isLogin();
+                    return;
+                }
+                    Intent tickling = new Intent(getContext(), MyOpinion.class);
+                    startActivity(tickling);
+
+
                 break;
             case R.id.system:
-                Intent intent_system = new Intent(getContext(), SystemMassageActivity.class);
-                startActivity(intent_system);
+                if (USER_INFO == null) {
+                    isLogin();
+                    return;
+                }
+                    Intent intent_system = new Intent(getContext(), SystemMassageActivity.class);
+                    startActivity(intent_system);
 
                 break;
             case R.id.my_finish:
@@ -196,12 +274,10 @@ public class MineFragment extends BaseFragment {
 
                         //Intent清除栈FLAG_ACTIVITY_CLEAR_TASK会把当前栈内所有Activity清空；
                         //FLAG_ACTIVITY_NEW_TASK配合使用，才能完成跳转
-
                         userInfoDao.deleteAll();
 
-                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        backNum.getLogin("1");
+
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -282,9 +358,7 @@ public class MineFragment extends BaseFragment {
                     File imageFile = FileUtils.getImageFile();
                     String path = imageFile.getPath();
 
-                    Log.e("zmz", "=====" + path);
-
-                    headPresenter.reqeust(userid, sessionId, path);
+                    headPresenter.reqeust(userId, sessionId, path);
 
                     break;
                 case CHOOSE_PICTURE:
@@ -303,7 +377,7 @@ public class MineFragment extends BaseFragment {
                     // 4.0以上平台会自动关闭cursor,所以加上版本判断,OK
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
                         actualimagecursor.close();
-                    headPresenter.reqeust(userid, sessionId, img_path);
+                    headPresenter.reqeust(userId, sessionId, img_path);
                     break;
             }
         }
@@ -344,21 +418,33 @@ public class MineFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        backNum = (BackNum) context;
+    }
+
     private class MassageCall implements DataCall<Result<MineMassage>> {
         @Override
         public void success(Result<MineMassage> result) {
+
             MineMassage mineMassage = result.getResult();
 
-            if (mineMassage.getUserSignStatus() == 2) {
-                mySign.setText("已签到");
-            } else {
-                mySign.setText("签到");
+            if (result.getStatus().equals("0000")) {
+
+                myPic.setImageURI(Uri.parse(mineMassage.getHeadPic()));
+                myName.setText(mineMassage.getNickName());
+                if (mineMassage.getUserSignStatus() == 2) {
+                    mySign.setText("已签到");
+                } else {
+                    mySign.setText("签到");
+                }
             }
         }
 
         @Override
         public void fail(ApiException e) {
-
+            Toast.makeText(getContext(), "请先登录！", Toast.LENGTH_SHORT).show();
         }
     }
 }

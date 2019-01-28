@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="520dp"
+    android:background="@android:color/transparent">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/pop"
+                android:layout_width="match_parent"
+                android:layout_height="520dp"
+                android:layout_marginTop="@dimen/dp_30"
+                android:background="@drawable/pop_bg_circle"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_24"
+                android:paddingRight="@dimen/dp_24">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20">
+
+                    <ImageView
+                        android:id="@+id/cancel"
+                        android:layout_width="@dimen/dp_22"
+                        android:layout_height="@dimen/dp_18"
+                        android:layout_alignParentRight="true"
+                        android:padding="5dp"
+                        android:src="@mipmap/cancel_buttom" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_130"
+                        android:layout_marginRight="@dimen/dp_20"
+                        android:orientation="vertical"
+                        android:layout_toLeftOf="@+id/cancel">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/type_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="类型："
+                                android:textColor="@color/colorTextColor"
+                                android:textSize="@dimen/sp_12" />
+
+                            <TextView
+                                android:id="@+id/type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/type_text"
+                                android:text="eeeee"
+                                android:textColor="@color/colorTextColor"
+                                android:textSize="@dimen/sp_12" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/director_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="导演："
+                                android:textColor="@color/colorTextColor"
+                                android:textSize="@dimen/sp_12" />
+
+                            <TextView
+                                android:id="@+id/director"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/director_text"
+                                android:text="eeeee"
+                                android:textColor="@color/colorTextColor"
+                                android:textSize="@dimen/sp_12" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/min_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="类型："
+                                android:textColor="@color/colorTextColor"
+                                android:textSize="@dimen/sp_12" />
+
+                            <TextView
+                                android:id="@+id/min"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/min_text"
+                                android:text="eeeee"
+                                android:textColor="@color/colorTextColor"
+                                android:textSize="@dimen/sp_12" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/place_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="类型："
+                                android:textColor="@color/colorTextColor"
+                                android:textSize="@dimen/sp_12" />
+
+                            <TextView
+                                android:id="@+id/place"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/place_text"
+                                android:text="eeeee"
+                                android:textColor="@color/colorTextColor"
+                                android:textSize="@dimen/sp_12" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/plot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="剧情介绍" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="@dimen/dp_6"
+                    android:background="@drawable/bg_circle" />
+
+                <zmz.zhao.com.zmz.util.ExpandableTextView
+                    android:id="@+id/etv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:collapseExpandGrarity="right"
+                    app:collapseExpandTextColor="#9932cc"
+                    app:contentTextColor="@color/colorTextColor"
+                    app:contentTextSize="12sp"
+                    app:maxCollapsedLines="4"
+                    app:textCollapse="@string/collapse"
+                    app:textExpand="@string/expand">
+
+                </zmz.zhao.com.zmz.util.ExpandableTextView>
+
+                <TextView
+                    android:id="@+id/actor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="演职人员" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="@dimen/dp_6"
+                    android:background="@drawable/bg_circle" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                    <Button
+                        android:layout_width="@dimen/dp_75"
+                        android:layout_height="@dimen/dp_32"
+                        android:layout_alignParentLeft="true"
+                        android:background="@drawable/bg_btn_role"
+                        android:text="演员名字"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_12" />
+
+                    <Button
+                        android:layout_width="@dimen/dp_75"
+                        android:layout_height="@dimen/dp_32"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/dp_30"
+                        android:background="@drawable/bg_btn_role"
+                        android:text="饰演角色"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_12" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                    <TextView
+                        android:id="@+id/actor1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="额鹅鹅鹅"
+                        android:textColor="@color/colorTextColor"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/shi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="饰"
+                        android:textColor="#6b0e3d"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/role1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_45"
+                        android:layout_toRightOf="@+id/shi"
+                        android:text="啦啦啦啦"
+                        android:textColor="@color/colorTextColor"
+                        android:textSize="@dimen/sp_12" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="#f2f2f2" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                    <TextView
+                        android:id="@+id/actor2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="额鹅鹅鹅"
+                        android:textColor="@color/colorTextColor"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/shi1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="饰"
+                        android:textColor="#6b0e3d"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/role2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_45"
+                        android:layout_toRightOf="@+id/shi1"
+                        android:text="啦啦啦啦"
+                        android:textColor="@color/colorTextColor"
+                        android:textSize="@dimen/sp_12" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="#f2f2f2" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                    <TextView
+                        android:id="@+id/actor3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="额鹅鹅鹅"
+                        android:textColor="@color/colorTextColor"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/shi2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="饰"
+                        android:textColor="#6b0e3d"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/role3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_45"
+                        android:layout_toRightOf="@+id/shi2"
+                        android:text="啦啦啦啦"
+                        android:textColor="@color/colorTextColor"
+                        android:textSize="@dimen/sp_12" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="#f2f2f2" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                    <TextView
+                        android:id="@+id/actor4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="额鹅鹅鹅"
+                        android:textColor="@color/colorTextColor"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/shi3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="饰"
+                        android:textColor="#6b0e3d"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/role4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_45"
+                        android:layout_toRightOf="@+id/shi3"
+                        android:text="啦啦啦啦"
+                        android:textColor="@color/colorTextColor"
+                        android:textSize="@dimen/sp_12" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="#f2f2f2" />
+
+            </LinearLayout>
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/details_image"
+                android:layout_width="@dimen/dp_112"
+                android:layout_height="@dimen/dp_149"
+                app:roundedCornerRadius="8dp"
+                android:layout_marginLeft="@dimen/dp_24"
+                android:src="@mipmap/bbitmap" />
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</RelativeLayout>
+
+
+

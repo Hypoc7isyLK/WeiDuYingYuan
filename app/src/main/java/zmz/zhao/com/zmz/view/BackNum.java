@@ -7,4 +7,5 @@ package zmz.zhao.com.zmz.view;
  */
 public interface BackNum {
     void getNum(int id);
+    void getLogin(String isLogin);
 }
