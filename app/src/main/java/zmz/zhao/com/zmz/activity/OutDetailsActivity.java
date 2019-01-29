@@ -115,7 +115,7 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleZzry.setVisibility(View.GONE);//隐藏
         movieRecycleJjsy.setVisibility(View.GONE);//隐藏
         mShowLunBoPresenter = new ShowLunBoPresenter(new ShowLunboCall());
-        mShowLunBoPresenter.reqeust(mUserId, mSessionId, "1", "20");
+        mShowLunBoPresenter.reqeust(0, "", "1", "20");
         movieRecycleRmdy.setLayoutManager(new LinearLayoutManager(OutDetailsActivity.this, OrientationHelper.VERTICAL, false));
         movieRecycleRmdy.setAdapter(mOutDetailsAdapter);
     }
@@ -129,7 +129,7 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleRmdy.setVisibility(View.GONE);//隐藏
         movieRecycleJjsy.setVisibility(View.GONE);//隐藏
         mHotShowingPresenter = new HotShowingPresenter(new HotShowingCall());
-        mHotShowingPresenter.reqeust(mUserId, mSessionId, "1", "100");
+        mHotShowingPresenter.reqeust(0, "", "1", "100");
         movieRecycleZzry.setLayoutManager(new LinearLayoutManager(OutDetailsActivity.this, OrientationHelper.VERTICAL, false));
         movieRecycleZzry.setAdapter(mOutDetailsAdapter);
     }
@@ -143,7 +143,7 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleRmdy.setVisibility(View.GONE);//隐藏
         movieRecycleZzry.setVisibility(View.GONE);//隐藏
         mCommingSunPresenter = new CommingSunPresenter(new CommingSunCall());
-        mCommingSunPresenter.reqeust(mUserId, mSessionId, "1", "100");
+        mCommingSunPresenter.reqeust(0, "", "1", "100");
         movieRecycleJjsy.setLayoutManager(new LinearLayoutManager(OutDetailsActivity.this, OrientationHelper.VERTICAL, false));
         movieRecycleJjsy.setAdapter(mOutDetailsAdapter);
     }

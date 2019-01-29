@@ -57,8 +57,8 @@ public class MovieFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        mSessionId = USER_INFO.getSessionId();
-        mUserId = USER_INFO.getUserId();
+        /*mSessionId = USER_INFO.getSessionId();
+        mUserId = USER_INFO.getUserId();*/
         mCinemaListAdapter = new CinemaListAdapter(getActivity());
         tjyy();
         cinemaRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -111,7 +111,7 @@ public class MovieFragment extends BaseFragment {
         cinemaRecycleTjyy.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.VERTICAL, false));
         cinemaRecycleTjyy.setAdapter(mCinemaListAdapter);
         mCinemaListPresenter = new CinemaListPresenter(new CinemalistCall());
-        mCinemaListPresenter.reqeust(mUserId, mSessionId, "1", "20");
+        mCinemaListPresenter.reqeust(0, "", "1", "20");
 
 
     }
@@ -127,7 +127,7 @@ public class MovieFragment extends BaseFragment {
         cinemaRecycleFjyy.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.VERTICAL, false));
         cinemaRecycleFjyy.setAdapter(mCinemaListAdapter);
         mNearbyCinemaPresenter = new NearbyCinemaPresenter(new CinemalistCall());
-        mNearbyCinemaPresenter.reqeust(mUserId, mSessionId, "1", "20");
+        mNearbyCinemaPresenter.reqeust(0, "", "1", "20");
     }
 
     private class CinemalistCall implements DataCall<Result<List<CinemaListBean>>> {

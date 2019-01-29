@@ -8,6 +8,9 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.greendao.gen.DaoMaster;
+import com.greendao.gen.UserDao;
+import com.greendao.gen.UserInfoDao;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;

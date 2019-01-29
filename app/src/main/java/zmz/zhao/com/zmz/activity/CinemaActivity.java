@@ -66,7 +66,7 @@ public class CinemaActivity extends BaseActivity {
     private String mSessionId;
     private int mUserId;
     private String mString;
-    private IWXAPI api;
+
     private String mAddress;
     private String mLogo;
     private String mName;
@@ -86,11 +86,7 @@ public class CinemaActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        /**
-         * 微信支付
-         */
-        api = WXAPIFactory.createWXAPI(this, "wxb3852e6a6b7d9516");//第二个参数为APPID
-        api.registerApp("wxb3852e6a6b7d9516");
+
 
         mScheduleAdapter = new ScheduleAdapter(this);
         mScheduleListAdapter = new ScheduleListAdapter(this);
@@ -138,10 +134,11 @@ public class CinemaActivity extends BaseActivity {
         mScheduleListAdapter.setOnClickListener(new ScheduleListAdapter.OnClickListener() {
             @Override
             public void scuccess(int id,String price,String screeningHall) {
+                Log.e("lk","cinid"+id);
                 Intent intent = new Intent(CinemaActivity.this,ChooseActivity.class);
                 intent.putExtra("name",mName);
                 intent.putExtra("address",mAddress);
-                intent.putExtra("id",id);
+                intent.putExtra("id",id+"");
                 intent.putExtra("price",price);
                 intent.putExtra("screeningHall",screeningHall);
                 intent.putExtra("cinemaname",cinemaname);
@@ -160,62 +157,12 @@ public class CinemaActivity extends BaseActivity {
     @OnClick(R.id.yingyuan)
     public void onViewClicked() {
 
-        /**
-         * 微信支付
-         */
-        mSessionId = USER_INFO.getSessionId();
-        mUserId = USER_INFO.getUserId();
 
-        mString = MD5Utils.md5Password(mUserId + "590" + "1" + "movie");
-        mPlaceanOrderPresenter = new PlaceanOrderPresenter(new PlaceOrderCall());
-        mPlaceanOrderPresenter.reqeust(mUserId, mSessionId, 590, 1, mString);
 
 
     }
 
-    /**
-     * 微信支付
-     */
-    private class PlaceOrderCall implements DataCall<Result> {
-        @Override
-        public void success(Result result) {
-            if (result.getStatus().equals("0000")) {
 
-                Toast.makeText(CinemaActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("lk", "订单号" + result.getOrderId());
-                String orderId = result.getOrderId();
-                IRequest interfacea = NetworkManager.getInstance().create(IRequest.class);
-                interfacea.pay(USER_INFO.getUserId(), USER_INFO.getSessionId() + "", "1", orderId).subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<PayBean>() {
-                            @Override
-                            public void accept(PayBean payBean) throws Exception {
-                                PayReq req = new PayReq();
-                                req.appId = payBean.getAppId();
-                                req.partnerId = payBean.getPartnerId();
-                                req.prepayId = payBean.getPrepayId();
-                                req.nonceStr = payBean.getNonceStr();
-                                req.timeStamp = payBean.getTimeStamp();
-                                req.packageValue = payBean.getPackageValue();
-                                req.sign = payBean.getSign();
-                                // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-                                //3.调用微信支付sdk支付方法
-                                api.sendReq(req);
-                            }
-                        });
-
-
-            } else {
-                Toast.makeText(CinemaActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-        @Override
-        public void fail(ApiException e) {
-
-        }
-    }
 
     private class ScheduleCall implements DataCall<Result<List<ScheduleCinemaBean>>> {
 
