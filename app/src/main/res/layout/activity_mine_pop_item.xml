@@ -201,8 +201,7 @@
                     <Button
                         android:layout_width="@dimen/dp_75"
                         android:layout_height="@dimen/dp_32"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/dp_30"
+                        android:layout_marginLeft="@dimen/dp_260"
                         android:background="@drawable/bg_btn_role"
                         android:text="饰演角色"
                         android:textColor="@color/white"
@@ -238,8 +237,7 @@
                         android:id="@+id/role1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_45"
-                        android:layout_toRightOf="@+id/shi"
+                        android:layout_marginLeft="@dimen/dp_260"
                         android:text="啦啦啦啦"
                         android:textColor="@color/colorTextColor"
                         android:textSize="@dimen/sp_12" />
@@ -279,8 +277,7 @@
                         android:id="@+id/role2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_45"
-                        android:layout_toRightOf="@+id/shi1"
+                        android:layout_marginLeft="@dimen/dp_260"
                         android:text="啦啦啦啦"
                         android:textColor="@color/colorTextColor"
                         android:textSize="@dimen/sp_12" />
@@ -320,8 +317,7 @@
                         android:id="@+id/role3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_45"
-                        android:layout_toRightOf="@+id/shi2"
+                        android:layout_marginLeft="@dimen/dp_260"
                         android:text="啦啦啦啦"
                         android:textColor="@color/colorTextColor"
                         android:textSize="@dimen/sp_12" />
@@ -361,8 +357,7 @@
                         android:id="@+id/role4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_45"
-                        android:layout_toRightOf="@+id/shi3"
+                        android:layout_marginLeft="@dimen/dp_260"
                         android:text="啦啦啦啦"
                         android:textColor="@color/colorTextColor"
                         android:textSize="@dimen/sp_12" />

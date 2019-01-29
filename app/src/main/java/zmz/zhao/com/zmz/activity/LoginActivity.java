@@ -151,6 +151,13 @@ public class LoginActivity extends BaseActivity {
             /*mWeChatLoginPresenter = new WeChatLoginPresenter(new WechatCall());
             mWeChatLoginPresenter.reqeust(code);*/
 
+            if (isLogin != null &&isLogin.equals("1")){
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+
+            finish();
+
 
         } else {
             Toast.makeText(this, "用户未安装微信", Toast.LENGTH_SHORT).show();
@@ -207,7 +214,6 @@ public class LoginActivity extends BaseActivity {
                 if (isLogin != null &&isLogin.equals("1")){
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
-
                 }
 
                 finish();
@@ -229,43 +235,4 @@ public class LoginActivity extends BaseActivity {
         mLoginPresenter = null;
     }
 
-
-    private class WechatCall implements DataCall<Result<LoginBean>> {
-        @Override
-        public void success(Result<LoginBean> result) {
-            if (result.getStatus().equals("0000")) {
-
-                result.getResult().getUserInfo().setFlag(flag_num);
-
-                result.getResult().getUserInfo().setLogin_flag(login_flag);
-
-                result.getResult().getUserInfo().setPwd(edpwd);
-
-
-                result.getResult().getUserInfo().setUserId(result.getResult().getUserId());
-                result.getResult().getUserInfo().setSessionId(result.getResult().getSessionId());
-
-
-                result.getResult().getUserInfo().setStatus(1);
-
-                UserInfoDao userInfoDao = DaoMaster.newDevSession(LoginActivity.this, UserDao.TABLENAME).getUserInfoDao();
-
-                userInfoDao.insertOrReplace(result.getResult().getUserInfo());
-
-                Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-
-                finish();
-            } else {
-                Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-        @Override
-        public void fail(ApiException e) {
-
-        }
-    }
 }

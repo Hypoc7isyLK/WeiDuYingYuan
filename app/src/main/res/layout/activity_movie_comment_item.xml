@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    
+    <LinearLayout
+        android:id="@+id/head_text"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/comment_head"
+            android:layout_width="@dimen/dp_40"
+            android:layout_margin="@dimen/dp_5"
+            android:layout_height="@dimen/dp_40"
+            fresco:roundAsCircle="true"/>
+        <TextView
+            android:id="@+id/comment_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/colorTextColor"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:text="jdfhbjsdhj"/>
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/comment_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_12"
+        android:ellipsize="end"
+        android:textColor="@color/colorTextColor"
+        android:textSize="@dimen/sp_12"
+        android:text="dsfgsdfsfsdfsdfsdf"
+        android:maxLines="4"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/comment_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/colorview"
+            android:textSize="@dimen/sp_12"
+            android:text="2109"/>
+        
+        <TextView
+            android:id="@+id/comment_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/colorview"
+            android:textSize="@dimen/sp_12"
+            android:text="5000"/>
+        <ImageView
+            android:id="@+id/comment_massage"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            android:layout_toLeftOf="@+id/comment_num"
+            android:layout_marginRight="@dimen/dp_6"
+            android:src="@mipmap/comment"/>
+        <TextView
+            android:id="@+id/comment_praise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1253"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/colorview"
+            android:layout_marginRight="@dimen/dp_18"
+            android:layout_toLeftOf="@+id/comment_massage"/>
+        <ToggleButton
+            android:id="@+id/praise"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="@dimen/dp_16"
+            android:textOff=""
+            android:textOn=""
+            android:checked="false"
+            android:layout_toLeftOf="@+id/comment_praise"
+            android:layout_marginRight="@dimen/dp_5"
+            android:background="@drawable/sele_praise"/>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/colorview"/>
+    <TextView
+        android:id="@+id/commentAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textColor="@color/colorview"
+        android:text=""/>
+
+</LinearLayout>
+
+
+

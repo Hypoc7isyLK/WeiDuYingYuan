@@ -8,6 +8,7 @@ import java.util.List;
  * function:个人状态信息
  */
 public class MineMassage {
+
     private String headPic;
     private int integral;
     private String nickName;

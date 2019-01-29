@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -44,7 +46,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyHloder>{
 
     @Override
     public void onBindViewHolder(@NonNull MyHloder myHloder, int i) {
-        myHloder.simple.setImageURI(Uri.parse(list.get(i)));
+        Glide.with(context).load(list.get(i)).into(myHloder.simple);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyHloder>{
     }
 
     class MyHloder extends RecyclerView.ViewHolder {
-        SimpleDraweeView simple;
+        ImageView simple;
         public MyHloder(@NonNull View itemView) {
             super(itemView);
 

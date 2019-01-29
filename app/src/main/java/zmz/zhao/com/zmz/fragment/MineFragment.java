@@ -106,11 +106,9 @@ public class MineFragment extends BaseFragment {
         signPresenter = new SignPresenter(new SignCall());
 
         if (USER_INFO == null) {
-
             isLogin();
             return;
         }
-
         userId = USER_INFO.getUserId();
 
         sessionId = USER_INFO.getSessionId();
@@ -168,9 +166,13 @@ public class MineFragment extends BaseFragment {
         List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
         if (userInfoList != null && userInfoList.size() > 0) {
+
             UserInfo userInfo = userInfoList.get(0);
 
+
             int userids = userInfo.getUserId();
+
+            myPic.setImageURI(Uri.parse(userInfo.getHeadPic()));
 
             String sessionIds = userInfo.getSessionId();
 
@@ -219,7 +221,6 @@ public class MineFragment extends BaseFragment {
                     userId = USER_INFO.getUserId();
 
                     sessionId = USER_INFO.getSessionId();
-
                     signPresenter.reqeust(userId, sessionId);
 
                 }
@@ -306,8 +307,6 @@ public class MineFragment extends BaseFragment {
         album.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     //权限还没有授予，需要在这里写申请权限的代码
                     ActivityCompat.requestPermissions(getActivity(),
@@ -319,7 +318,6 @@ public class MineFragment extends BaseFragment {
                     //用startActivityForResult方法，待会儿重写onActivityResult()方法，拿到图片做裁剪操作
                     startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
                 }
-
             }
         });
         //相机
@@ -327,14 +325,11 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
 
-
                 Intent openCameraIntent = new Intent(
                         MediaStore.ACTION_IMAGE_CAPTURE);
-
                 tempUri = Uri.parse(FileUtils.getDir("/image/bimap") + "1.jpg");
 
                 Log.e("zmz", "=====" + tempUri);
-
                 //启动相机程序
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);

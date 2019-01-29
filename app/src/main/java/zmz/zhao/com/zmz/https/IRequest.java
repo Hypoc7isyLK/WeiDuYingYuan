@@ -14,6 +14,7 @@ import retrofit2.http.Query;
 import zmz.zhao.com.zmz.bean.Address;
 import zmz.zhao.com.zmz.bean.Attention;
 import zmz.zhao.com.zmz.bean.CinemaListBean;
+import zmz.zhao.com.zmz.bean.Comment;
 import zmz.zhao.com.zmz.bean.DetailsBean;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.MineMassage;
@@ -206,7 +207,7 @@ public interface IRequest {
     @GET("movie/v1/findMoviesDetail")
     Observable<Result<DetailsBean>> showDetails(@Header("userId") int userId,
                                                 @Header("sessionId") String sessionId,
-                                                @Query("movieId")String movieId);
+                                                @Query("movieId") String movieId);
 
     /**
      * @作者 啊哈
@@ -226,9 +227,9 @@ public interface IRequest {
 
     @GET("cinema/v1/findNearbyCinemas")
     Observable<Result<List<CinemaListBean>>> shownearbyCinema(@Header("userId") int userId,
-                                                        @Header("sessionId") String sessionId,
-                                                        @Query("page") String page,
-                                                        @Query("count") String count);
+                                                              @Header("sessionId") String sessionId,
+                                                              @Query("page") String page,
+                                                              @Query("count") String count);
 
     @GET("movie/v1/findMovieListByCinemaId")
     Observable<Result<List<ScheduleCinemaBean>>> showScheduleCinema(@Query("cinemaId") String cinemaId);
@@ -243,7 +244,6 @@ public interface IRequest {
                                         @Field("sign") String sign);
 
 
-
     @POST("movie/v1/verify/pay")
     @FormUrlEncoded
     Observable<PayBean> pay(@Header("userId") int userId,
@@ -253,6 +253,29 @@ public interface IRequest {
 
     @POST("user/v1/weChatBindingLogin")
     @FormUrlEncoded
-    Observable<Result> wechatlogin(@Field("code") String code);
+    Observable<Result<LoginBean>> wechatlogin(@Field("code") String code);
+
+
+    /**
+     * @作者 啊哈
+     * @date 2019/1/29
+     * @method：关注电影
+     */
+    @GET("movie/v1/verify/followMovie")
+    Observable<Result> focus(@Header("userId") int userId,
+                             @Header("sessionId") String sessionId,
+                             @Query("movieId") int id);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/1/29
+     * @method：影评
+     */
+    @GET("movie/v1/findAllMovieComment")
+    Observable<Result<List<Comment>>> comment(@Header("userId") int userId,
+                                              @Header("sessionId") String sessionId,
+                                              @Query("movieId") int id,
+                                              @Query("page") int page,
+                                              @Query("count") int count);
 }
 

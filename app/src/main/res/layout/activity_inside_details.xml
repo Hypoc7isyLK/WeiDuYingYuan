@@ -128,7 +128,7 @@
             android:layout_height="@dimen/dp_58"
             android:layout_marginRight="@dimen/dp_24"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/com_back"/>
+            android:src="@mipmap/publish"/>
 
     </RelativeLayout>
 

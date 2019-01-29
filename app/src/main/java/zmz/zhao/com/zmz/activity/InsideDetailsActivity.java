@@ -18,9 +18,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.List;
 
@@ -28,17 +30,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jzvd.JZVideoPlayer;
+import zmz.zhao.com.zmz.adapter.CommentAdapter;
 import zmz.zhao.com.zmz.adapter.DumplingsAdapter;
 import zmz.zhao.com.zmz.adapter.ImageAdapter;
+import zmz.zhao.com.zmz.bean.Comment;
 import zmz.zhao.com.zmz.bean.DetailsBean;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
+import zmz.zhao.com.zmz.presenter.CommentPresenter;
 import zmz.zhao.com.zmz.presenter.DetailsPresenter;
+import zmz.zhao.com.zmz.presenter.FocusMoviePresenter;
 import zmz.zhao.com.zmz.util.ExpandableTextView;
 import zmz.zhao.com.zmz.util.SpaceItemDecoration;
 import zmz.zhao.com.zmz.view.DataCall;
 
-public class InsideDetailsActivity extends BaseActivity {
+public class InsideDetailsActivity extends BaseActivity implements XRecyclerView.LoadingListener {
 
 
     @BindView(R.id.xiaoxin)
@@ -66,8 +72,14 @@ public class InsideDetailsActivity extends BaseActivity {
     private String mSessionId;
     private int mUserId;
     private String mId1;
-    PopupWindow spopWindow;
+    CommentPresenter commentPresenter;
 
+    PopupWindow spopWindow;
+    private XRecyclerView comment;
+    private int userId;
+    private String sessionId;
+    private CommentAdapter commentAdapter;
+    FocusMoviePresenter focusMoviePresenter;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_inside_details;
@@ -80,14 +92,15 @@ public class InsideDetailsActivity extends BaseActivity {
         mId1 = mIntent.getStringExtra("id");
         Log.e("lk", "inside" + mId1);
 
-        /*if (mFollow == 1){
-            xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_selected);
-        }else {
-            xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_default);
-        }*/
+        userId = USER_INFO.getUserId();
+
+        sessionId = USER_INFO.getSessionId();
 
         mDetailsPresenter = new DetailsPresenter(new DetailsCall());
+        commentPresenter = new CommentPresenter(new CommentCall());
+        focusMoviePresenter = new FocusMoviePresenter(new FocusCall());
         mDetailsPresenter.reqeust(0, "", mId1);
+
     }
 
     @Override
@@ -99,12 +112,19 @@ public class InsideDetailsActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.xiaoxin:
+                if (mResult.getFollowMovie() == 1){
+                    focusMoviePresenter.reqeust(userId,sessionId,mResult.getId());
+                }
+
                 break;
             case R.id.insidetails_details:
+                int height = getWindowManager().getDefaultDisplay().getHeight();
 
                 View popView = View.inflate(this, R.layout.activity_mine_pop_item, null);
                 PopupWindow popWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT, true);
+                        ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+                popWindow.setHeight(height*4/5);
                 popWindow.setTouchable(true);
                 popWindow.setBackgroundDrawable(new BitmapDrawable());
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -166,18 +186,18 @@ public class InsideDetailsActivity extends BaseActivity {
     }
 
     private void popup(String name,int page) {
-
+        int height = getWindowManager().getDefaultDisplay().getHeight();
         View popView = View.inflate(this, R.layout.activity_mine_btn_pop_item, null);
-        spopWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        spopWindow = new PopupWindow(popView, ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        spopWindow.setHeight(height*4/5);
         spopWindow.setTouchable(true);
         spopWindow.setBackgroundDrawable(new BitmapDrawable());
         spopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
         TextView details_title = popView.findViewById(R.id.details_title);
+
         ImageView cancel= popView.findViewById(R.id.cance);
-
-
 
         details_title.setText(name);
 
@@ -195,7 +215,7 @@ public class InsideDetailsActivity extends BaseActivity {
 
 
         if (page == 1){
-            RecyclerView stage = popView.findViewById(R.id.stage);
+            XRecyclerView stage = popView.findViewById(R.id.stage);
             stage.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
             List<DetailsBean.ShortFilmListBean> shortFilmList = mResult.getShortFilmList();
             DumplingsAdapter dumplingsAdapter = new DumplingsAdapter(this);
@@ -205,21 +225,57 @@ public class InsideDetailsActivity extends BaseActivity {
 
         }else if (page == 2){
 
-            RecyclerView stage = popView.findViewById(R.id.stage);
-            StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-            stage.setLayoutManager(staggeredGridLayoutManager);
-            stage.addItemDecoration(new SpaceItemDecoration(10));
+            XRecyclerView stag = popView.findViewById(R.id.stage);
+            StaggeredGridLayoutManager recyclerViewLayoutManager =
+                    new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            stag.setLayoutManager(recyclerViewLayoutManager);
 
+            stag.addItemDecoration(new SpaceItemDecoration(10));
             List<String> posterList = mResult.getPosterList();
 
             ImageAdapter imageAdapter = new ImageAdapter(this);
 
             imageAdapter.addAll(posterList);
 
-            stage.setAdapter(imageAdapter);
+            stag.setAdapter(imageAdapter);
+        }else if(page == 3){
+
+            comment = popView.findViewById(R.id.stage);
+
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+            comment.setLayoutManager(linearLayoutManager);
+
+            commentAdapter = new CommentAdapter(this);
+
+            comment.setAdapter(commentAdapter);
+
+            commentPresenter.reqeust(userId, sessionId,mResult.getId(),true);
+
         }
 
     }
+
+    @Override
+    public void onRefresh() {
+        if (commentPresenter.Running()){
+            comment.refreshComplete();
+            return;
+        }
+        commentPresenter.reqeust(userId,sessionId,mResult.getId(),true);
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (commentPresenter.Running()){
+            comment.loadMoreComplete();
+            return;
+        }
+        commentPresenter.reqeust(userId,sessionId,mResult.getId(),false);
+    }
+
     private class DetailsCall implements DataCall<Result<DetailsBean>> {
 
 
@@ -228,6 +284,55 @@ public class InsideDetailsActivity extends BaseActivity {
             mResult = result.getResult();
             insidetailsSimple.setImageURI(mResult.getImageUrl());
             insidetailsTitle.setText(mResult.getName());
+
+            if (mResult.getFollowMovie() == 1){
+                xiaoxin.setImageResource(R.mipmap.com_icon_collection_selected);
+            }else {
+                xiaoxin.setImageResource(R.mipmap.com_icon_collection_default);
+            }
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+
+    private class CommentCall implements DataCall<Result<List<Comment>>> {
+        @Override
+        public void success(Result<List<Comment>> result) {
+
+
+            if(result.getStatus().equals("0000")){
+                List<Comment> comments = result.getResult();
+                if (commentPresenter.isResresh()){
+                    commentAdapter.clear();
+                }
+
+                commentAdapter.addAll(comments);
+
+                commentAdapter.notifyDataSetChanged();
+            }
+
+            comment.loadMoreComplete();
+
+            comment.refreshComplete();
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+
+    private class FocusCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+
+            if (result.getStatus().equals("0000")){
+                Toast.makeText(InsideDetailsActivity.this, ""+result.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
         }
 
         @Override
