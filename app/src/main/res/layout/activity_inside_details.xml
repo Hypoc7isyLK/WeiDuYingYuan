@@ -4,8 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/insidebg"
+    android:background="@mipmap/insidebgg"
     tools:context="zmz.zhao.com.zmz.activity.InsideDetailsActivity">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bg"
+        android:alpha="0.3" />
 
     <RelativeLayout
         android:layout_width="match_parent"

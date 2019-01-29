@@ -23,6 +23,7 @@ import zmz.zhao.com.zmz.bean.PayBean;
 import zmz.zhao.com.zmz.bean.Record;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.ScheduleCinemaBean;
+import zmz.zhao.com.zmz.bean.ScheduleListBean;
 import zmz.zhao.com.zmz.bean.ShowLunBoBean;
 import zmz.zhao.com.zmz.bean.SystemMassage;
 
@@ -227,9 +228,9 @@ public interface IRequest {
 
     @GET("cinema/v1/findNearbyCinemas")
     Observable<Result<List<CinemaListBean>>> shownearbyCinema(@Header("userId") int userId,
-                                                              @Header("sessionId") String sessionId,
-                                                              @Query("page") String page,
-                                                              @Query("count") String count);
+                                                        @Header("sessionId") String sessionId,
+                                                        @Query("page") String page,
+                                                        @Query("count") String count);
 
     @GET("movie/v1/findMovieListByCinemaId")
     Observable<Result<List<ScheduleCinemaBean>>> showScheduleCinema(@Query("cinemaId") String cinemaId);
@@ -244,6 +245,7 @@ public interface IRequest {
                                         @Field("sign") String sign);
 
 
+
     @POST("movie/v1/verify/pay")
     @FormUrlEncoded
     Observable<PayBean> pay(@Header("userId") int userId,
@@ -253,7 +255,14 @@ public interface IRequest {
 
     @POST("user/v1/weChatBindingLogin")
     @FormUrlEncoded
-    Observable<Result<LoginBean>> wechatlogin(@Field("code") String code);
+    Observable<Result> wechatlogin(@Field("code") String code);
+
+
+
+
+    @GET("movie/v1/findMovieScheduleList")
+    Observable<Result<List<ScheduleListBean>>> showScheduleList(@Query("cinemasId") String cinemaId,
+                                                                @Query("movieId") String movieId);
 
 
     /**

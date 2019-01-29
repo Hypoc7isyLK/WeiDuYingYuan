@@ -28,6 +28,9 @@ public class CinemaListAdapter extends RecyclerView.Adapter<CinemaListAdapter.Vi
     List<CinemaListBean> mListBeans;
     private int mFollowCinema;
     private int mId;
+    private String mName;
+    private String mAddress;
+    private String mLogo;
 
     public CinemaListAdapter(Context context) {
         this.context = context;
@@ -60,13 +63,18 @@ public class CinemaListAdapter extends RecyclerView.Adapter<CinemaListAdapter.Vi
             viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_default);
         }
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 mId = mListBeans.get(i).getId();
-                mOnclicklitener.success(mId);
+                mAddress = mListBeans.get(i).getAddress();
+                mLogo = mListBeans.get(i).getLogo();
+                mName = mListBeans.get(i).getName();
+                mOnclicklitener.success(mId,mAddress,mLogo,mName);
                 Log.e("lk", "onBindViewHolder:+session"+mId );
             }
         });
+
 
     }
 
@@ -93,7 +101,7 @@ public class CinemaListAdapter extends RecyclerView.Adapter<CinemaListAdapter.Vi
         }
     }
     public interface Onclicklitener{
-        void success(int id);
+        void success(int id, String address, String logo, String name);
     }
 
     private Onclicklitener mOnclicklitener;

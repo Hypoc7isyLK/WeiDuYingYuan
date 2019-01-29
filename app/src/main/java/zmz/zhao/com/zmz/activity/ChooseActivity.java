@@ -1,9 +1,11 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import zmz.zhao.com.zmz.dialog.ChooseDialog;
+import zmz.zhao.com.zmz.view.Marquee;
 
 public class ChooseActivity extends BaseActivity {
 
@@ -29,6 +32,21 @@ public class ChooseActivity extends BaseActivity {
     Button wechatPay;
     @BindView(R.id.wechat_cancel)
     Button wechatCancel;
+    @BindView(R.id.choose_cinema_name)
+    TextView chooseCinemaName;
+    @BindView(R.id.choose_cinema_address)
+    TextView chooseCinemaAddress;
+    @BindView(R.id.choose_movie_name)
+    TextView chooseMovieName;
+    @BindView(R.id.choose_cinema_marquee)
+    Marquee chooseCinemaMarquee;
+    private Intent mIntent;
+    private String mId;
+    private String mmPrice;
+    private String mScreeningHall;
+    private String mAddress;
+    private String mName;
+    private String mCinemaname;
 
     @Override
     protected int getLayoutId() {
@@ -38,6 +56,19 @@ public class ChooseActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+        mIntent = getIntent();
+        mId = mIntent.getStringExtra("id");
+        mmPrice = mIntent.getStringExtra("price");
+        mScreeningHall = mIntent.getStringExtra("screeningHall");
+        mAddress = mIntent.getStringExtra("address");
+        mName = mIntent.getStringExtra("name");
+        mCinemaname = mIntent.getStringExtra("cinemaname");
+
+        chooseCinemaName.setText(mCinemaname);
+        chooseCinemaAddress.setText(mAddress);
+        chooseMovieName.setText(mName);
+
+
         //初始化影院选座页面对应的影院以及影片信息
         initChooseMessage();
 
@@ -88,7 +119,8 @@ public class ChooseActivity extends BaseActivity {
     }
 
     private void initChooseMessage() {
-        String mPrice = "0.1";
+
+        String mPrice = mmPrice;
         mPriceWithCalculate = new BigDecimal(mPrice);
     }
 
@@ -101,6 +133,7 @@ public class ChooseActivity extends BaseActivity {
     private void changePriceWithSelected() {
         selectedTableCount++;
         String currentPrice = mPriceWithCalculate.multiply(new BigDecimal(String.valueOf(selectedTableCount))).toString();
+        Log.e("lk", "currentprice" + currentPrice);
         SpannableString spannableString = changTVsize(currentPrice);
         chooseMoviePrice.setText(spannableString);
         //计算机：处理浮点数是不精确的1.2 - 02   = 1   =》    0.9999999999
@@ -123,7 +156,7 @@ public class ChooseActivity extends BaseActivity {
 
     @OnClick(R.id.choose_cinema_settable)
     public void onViewClicked() {
-        chooseCinemaSettable.setScreenName("8号厅荧幕");//设置屏幕名称
+        chooseCinemaSettable.setScreenName(mScreeningHall + "荧幕");//设置屏幕名称
         chooseCinemaSettable.setMaxSelected(3);//设置最多选中
 
     }
@@ -135,8 +168,6 @@ public class ChooseActivity extends BaseActivity {
         }
         return spannableString;
     }
-
-
 
 
     @OnClick({R.id.wechat_pay, R.id.wechat_cancel})
@@ -153,6 +184,7 @@ public class ChooseActivity extends BaseActivity {
 
     private void xiaDan() {
         ChooseDialog chooseDialog = new ChooseDialog();
-        chooseDialog.show(getSupportFragmentManager(),"");
+        chooseDialog.show(getSupportFragmentManager(), "");
     }
+
 }

@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -65,6 +64,8 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     ImageView movir_back;
     @BindView(R.id.insidetails_buy)
     ImageView insidetailsBuy;
+    @BindView(R.id.bg)
+    SimpleDraweeView bg;
 
 
     private DetailsBean mResult;
@@ -129,7 +130,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
                 popWindow.setBackgroundDrawable(new BitmapDrawable());
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
-                initData(popView,popWindow);
+                initData(popView, popWindow);
 
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -140,14 +141,14 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
                 break;
             case R.id.insidetails_foreshow:
 
-                popup("预告片",1);
+                popup("预告片", 1);
 
                 break;
             case R.id.insidetails_photo:
-                popup("剧照",2);
+                popup("剧照", 2);
                 break;
             case R.id.insidetails_discuss:
-                popup("影评",3);
+                popup("影评", 3);
                 break;
             case R.id.movir_back:
                 finish();
@@ -167,7 +168,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         TextView director = popView.findViewById(R.id.director);
         TextView place = popView.findViewById(R.id.place);
         TextView min = popView.findViewById(R.id.min);
-        ImageView cancel= popView.findViewById(R.id.cancel);
+        ImageView cancel = popView.findViewById(R.id.cancel);
 
         details_image.setImageURI(Uri.parse(mResult.getImageUrl()));
         type.setText(mResult.getMovieTypes());
@@ -188,16 +189,16 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     private void popup(String name,int page) {
         int height = getWindowManager().getDefaultDisplay().getHeight();
         View popView = View.inflate(this, R.layout.activity_mine_btn_pop_item, null);
-        spopWindow = new PopupWindow(popView, ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        spopWindow.setHeight(height*4/5);
+        spopWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT, true);
         spopWindow.setTouchable(true);
         spopWindow.setBackgroundDrawable(new BitmapDrawable());
         spopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
         TextView details_title = popView.findViewById(R.id.details_title);
-
         ImageView cancel= popView.findViewById(R.id.cance);
+
+
 
         details_title.setText(name);
 
@@ -284,7 +285,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             mResult = result.getResult();
             insidetailsSimple.setImageURI(mResult.getImageUrl());
             insidetailsTitle.setText(mResult.getName());
-
+            bg.setImageURI(mResult.getImageUrl());
             if (mResult.getFollowMovie() == 1){
                 xiaoxin.setImageResource(R.mipmap.com_icon_collection_selected);
             }else {
@@ -332,6 +333,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             if (result.getStatus().equals("0000")){
                 Toast.makeText(InsideDetailsActivity.this, ""+result.getMessage(), Toast.LENGTH_SHORT).show();
             }
+
 
         }
 
