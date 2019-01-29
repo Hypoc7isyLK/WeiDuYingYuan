@@ -7,7 +7,6 @@ import android.widget.EditText;
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.DaoSession;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 
 import butterknife.BindView;
@@ -68,7 +67,7 @@ public class UpdatePwdActivity extends BaseActivity {
         @Override
         public void success(Result result) {
             if (result.getStatus().equals("0000")){
-                DaoSession daoSession = DaoMaster.newDevSession(UpdatePwdActivity.this, UserDao.TABLENAME);
+                DaoSession daoSession = DaoMaster.newDevSession(UpdatePwdActivity.this, UserInfoDao.TABLENAME);
                 UserInfoDao userInfoDao = daoSession.getUserInfoDao();
                 userInfoDao.deleteAll();
 

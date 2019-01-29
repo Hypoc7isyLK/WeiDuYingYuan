@@ -11,6 +11,8 @@ import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
+import com.greendao.gen.DaoMaster;
+import com.greendao.gen.UserInfoDao;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -19,9 +21,6 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-import zmz.zhao.com.zmz.activity.BaseActivity;
-import zmz.zhao.com.zmz.activity.HomeActivity;
-import zmz.zhao.com.zmz.activity.LoginActivity;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
@@ -32,7 +31,6 @@ import zmz.zhao.com.zmz.view.DataCall;
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
 	public static final String WEIXIN_APP_ID = "wxb3852e6a6b7d9516";
-    private String isLogin;
     private IWXAPI api;
 	private WeChatLoginPresenter mWeChatLoginPresenter;
 
@@ -41,9 +39,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.entry);
 
-        Intent intent = getIntent();
-
-        isLogin = intent.getStringExtra("isLogin");
 
         api = WXAPIFactory.createWXAPI(this, Constants.APP_ID, true);
 
@@ -87,29 +82,16 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                 if (result.getStatus().equals("0000")) {
 
+					result.getResult().getUserInfo().setUserId(result.getResult().getUserId());
+					result.getResult().getUserInfo().setSessionId(result.getResult().getSessionId());
 
+					result.getResult().getUserInfo().setStatus(1);
 
-                    result.getResult().getUserInfo().setUserId(result.getResult().getUserId());
-                    result.getResult().getUserInfo().setSessionId(result.getResult().getSessionId());
+					UserInfoDao userInfoDao = DaoMaster.newDevSession(getBaseContext(), UserInfoDao.TABLENAME).getUserInfoDao();
 
-
-                    result.getResult().getUserInfo().setStatus(1);
-
-                    UserInfoDao userInfoDao = DaoMaster.newDevSession(WXEntryActivity.this, UserDao.TABLENAME).getUserInfoDao();
-                    userInfoDao.insertOrReplace(result.getResult().getUserInfo());
-
+					userInfoDao.insertOrReplace(result.getResult().getUserInfo());
 
                     Toast.makeText(WXEntryActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-
-                    if (isLogin != null && isLogin.equals("1")){
-
-                        Intent intent = new Intent(WXEntryActivity.this, HomeActivity.class);
-
-                        startActivity(intent);
-
-                    }
-
-                    finish();
 
                 } else {
                     Toast.makeText(WXEntryActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();

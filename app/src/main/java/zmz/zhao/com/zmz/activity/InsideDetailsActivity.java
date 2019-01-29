@@ -113,8 +113,12 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.xiaoxin:
-                if (mResult.getFollowMovie() == 1){
+
+                Toast.makeText(this, "guanzhu", Toast.LENGTH_SHORT).show();
+                if (mResult.getFollowMovie() == 2){
                     focusMoviePresenter.reqeust(userId,sessionId,mResult.getId());
+                }else {
+
                 }
 
                 break;
@@ -286,6 +290,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             insidetailsSimple.setImageURI(mResult.getImageUrl());
             insidetailsTitle.setText(mResult.getName());
             bg.setImageURI(mResult.getImageUrl());
+
             if (mResult.getFollowMovie() == 1){
                 xiaoxin.setImageResource(R.mipmap.com_icon_collection_selected);
             }else {
@@ -332,6 +337,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
             if (result.getStatus().equals("0000")){
                 Toast.makeText(InsideDetailsActivity.this, ""+result.getMessage(), Toast.LENGTH_SHORT).show();
+                xiaoxin.setImageResource(R.mipmap.com_icon_collection_selected);
             }
 
 

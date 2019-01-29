@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -123,7 +122,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         super.onResume();
 
-        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
 
         List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 

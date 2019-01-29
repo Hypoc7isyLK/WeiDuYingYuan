@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -74,22 +73,56 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
         finish_recycle.setVisibility(View.GONE);
 
         recordPresenter = new RecordPresenter(new RecordCall());
+
         donePresenter = new RecordPresenter(new DoneCall());
 
         record_unfinished.setTextColor(getResources().getColorStateList(R.color.white));
+
         initData();
+
         if (USER_INFO == null) {
             isLogin();
             return;
         }
 
         userId = USER_INFO.getUserId();
+
         sessionId = USER_INFO.getSessionId();
 
+        Log.e("zmz" + userId, "==00000000==" + sessionId);
 
+        recordPresenter.reqeust(userId, sessionId, true,1);
+
+        donePresenter.reqeust(userId, sessionId, true,2);
 
 
     }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
+
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+
+        if (userInfoList != null && userInfoList.size() > 0) {
+            UserInfo userInfo = userInfoList.get(0);
+
+            int userids = userInfo.getUserId();
+
+            String sessionIds = userInfo.getSessionId();
+
+            Log.e("zmz"+userids,"============="+sessionIds);
+
+            recordPresenter.reqeust(userids, sessionIds, true,1);
+            donePresenter.reqeust(userids, sessionIds, true,2);
+
+            initData();
+        }
+    }
+
 
     private void initData() {
 
@@ -129,7 +162,7 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
 
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        unfinish_recycle.addItemDecoration(new SpaceItemDecoration(20));
+        unfinish_recycle.addItemDecoration(new SpaceItemDecoration(10));
 
         unfinish_recycle.setLayoutManager(linearLayoutManager);
 
@@ -137,13 +170,11 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
 
         unfinish_recycle.setAdapter(undoneAdapter);
 
-        recordPresenter.reqeust(userId, sessionId, true, 1);
-
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(this);
 
         linearLayoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
 
-        finish_recycle.addItemDecoration(new SpaceItemDecoration(20));
+        finish_recycle.addItemDecoration(new SpaceItemDecoration(10));
 
         finish_recycle.setLayoutManager(linearLayoutManager1);
 
@@ -151,34 +182,9 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
 
         finish_recycle.setAdapter(doneAdapter);
 
-        donePresenter.reqeust(userId, sessionId, true, 2);
 
     }
 
-    @Override
-    public void onResume() {
-
-        super.onResume();
-
-        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
-
-        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
-
-        if (userInfoList != null && userInfoList.size() > 0) {
-            UserInfo userInfo = userInfoList.get(0);
-
-            int userids = userInfo.getUserId();
-
-            String sessionIds = userInfo.getSessionId();
-
-            Log.e("zmz"+userids,"============="+sessionIds);
-
-            recordPresenter.reqeust(userids, sessionIds, true,1);
-            donePresenter.reqeust(userids, sessionIds, true,2);
-            initData();
-        }
-
-    }
 
     public void isLogin() {
 

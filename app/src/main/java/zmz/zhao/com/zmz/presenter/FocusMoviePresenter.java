@@ -22,6 +22,6 @@ public class FocusMoviePresenter extends BasePresenter{
         IRequest iRequest = NetworkManager.getInstance().create(IRequest.class);
 
 
-        return iRequest.focus((int)args[0],(String)args[1],(int)args[3]);
+        return iRequest.focus((int)args[0],(String)args[1],(int)args[2]);
     }
 }

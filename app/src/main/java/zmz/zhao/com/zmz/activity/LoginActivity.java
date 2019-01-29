@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 import com.bw.movie.R;
 import com.bw.movie.wxapi.WXEntryActivity;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -55,7 +53,6 @@ public class LoginActivity extends BaseActivity {
     private boolean isHideFirst;
     boolean flag_num = false;
     boolean login_flag = false;
-    private String isLogin;
     private WeChatLoginPresenter mWeChatLoginPresenter;
 
     @Override
@@ -73,10 +70,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
-        Intent intent = getIntent();
-
-        isLogin = intent.getStringExtra("isLogin");
 
         ButterKnife.bind(this);
         textview_register = findViewById(R.id.textview_register);
@@ -148,13 +141,6 @@ public class LoginActivity extends BaseActivity {
             req.state = "wechat_sdk_demo_test_neng";
             mApi.sendReq(req);
 
-            /*mWeChatLoginPresenter = new WeChatLoginPresenter(new WechatCall());
-            mWeChatLoginPresenter.reqeust(code);*/
-
-            if (isLogin != null &&isLogin.equals("1")){
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
-            }
 
             finish();
 
@@ -192,29 +178,22 @@ public class LoginActivity extends BaseActivity {
         public void success(Result<LoginBean> result) {
             if (result.getStatus().equals("0000")) {
 
-                result.getResult().getUserInfo().setFlag(flag_num);
+                result.getResult().getUserInfo().setFlag(false);
 
-                result.getResult().getUserInfo().setLogin_flag(login_flag);
+                result.getResult().getUserInfo().setLogin_flag(false);
 
-                result.getResult().getUserInfo().setPwd(edpwd);
-
+                result.getResult().getUserInfo().setPwd("0000");
 
                 result.getResult().getUserInfo().setUserId(result.getResult().getUserId());
                 result.getResult().getUserInfo().setSessionId(result.getResult().getSessionId());
 
-
                 result.getResult().getUserInfo().setStatus(1);
 
+                UserInfoDao userInfoDao = DaoMaster.newDevSession(getBaseContext(), UserInfoDao.TABLENAME).getUserInfoDao();
 
                 userInfoDao.insertOrReplace(result.getResult().getUserInfo());
 
-
                 Toast.makeText(LoginActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-
-                if (isLogin != null &&isLogin.equals("1")){
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
 
                 finish();
 
