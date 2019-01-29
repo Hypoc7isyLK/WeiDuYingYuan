@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserInfoDao;
