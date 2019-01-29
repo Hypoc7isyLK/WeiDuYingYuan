@@ -22,6 +22,7 @@ import zmz.zhao.com.zmz.bean.PayBean;
 import zmz.zhao.com.zmz.bean.Record;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.ScheduleCinemaBean;
+import zmz.zhao.com.zmz.bean.ScheduleListBean;
 import zmz.zhao.com.zmz.bean.ShowLunBoBean;
 import zmz.zhao.com.zmz.bean.SystemMassage;
 
@@ -254,5 +255,12 @@ public interface IRequest {
     @POST("user/v1/weChatBindingLogin")
     @FormUrlEncoded
     Observable<Result> wechatlogin(@Field("code") String code);
+
+
+
+
+    @GET("movie/v1/findMovieScheduleList")
+    Observable<Result<List<ScheduleListBean>>> showScheduleList(@Query("cinemasId") String cinemaId,
+                                                                @Query("movieId") String movieId);
 }
 

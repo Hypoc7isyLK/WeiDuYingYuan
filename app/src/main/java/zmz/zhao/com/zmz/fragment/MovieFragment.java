@@ -77,10 +77,16 @@ public class MovieFragment extends BaseFragment {
         });
         mCinemaListAdapter.setOnclicklitener(new CinemaListAdapter.Onclicklitener() {
             @Override
-            public void success(int id) {
+            public void success(int id, String address, String logo, String name) {
                 Log.e("lk","影院id"+id);
+                Log.e("lk","影院地址"+address);
+                Log.e("lk","影院logo"+logo);
+                Log.e("lk","影院name"+name);
                 Intent intent = new Intent(getActivity(),CinemaActivity.class);
                 intent.putExtra("id",id+"");
+                intent.putExtra("address",address);
+                intent.putExtra("logo",logo);
+                intent.putExtra("name",name);
                 startActivity(intent);
             }
         });

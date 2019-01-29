@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -59,6 +58,8 @@ public class InsideDetailsActivity extends BaseActivity {
     ImageView movir_back;
     @BindView(R.id.insidetails_buy)
     ImageView insidetailsBuy;
+    @BindView(R.id.bg)
+    SimpleDraweeView bg;
 
 
     private DetailsBean mResult;
@@ -109,7 +110,7 @@ public class InsideDetailsActivity extends BaseActivity {
                 popWindow.setBackgroundDrawable(new BitmapDrawable());
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
-                initData(popView,popWindow);
+                initData(popView, popWindow);
 
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -120,14 +121,14 @@ public class InsideDetailsActivity extends BaseActivity {
                 break;
             case R.id.insidetails_foreshow:
 
-                popup("预告片",1);
+                popup("预告片", 1);
 
                 break;
             case R.id.insidetails_photo:
-                popup("剧照",2);
+                popup("剧照", 2);
                 break;
             case R.id.insidetails_discuss:
-                popup("影评",3);
+                popup("影评", 3);
                 break;
             case R.id.movir_back:
                 finish();
@@ -147,7 +148,7 @@ public class InsideDetailsActivity extends BaseActivity {
         TextView director = popView.findViewById(R.id.director);
         TextView place = popView.findViewById(R.id.place);
         TextView min = popView.findViewById(R.id.min);
-        ImageView cancel= popView.findViewById(R.id.cancel);
+        ImageView cancel = popView.findViewById(R.id.cancel);
 
         details_image.setImageURI(Uri.parse(mResult.getImageUrl()));
         type.setText(mResult.getMovieTypes());
@@ -165,7 +166,7 @@ public class InsideDetailsActivity extends BaseActivity {
 
     }
 
-    private void popup(String name,int page) {
+    private void popup(String name, int page) {
 
         View popView = View.inflate(this, R.layout.activity_mine_btn_pop_item, null);
         spopWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -175,8 +176,7 @@ public class InsideDetailsActivity extends BaseActivity {
         spopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
         TextView details_title = popView.findViewById(R.id.details_title);
-        ImageView cancel= popView.findViewById(R.id.cance);
-
+        ImageView cancel = popView.findViewById(R.id.cance);
 
 
         details_title.setText(name);
@@ -194,7 +194,7 @@ public class InsideDetailsActivity extends BaseActivity {
         });
 
 
-        if (page == 1){
+        if (page == 1) {
             RecyclerView stage = popView.findViewById(R.id.stage);
             stage.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
             List<DetailsBean.ShortFilmListBean> shortFilmList = mResult.getShortFilmList();
@@ -203,10 +203,10 @@ public class InsideDetailsActivity extends BaseActivity {
             dumplingsAdapter.addAll(shortFilmList);
             stage.setAdapter(dumplingsAdapter);
 
-        }else if (page == 2){
+        } else if (page == 2) {
 
             RecyclerView stage = popView.findViewById(R.id.stage);
-            StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+            StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             stage.setLayoutManager(staggeredGridLayoutManager);
             stage.addItemDecoration(new SpaceItemDecoration(10));
 
@@ -220,6 +220,9 @@ public class InsideDetailsActivity extends BaseActivity {
         }
 
     }
+
+
+
     private class DetailsCall implements DataCall<Result<DetailsBean>> {
 
 
@@ -228,6 +231,7 @@ public class InsideDetailsActivity extends BaseActivity {
             mResult = result.getResult();
             insidetailsSimple.setImageURI(mResult.getImageUrl());
             insidetailsTitle.setText(mResult.getName());
+            bg.setImageURI(mResult.getImageUrl());
         }
 
         @Override
