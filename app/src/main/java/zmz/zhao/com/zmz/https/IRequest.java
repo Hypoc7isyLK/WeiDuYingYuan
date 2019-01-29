@@ -255,7 +255,7 @@ public interface IRequest {
 
     @POST("user/v1/weChatBindingLogin")
     @FormUrlEncoded
-    Observable<Result> wechatlogin(@Field("code") String code);
+    Observable<Result<LoginBean>> wechatlogin(@Field("code") String code);
 
 
 

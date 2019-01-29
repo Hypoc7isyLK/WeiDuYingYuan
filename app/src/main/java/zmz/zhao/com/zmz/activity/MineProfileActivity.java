@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 
 import java.text.ParseException;
@@ -93,7 +92,7 @@ public class MineProfileActivity extends BaseActivity {
 
         super.onResume();
 
-        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
 
         List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 

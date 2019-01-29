@@ -5,13 +5,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -29,12 +30,9 @@ import android.widget.Toast;
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 
 import java.io.File;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,9 +50,7 @@ import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.HeadPresenter;
 import zmz.zhao.com.zmz.presenter.MessagePresenter;
 import zmz.zhao.com.zmz.presenter.SignPresenter;
-import zmz.zhao.com.zmz.util.DateUtils;
 import zmz.zhao.com.zmz.util.FileUtils;
-import zmz.zhao.com.zmz.view.BackNum;
 import zmz.zhao.com.zmz.view.DataCall;
 
 
@@ -92,12 +88,7 @@ public class MineFragment extends BaseFragment {
     private AlertDialog.Builder mBuilder;
     private String sessionId;
     private boolean image;
-    private BackNum backNum;
     private int userId;
-
-    public void setBackNum(BackNum backNum) {
-        this.backNum = backNum;
-    }
 
     @Override
     public void initView(View view) {
@@ -156,19 +147,17 @@ public class MineFragment extends BaseFragment {
     }
 
 
+
     @Override
     public void onResume() {
-
         super.onResume();
 
-        UserInfoDao userInfoDao = DaoMaster.newDevSession(getActivity(), UserDao.TABLENAME).getUserInfoDao();
 
-        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+        List<UserInfo> userInfoList = USER_INFODAO.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
         if (userInfoList != null && userInfoList.size() > 0) {
 
             UserInfo userInfo = userInfoList.get(0);
-
 
             int userids = userInfo.getUserId();
 
@@ -177,9 +166,14 @@ public class MineFragment extends BaseFragment {
             String sessionIds = userInfo.getSessionId();
 
             messagePresenter.reqeust(userids, sessionIds);
+
+            Log.e("zmz","========"+"返回成功");
+
+            Toast.makeText( getActivity(), "返回成功", Toast.LENGTH_SHORT).show();
         }
 
     }
+
 
     @Override
     public void initData(View view) {
@@ -275,9 +269,7 @@ public class MineFragment extends BaseFragment {
 
                         //Intent清除栈FLAG_ACTIVITY_CLEAR_TASK会把当前栈内所有Activity清空；
                         //FLAG_ACTIVITY_NEW_TASK配合使用，才能完成跳转
-                        userInfoDao.deleteAll();
-
-                        backNum.getLogin("1");
+                        USER_INFODAO.deleteAll();
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -402,7 +394,7 @@ public class MineFragment extends BaseFragment {
             result.getResult();
             USER_INFO.setHeadPic(result.getHeadPath());
 
-            userInfoDao.update(USER_INFO);
+            USER_INFODAO.update(USER_INFO);
 
             myPic.setImageURI(Uri.parse(result.getHeadPath()));
         }
@@ -412,13 +404,6 @@ public class MineFragment extends BaseFragment {
 
         }
     }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        backNum = (BackNum) context;
-    }
-
     private class MassageCall implements DataCall<Result<MineMassage>> {
         @Override
         public void success(Result<MineMassage> result) {

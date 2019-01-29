@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 
 import java.util.List;
@@ -28,16 +27,17 @@ public abstract class BaseFragment extends Fragment {
 
     private Unbinder unbinder;
     public UserInfo USER_INFO;
-    public UserInfoDao userInfoDao;
+    public UserInfoDao USER_INFODAO;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(getContent(), container, false);
         unbinder = ButterKnife.bind(this, view);
-        userInfoDao = DaoMaster.newDevSession(getActivity(), UserDao.TABLENAME).getUserInfoDao();
 
-        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+        USER_INFODAO = DaoMaster.newDevSession(getActivity(), UserInfoDao.TABLENAME).getUserInfoDao();
+
+        List<UserInfo> userInfoList = USER_INFODAO.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
         if (userInfoList != null && userInfoList.size()>0) {
             USER_INFO = userInfoList.get(0);
@@ -50,18 +50,6 @@ public abstract class BaseFragment extends Fragment {
     public abstract int getContent();
     public abstract void initView(View view);
     public abstract void initData(View view);
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        userInfoDao = DaoMaster.newDevSession(getActivity(), UserDao.TABLENAME).getUserInfoDao();
-
-        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
-
-        if (userInfoList != null && userInfoList.size()>0) {
-            USER_INFO = userInfoList.get(0);
-        }
-    }
 
     @Override
     public void onDestroyView() {

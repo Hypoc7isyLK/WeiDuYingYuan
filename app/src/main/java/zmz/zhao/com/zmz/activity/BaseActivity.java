@@ -1,17 +1,12 @@
 package zmz.zhao.com.zmz.activity;
 
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.greendao.gen.DaoMaster;
-import com.greendao.gen.UserDao;
 import com.greendao.gen.UserInfoDao;
 
 import java.util.List;
@@ -31,12 +26,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
 
-        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+        userInfoDao = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
 
-        if (userInfoList != null && userInfoList.size()>0) {
-            USER_INFO = userInfoList.get(0);
+        List<UserInfo> userInfo = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+
+        if (userInfo != null && userInfo.size()>0) {
+            USER_INFO = userInfo.get(0);
         }
 
 
@@ -69,18 +65,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         destoryData();
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        userInfoDao = DaoMaster.newDevSession(this, UserDao.TABLENAME).getUserInfoDao();
-
-        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
-
-        if (userInfoList != null && userInfoList.size()>0) {
-            USER_INFO = userInfoList.get(0);
-        }
     }
 
     @Override

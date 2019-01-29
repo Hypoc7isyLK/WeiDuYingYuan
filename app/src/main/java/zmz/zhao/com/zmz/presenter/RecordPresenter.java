@@ -13,7 +13,9 @@ import zmz.zhao.com.zmz.view.DataCall;
 public class RecordPresenter extends BasePresenter{
 
     private int page = 1;
-    private int count = 10;
+
+    private int count = 5;
+
     private boolean isRefresh = true;
 
     public RecordPresenter(DataCall dataCall) {
