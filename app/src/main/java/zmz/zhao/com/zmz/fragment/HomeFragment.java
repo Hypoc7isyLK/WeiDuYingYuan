@@ -16,9 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.umeng.analytics.MobclickAgent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -98,6 +104,7 @@ public class HomeFragment extends BaseFragment {
     public void initView(View view) {
         mCarouselAdapter = new CarouselAdapter(getActivity());
         list.setAdapter(mCarouselAdapter);
+
 
 
         list.setOnItemSelectedListener(new CoverFlowLayoutManger.OnSelected() {
@@ -187,12 +194,12 @@ public class HomeFragment extends BaseFragment {
             //输入完成后，提交时触发的方法
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.isEmpty()) {
+                if (query.isEmpty()){
                     Toast.makeText(getContext(), "请输入查找内容！", Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-                Toast.makeText(getContext(), "搜索成功" + query, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "搜索成功"+query, Toast.LENGTH_SHORT).show();
 
                 return false;
             }
@@ -240,25 +247,29 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.rmdy, R.id.zzry, R.id.jjsy, R.id.dingwei})
+
+
+
+
+    @OnClick({R.id.rmdy, R.id.zzry, R.id.jjsy,R.id.dingwei})
     public void onViewClicked(View view) {
-        Intent intent = new Intent(getActivity(), OutDetailsActivity.class);
+        Intent intent = new Intent(getActivity(),OutDetailsActivity.class);
         switch (view.getId()) {
             case R.id.dingwei:
                 break;
             case R.id.rmdy:
 
-                intent.putExtra("hei", "1");
+                intent.putExtra("hei","1");
                 startActivity(intent);
                 break;
             case R.id.zzry:
 
-                intent.putExtra("hei", "2");
+                intent.putExtra("hei","2");
                 startActivity(intent);
                 break;
             case R.id.jjsy:
 
-                intent.putExtra("hei", "3");
+                intent.putExtra("hei","3");
                 startActivity(intent);
                 break;
         }
@@ -351,7 +362,7 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    @Override
+   @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         backNum = (BackNum) context;
@@ -365,4 +376,19 @@ public class HomeFragment extends BaseFragment {
         mShowLunBoPresenter = null;
         mCommingSunPresenter = null;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("首页主页fragment");
+        MobclickAgent.onResume(getActivity());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("首页主页fragment");
+        MobclickAgent.onPause(getActivity());
+    }
+
+
 }

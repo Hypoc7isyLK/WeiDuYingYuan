@@ -18,6 +18,7 @@ import com.greendao.gen.UserInfoDao;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -212,6 +213,20 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void destoryData() {
         mLoginPresenter = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("登陆页面");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("登陆页面");
+        MobclickAgent.onPause(this);
     }
 
 }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -91,7 +92,9 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         mId1 = mIntent.getStringExtra("id");
         Log.e("lk", "inside" + mId1);
 
+        /*userId = USER_INFO.getUserId();
 
+        sessionId = USER_INFO.getSessionId();*/
         mDetailsPresenter = new DetailsPresenter(new DetailsCall());
         commentPresenter = new CommentPresenter(new CommentCall());
         focusMoviePresenter = new FocusMoviePresenter(new FocusCall());
@@ -265,7 +268,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
             comment.setAdapter(commentAdapter);
 
-            commentPresenter.reqeust(userId, sessionId,mResult.getId(),true);
+            commentPresenter.reqeust(0, "",mResult.getId(),true);
 
         }
 
@@ -277,7 +280,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             comment.refreshComplete();
             return;
         }
-        commentPresenter.reqeust(userId,sessionId,mResult.getId(),true);
+        commentPresenter.reqeust(0,"",mResult.getId(),true);
     }
 
     @Override
@@ -286,7 +289,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             comment.loadMoreComplete();
             return;
         }
-        commentPresenter.reqeust(userId,sessionId,mResult.getId(),false);
+        commentPresenter.reqeust(0,"",mResult.getId(),false);
     }
 
     private class DetailsCall implements DataCall<Result<DetailsBean>> {
@@ -355,5 +358,18 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         public void fail(ApiException e) {
 
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("电影详情");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("电影详情");
+        MobclickAgent.onPause(this);
     }
 }

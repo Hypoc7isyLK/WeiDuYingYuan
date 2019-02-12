@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.SearchView;
 
 import com.bw.movie.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -152,5 +153,19 @@ public class MovieFragment extends BaseFragment {
         super.onDestroyView();
         mCinemaListPresenter = null;
         mNearbyCinemaPresenter = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("影院fragment");
+        MobclickAgent.onResume(getActivity());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("影院fragment");
+        MobclickAgent.onPause(getActivity());
     }
 }

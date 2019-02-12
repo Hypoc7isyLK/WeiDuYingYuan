@@ -60,7 +60,7 @@ public class CinemaListAdapter extends RecyclerView.Adapter<CinemaListAdapter.Vi
         if (mFollowCinema == 1){
             viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_selected);
         }else {
-            viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_default);
+            viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_huisexin);
         }
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
 

@@ -16,6 +16,7 @@ import com.qfdqc.views.seattable.SeatTable;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
 
 import java.math.BigDecimal;
 
@@ -218,24 +219,28 @@ public class ChooseActivity extends BaseActivity {
     }
 
     private void xiaDan() {
-        /**
-         * 微信支付
-         */
-        mSessionId = USER_INFO.getSessionId();
-        mUserId = USER_INFO.getUserId();
+        if (USER_INFO==null){
+            Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
+        }else {
+            mSessionId = USER_INFO.getSessionId();
+            mUserId = USER_INFO.getUserId();
+            if (count == 0){
+                Toast.makeText(this, "至少选择一个座位", Toast.LENGTH_SHORT).show();
+            }else {
+                String mCOUNT = String.valueOf(count);
+                Log.e("lk","mmmmmmcount"+mCOUNT);
 
-        mSessionId = USER_INFO.getSessionId();
-        mUserId = USER_INFO.getUserId();
-        String mCOUNT = String.valueOf(count);
-        Log.e("lk","mmmmmmcount"+mCOUNT);
+                Log.e("lk","mmmid"+mId);
 
-        Log.e("lk","mmmid"+mId);
 
-        mString = MD5Utils.md5Password(mUserId +mId + mCOUNT + "movie");
-        int id = Integer.parseInt(mId);
-        mPlaceanOrderPresenter = new PlaceanOrderPresenter(new PlaceOrderCall());
+                mString = MD5Utils.md5Password(mUserId +mId + mCOUNT + "movie");
+                int id = Integer.parseInt(mId);
+                mPlaceanOrderPresenter = new PlaceanOrderPresenter(new PlaceOrderCall());
 
-        mPlaceanOrderPresenter.reqeust(mUserId, mSessionId, id, count, mString);
+                mPlaceanOrderPresenter.reqeust(mUserId, mSessionId, id, count, mString);
+            }
+
+        }
     }
 
 
@@ -281,6 +286,19 @@ public class ChooseActivity extends BaseActivity {
         public void fail(ApiException e) {
 
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("选座页面");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("选座页面");
+        MobclickAgent.onPause(this);
     }
 
 }
