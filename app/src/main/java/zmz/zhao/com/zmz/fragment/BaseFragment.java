@@ -27,17 +27,19 @@ public abstract class BaseFragment extends Fragment {
 
     private Unbinder unbinder;
     public UserInfo USER_INFO;
-    public UserInfoDao USER_INFODAO;
+    public UserInfoDao USERINFODAO;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(getContent(), container, false);
+
         unbinder = ButterKnife.bind(this, view);
 
-        USER_INFODAO = DaoMaster.newDevSession(getActivity(), UserInfoDao.TABLENAME).getUserInfoDao();
+        USERINFODAO = DaoMaster.newDevSession(getActivity(), UserInfoDao.TABLENAME).getUserInfoDao();
 
-        List<UserInfo> userInfoList = USER_INFODAO.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+        List<UserInfo> userInfoList = USERINFODAO.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
         if (userInfoList != null && userInfoList.size()>0) {
             USER_INFO = userInfoList.get(0);

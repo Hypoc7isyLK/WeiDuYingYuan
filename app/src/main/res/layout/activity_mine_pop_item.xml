@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="520dp"
+    android:layout_height="@dimen/dp_550"
     android:background="@android:color/transparent">
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -100,7 +99,7 @@
                                 android:id="@+id/min_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="类型："
+                                android:text="时长："
                                 android:textColor="@color/colorTextColor"
                                 android:textSize="@dimen/sp_12" />
 
@@ -124,7 +123,7 @@
                                 android:id="@+id/place_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="类型："
+                                android:text="产地："
                                 android:textColor="@color/colorTextColor"
                                 android:textSize="@dimen/sp_12" />
 
@@ -164,6 +163,7 @@
                     app:collapseExpandGrarity="right"
                     app:collapseExpandTextColor="#9932cc"
                     app:contentTextColor="@color/colorTextColor"
+                    android:layout_marginTop="@dimen/dp_10"
                     app:contentTextSize="12sp"
                     app:maxCollapsedLines="4"
                     app:textCollapse="@string/collapse"

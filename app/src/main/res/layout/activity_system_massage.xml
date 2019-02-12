@@ -22,7 +22,7 @@
         android:textSize="@dimen/sp_14"
         android:layout_toRightOf="@id/sys_text"
         android:layout_marginLeft="@dimen/dp_5"
-        android:text="（3条未读）"/>
+        android:text=""/>
 
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView

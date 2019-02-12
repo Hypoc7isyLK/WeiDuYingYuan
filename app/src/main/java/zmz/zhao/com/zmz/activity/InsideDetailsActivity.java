@@ -70,8 +70,6 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
     private DetailsBean mResult;
     private DetailsPresenter mDetailsPresenter;
-    private String mSessionId;
-    private int mUserId;
     private String mId1;
     CommentPresenter commentPresenter;
 
@@ -93,9 +91,6 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         mId1 = mIntent.getStringExtra("id");
         Log.e("lk", "inside" + mId1);
 
-        userId = USER_INFO.getUserId();
-
-        sessionId = USER_INFO.getSessionId();
 
         mDetailsPresenter = new DetailsPresenter(new DetailsCall());
         commentPresenter = new CommentPresenter(new CommentCall());
@@ -106,7 +101,9 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
     @Override
     protected void destoryData() {
-        mDetailsPresenter = null;
+        mDetailsPresenter.unBind();
+        focusMoviePresenter.unBind();
+        commentPresenter.unBind();
     }
 
     @OnClick({R.id.xiaoxin, R.id.insidetails_details, R.id.insidetails_foreshow, R.id.movir_back, R.id.insidetails_photo, R.id.insidetails_discuss, R.id.insidetails_buy})
@@ -114,11 +111,16 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         switch (view.getId()) {
             case R.id.xiaoxin:
 
-                Toast.makeText(this, "guanzhu", Toast.LENGTH_SHORT).show();
-                if (mResult.getFollowMovie() == 2){
-                    focusMoviePresenter.reqeust(userId,sessionId,mResult.getId());
-                }else {
+                if(USER_INFO != null){
 
+                    userId = USER_INFO.getUserId();
+                    sessionId = USER_INFO.getSessionId();
+                    Toast.makeText(this, "guanzhu", Toast.LENGTH_SHORT).show();
+                    if (mResult.getFollowMovie() == 2){
+                        focusMoviePresenter.reqeust(userId,sessionId,mResult.getId());
+                    }else {
+
+                    }
                 }
 
                 break;
@@ -129,7 +131,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
                 PopupWindow popWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
-                popWindow.setHeight(height*4/5);
+                popWindow.setHeight(height*3/4);
                 popWindow.setTouchable(true);
                 popWindow.setBackgroundDrawable(new BitmapDrawable());
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -158,6 +160,11 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
                 finish();
                 break;
             case R.id.insidetails_buy:
+                Intent intent = new Intent(this, TheatreActivity.class);
+
+                intent.putExtra("title",mResult.getName());
+                intent.putExtra("id",String.valueOf(mResult.getId()));
+                startActivity(intent);
                 break;
         }
     }
@@ -195,6 +202,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         View popView = View.inflate(this, R.layout.activity_mine_btn_pop_item, null);
         spopWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        spopWindow.setHeight(height*3/4);
         spopWindow.setTouchable(true);
         spopWindow.setBackgroundDrawable(new BitmapDrawable());
         spopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);

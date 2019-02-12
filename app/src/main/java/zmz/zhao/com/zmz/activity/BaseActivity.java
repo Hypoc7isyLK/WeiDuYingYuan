@@ -1,6 +1,7 @@
 package zmz.zhao.com.zmz.activity;
 
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,7 @@ import zmz.zhao.com.zmz.bean.dao.UserInfo;
 public abstract class BaseActivity extends AppCompatActivity {
 
     public UserInfo USER_INFO;
-    public UserInfoDao userInfoDao;
+    public UserInfoDao USERINFODAO;
 
     private static BaseActivity mForegroundActivity = null;
 
@@ -27,16 +28,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        userInfoDao = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
+        USERINFODAO = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
 
-        List<UserInfo> userInfo = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+        List<UserInfo> userInfo = USERINFODAO.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
         if (userInfo != null && userInfo.size()>0) {
             USER_INFO = userInfo.get(0);
         }
-
-
         setContentView(getLayoutId());
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ButterKnife.bind(this);
 

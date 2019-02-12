@@ -96,20 +96,6 @@ public class MineFragment extends BaseFragment {
         messagePresenter = new MessagePresenter(new MassageCall());
         signPresenter = new SignPresenter(new SignCall());
 
-        if (USER_INFO == null) {
-            isLogin();
-            return;
-        }
-        userId = USER_INFO.getUserId();
-
-        sessionId = USER_INFO.getSessionId();
-        Log.e("zmz",""+userId);
-        String headPic = USER_INFO.getHeadPic();
-
-
-
-        messagePresenter.reqeust(userId, sessionId);
-
         if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -147,29 +133,30 @@ public class MineFragment extends BaseFragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
 
 
-        List<UserInfo> userInfoList = USER_INFODAO.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
+        UserInfoDao userInfoDao = DaoMaster.newDevSession(getActivity(), UserInfoDao.TABLENAME).getUserInfoDao();
+
+        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
         if (userInfoList != null && userInfoList.size() > 0) {
 
-            UserInfo userInfo = userInfoList.get(0);
+            USER_INFO = userInfoList.get(0);
 
-            int userids = userInfo.getUserId();
+            int userids = USER_INFO.getUserId();
 
-            myPic.setImageURI(Uri.parse(userInfo.getHeadPic()));
+            myPic.setImageURI(Uri.parse(USER_INFO.getHeadPic()));
 
-            String sessionIds = userInfo.getSessionId();
+            String sessionIds = USER_INFO.getSessionId();
 
             messagePresenter.reqeust(userids, sessionIds);
 
-            Log.e("zmz","========"+"返回成功");
+            //Log.e("zmz", "========" + "返回成功");
 
-            Toast.makeText( getActivity(), "返回成功", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "返回成功", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -191,7 +178,9 @@ public class MineFragment extends BaseFragment {
             case R.id.my_pic:
                 if (USER_INFO == null) {
                     isLogin();
+                    return;
                 } else {
+
                     View popView = View.inflate(getActivity(), R.layout.activity_mine_heard_image, null);
                     popWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT, true);
@@ -210,32 +199,32 @@ public class MineFragment extends BaseFragment {
             case R.id.my_sign:
                 if (USER_INFO == null) {
                     isLogin();
+                    return;
                 } else {
-
                     userId = USER_INFO.getUserId();
 
                     sessionId = USER_INFO.getSessionId();
                     signPresenter.reqeust(userId, sessionId);
-
                 }
+
 
                 break;
             case R.id.my_message:
 
-                    Intent datum = new Intent(getContext(), MineProfileActivity.class);
-                    startActivity(datum);
+                Intent datum = new Intent(getContext(), MineProfileActivity.class);
+                startActivity(datum);
 
                 break;
             case R.id.my_attention:
 
-                    Intent attention = new Intent(getContext(), FocusActivity.class);
-                    startActivity(attention);
+                Intent attention = new Intent(getContext(), FocusActivity.class);
+                startActivity(attention);
 
                 break;
             case R.id.my_goupiao:
 
-                    Intent buy = new Intent(getContext(), RecordActivity.class);
-                    startActivity(buy);
+                Intent buy = new Intent(getContext(), RecordActivity.class);
+                startActivity(buy);
 
 
                 break;
@@ -244,8 +233,8 @@ public class MineFragment extends BaseFragment {
                     isLogin();
                     return;
                 }
-                    Intent tickling = new Intent(getContext(), MyOpinion.class);
-                    startActivity(tickling);
+                Intent tickling = new Intent(getContext(), MyOpinion.class);
+                startActivity(tickling);
 
 
                 break;
@@ -254,8 +243,8 @@ public class MineFragment extends BaseFragment {
                     isLogin();
                     return;
                 }
-                    Intent intent_system = new Intent(getContext(), SystemMassageActivity.class);
-                    startActivity(intent_system);
+                Intent intent_system = new Intent(getContext(), SystemMassageActivity.class);
+                startActivity(intent_system);
 
                 break;
             case R.id.my_finish:
@@ -269,13 +258,16 @@ public class MineFragment extends BaseFragment {
 
                         //Intent清除栈FLAG_ACTIVITY_CLEAR_TASK会把当前栈内所有Activity清空；
                         //FLAG_ACTIVITY_NEW_TASK配合使用，才能完成跳转
-                        USER_INFODAO.deleteAll();
+                        USERINFODAO.deleteAll();
+                        USER_INFO = null;
+                        myName.setText("未登录");
+                        mySign.setText("签到");
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "取消了", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "取消", Toast.LENGTH_SHORT).show();
                     }
                 });
                 mBuilder.create().show();
@@ -287,6 +279,19 @@ public class MineFragment extends BaseFragment {
         RelativeLayout camera = popView.findViewById(R.id.camera);
         RelativeLayout album = popView.findViewById(R.id.album);
         RelativeLayout cancel = popView.findViewById(R.id.cancel);
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+            } else {
+                image = FileUtils.createDirs("/image/bimap");
+            }
+        } else {
+            image = FileUtils.createDirs("/image/bimap");
+        }
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,7 +399,7 @@ public class MineFragment extends BaseFragment {
             result.getResult();
             USER_INFO.setHeadPic(result.getHeadPath());
 
-            USER_INFODAO.update(USER_INFO);
+            USERINFODAO.update(USER_INFO);
 
             myPic.setImageURI(Uri.parse(result.getHeadPath()));
         }
@@ -404,6 +409,7 @@ public class MineFragment extends BaseFragment {
 
         }
     }
+
     private class MassageCall implements DataCall<Result<MineMassage>> {
         @Override
         public void success(Result<MineMassage> result) {

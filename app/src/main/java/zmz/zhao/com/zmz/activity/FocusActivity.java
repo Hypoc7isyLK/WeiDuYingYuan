@@ -127,11 +127,11 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
         List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
         if (userInfoList != null && userInfoList.size() > 0) {
-            UserInfo userInfo = userInfoList.get(0);
+            USER_INFO = userInfoList.get(0);
 
-            int userids = userInfo.getUserId();
+            int userids = USER_INFO.getUserId();
 
-            String sessionIds = userInfo.getSessionId();
+            String sessionIds = USER_INFO.getSessionId();
 
             Log.e("zmz"+userids,"============="+sessionIds);
 

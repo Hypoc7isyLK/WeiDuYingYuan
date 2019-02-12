@@ -40,8 +40,9 @@
         <activity android:name="zmz.zhao.com.zmz.activity.OutDetailsActivity" />
         <activity android:name="zmz.zhao.com.zmz.activity.InsideDetailsActivity" />
         <activity android:name="zmz.zhao.com.zmz.activity.SystemMassageActivity" />
-
+        <activity android:name="zmz.zhao.com.zmz.activity.TheatreActivity"/>
         <activity android:name="zmz.zhao.com.zmz.activity.CinemaActivity"></activity>
+        <activity android:name="zmz.zhao.com.zmz.activity.MovieScheduleActivity"/>
         <!-- 微信支付 -->
         <activity
             android:name=".wxapi.WXPayEntryActivity"

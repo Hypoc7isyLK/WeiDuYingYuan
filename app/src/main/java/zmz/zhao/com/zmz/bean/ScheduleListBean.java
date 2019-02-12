@@ -16,7 +16,6 @@ public class ScheduleListBean {
     private int seatsTotal;
     private int seatsUseCount;
     private int status;
-
     public String getBeginTime() {
         return beginTime;
     }

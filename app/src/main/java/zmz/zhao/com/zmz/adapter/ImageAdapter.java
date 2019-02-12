@@ -1,6 +1,7 @@
 package zmz.zhao.com.zmz.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -55,7 +58,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyHloder>{
     }
 
     class MyHloder extends RecyclerView.ViewHolder {
-        ImageView simple;
+        SimpleDraweeView simple;
         public MyHloder(@NonNull View itemView) {
             super(itemView);
 

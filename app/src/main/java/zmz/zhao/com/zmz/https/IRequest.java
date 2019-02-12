@@ -286,5 +286,20 @@ public interface IRequest {
                                               @Query("movieId") int id,
                                               @Query("page") int page,
                                               @Query("count") int count);
+    /**
+     * @作者 啊哈
+     * @date 2019/1/30
+     * @method：根据影片选择影院
+     */
+    @GET("movie/v1/findCinemasListByMovieId")
+    Observable<Result<List<CinemaListBean>>> theart(@Query("movieId") int movieId);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/2/12
+     * @method：影片排期
+     */
+    @GET("movie/v1/findMovieScheduleList")
+    Observable<Result<List<ScheduleListBean>>> filmSche(@Query("cinemasId") int cinemasId, @Query("movieId") int movieId);
 }
 
