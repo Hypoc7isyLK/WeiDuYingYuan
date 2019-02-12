@@ -15,6 +15,7 @@ import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserInfoDao;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -91,6 +92,9 @@ public class MineProfileActivity extends BaseActivity {
     public void onResume() {
 
         super.onResume();
+
+        MobclickAgent.onPageStart("我的页面");
+        MobclickAgent.onResume(this);
 
         UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
 
@@ -259,5 +263,13 @@ public class MineProfileActivity extends BaseActivity {
         public void fail(ApiException e) {
 
         }
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("我的页面");
+        MobclickAgent.onPause(this);
     }
 }

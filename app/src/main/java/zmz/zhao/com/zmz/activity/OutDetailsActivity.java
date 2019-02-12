@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.SearchView;
 
 import com.bw.movie.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -67,8 +68,8 @@ public class OutDetailsActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
-        mSessionId = USER_INFO.getSessionId();
-        mUserId = USER_INFO.getUserId();
+        /*mSessionId = USER_INFO.getSessionId();
+        mUserId = USER_INFO.getUserId();*/
         mOutDetailsAdapter = new OutDetailsAdapter(this);
         mHei = getIntent().getStringExtra("hei");
         if (mHei.equals("1")) {
@@ -215,5 +216,18 @@ public class OutDetailsActivity extends BaseActivity {
         public void fail(ApiException e) {
 
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("电影列表");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("电影列表");
+        MobclickAgent.onPause(this);
     }
 }

@@ -2,6 +2,8 @@ package zmz.zhao.com.zmz.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,12 +11,16 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.util.Collection;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import android.content.Context;
 import android.os.Environment;
 import zmz.zhao.com.zmz.app.MyApplication;
 
@@ -568,5 +574,97 @@ public class FileUtils {
 
         return null;
     }
+
+    /**
+     * 将数据存到文件中
+     *
+     * @param context context
+     * @param data 需要保存的数据
+     * @param fileName 文件名
+     */
+    public static void saveDataToFile(Context context, String data, String fileName)
+    {
+        FileOutputStream fileOutputStream = null;
+        BufferedWriter bufferedWriter = null;
+        try
+        {
+            /**
+             * "data"为文件名,MODE_PRIVATE表示如果存在同名文件则覆盖，
+             * 还有一个MODE_APPEND表示如果存在同名文件则会往里面追加内容
+             */
+            fileOutputStream = context.openFileOutput(fileName,
+                    Context.MODE_PRIVATE);
+            bufferedWriter = new BufferedWriter(
+                    new OutputStreamWriter(fileOutputStream));
+            bufferedWriter.write(data);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        finally
+        {
+            try
+            {
+                if (bufferedWriter != null)
+                {
+                    bufferedWriter.close();
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * 从文件中读取数据
+     * @param context context
+     * @param fileName 文件名
+     * @return 从文件中读取的数据
+     */
+    public static String loadDataFromFile(Context context, String fileName)
+    {
+        FileInputStream fileInputStream = null;
+        BufferedReader bufferedReader = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        try
+        {
+            /**
+             * 注意这里的fileName不要用绝对路径，只需要文件名就可以了，系统会自动到data目录下去加载这个文件
+             */
+            fileInputStream = context.openFileInput(fileName);
+            bufferedReader = new BufferedReader(
+                    new InputStreamReader(fileInputStream));
+            String result = "";
+            while ((result = bufferedReader.readLine()) != null)
+            {
+                stringBuilder.append(result);
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (bufferedReader != null)
+            {
+                try
+                {
+                    bufferedReader.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
+
 
 }

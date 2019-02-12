@@ -3,6 +3,7 @@ package zmz.zhao.com.zmz.fragment;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.umeng.analytics.MobclickAgent;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,6 +41,8 @@ import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.CommingSunPresenter;
 import zmz.zhao.com.zmz.presenter.HotShowingPresenter;
 import zmz.zhao.com.zmz.presenter.ShowLunBoPresenter;
+import zmz.zhao.com.zmz.util.FileUtils;
+import zmz.zhao.com.zmz.util.WifiUtils;
 import zmz.zhao.com.zmz.view.BackNum;
 import zmz.zhao.com.zmz.view.DataCall;
 
@@ -76,6 +85,7 @@ public class HomeFragment extends BaseFragment {
     private CommingSunPresenter mCommingSunPresenter;
 
     private BackNum backNum;
+    private int mNetype;
 
     public void setBackNum(BackNum backNum) {
         this.backNum = backNum;
@@ -85,6 +95,19 @@ public class HomeFragment extends BaseFragment {
     public void initView(View view) {
         mCarouselAdapter = new CarouselAdapter(getActivity());
         list.setAdapter(mCarouselAdapter);
+        mNetype = WifiUtils.getInstance(getActivity()).getNetype();
+        if (mNetype!=-1){
+            mShowLunBoPresenter = new ShowLunBoPresenter(new ShowLunboCall());
+            mShowLunBoPresenter.reqeust(0, "", "1", "20");
+            mHotShowingPresenter = new HotShowingPresenter(new HotShowingCall());
+            mHotShowingPresenter.reqeust(0, "", "1", "100");
+            mCommingSunPresenter = new CommingSunPresenter(new CommingSunCall());
+            mCommingSunPresenter.reqeust(0, "", "1", "100");
+        }else {
+
+            Toast.makeText(getActivity(), "没有网络！", Toast.LENGTH_SHORT).show();
+        }
+
 
 
         list.setOnItemSelectedListener(new CoverFlowLayoutManger.OnSelected() {
@@ -98,24 +121,21 @@ public class HomeFragment extends BaseFragment {
         });
 
 
-        mShowLunBoPresenter = new ShowLunBoPresenter(new ShowLunboCall());
-        mShowLunBoPresenter.reqeust(0, "", "1", "20");
+
 
         recyclerviewMovie.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false));
         mPopularAdapter = new HotShowingAdapter(getActivity());
         recyclerviewMovie.setAdapter(mPopularAdapter);
 
 
-        mHotShowingPresenter = new HotShowingPresenter(new HotShowingCall());
-        mHotShowingPresenter.reqeust(0, "", "1", "100");
+
 
         recyclerviewHotshowing.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false));
         mHotShowingAdapter = new HotShowingAdapter(getActivity());
         recyclerviewHotshowing.setAdapter(mHotShowingAdapter);
 
 
-        mCommingSunPresenter = new CommingSunPresenter(new CommingSunCall());
-        mCommingSunPresenter.reqeust(0, "", "1", "100");
+
 
         recyclerviewCommingsun.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false));
         mCommingSunAdapter = new HotShowingAdapter(getActivity());
@@ -220,6 +240,7 @@ public class HomeFragment extends BaseFragment {
         @Override
         public void success(Result<List<ShowLunBoBean>> result) {
             mResult = result.getResult();
+            FileUtils.saveDataToFile(getActivity(),"","TTT");
 
             mCarouselAdapter.reset(mResult);
 
@@ -268,6 +289,7 @@ public class HomeFragment extends BaseFragment {
             mCommingSunAdapter.Clear();
             mCommingSunAdapter.reset(mResult);
             mCommingSunAdapter.notifyDataSetChanged();
+
         }
 
         @Override
@@ -290,4 +312,19 @@ public class HomeFragment extends BaseFragment {
         mShowLunBoPresenter = null;
         mCommingSunPresenter = null;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("首页主页fragment");
+        MobclickAgent.onResume(getActivity());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("首页主页fragment");
+        MobclickAgent.onPause(getActivity());
+    }
+
+
 }

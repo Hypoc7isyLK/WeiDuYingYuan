@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserInfoDao;
@@ -16,6 +17,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import zmz.zhao.com.zmz.bean.dao.UserInfo;
+import zmz.zhao.com.zmz.util.WifiUtils;
 
 /**
  * date:2019/1/22
@@ -25,12 +27,16 @@ import zmz.zhao.com.zmz.bean.dao.UserInfo;
 public abstract class BaseFragment extends Fragment {
 
 
+
     private Unbinder unbinder;
     public UserInfo USER_INFO;
     public UserInfoDao USER_INFODAO;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
 
         View view = inflater.inflate(getContent(), container, false);
         unbinder = ButterKnife.bind(this, view);

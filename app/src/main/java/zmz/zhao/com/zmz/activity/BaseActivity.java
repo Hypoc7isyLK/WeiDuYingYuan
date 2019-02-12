@@ -6,13 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
+import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserInfoDao;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import zmz.zhao.com.zmz.bean.dao.UserInfo;
+import zmz.zhao.com.zmz.util.WifiUtils;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -21,12 +24,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     public UserInfoDao userInfoDao;
 
     private static BaseActivity mForegroundActivity = null;
+    private int mNetype;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         userInfoDao = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
 
         List<UserInfo> userInfo = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
@@ -34,14 +36,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (userInfo != null && userInfo.size()>0) {
             USER_INFO = userInfo.get(0);
         }
-
-
-        setContentView(getLayoutId());
-
-        ButterKnife.bind(this);
-
-        initView();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+
+        mNetype = WifiUtils.getInstance(this).getNetype();
+        if (mNetype!=-1){
+            setContentView(getLayoutId());
+
+            ButterKnife.bind(this);
+
+            initView();
+        }else {
+            setContentView(R.layout.wangluo);
+        }
+
+
+
 
     }
     /**
@@ -75,5 +85,17 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public static BaseActivity getForegroundActivity() {
         return mForegroundActivity;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

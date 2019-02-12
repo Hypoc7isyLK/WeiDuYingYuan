@@ -8,6 +8,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
 import com.bw.movie.R;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 /**
@@ -65,5 +66,19 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void destoryData() {
         handler.removeCallbacks(null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("倒计时页面");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("倒计时页面");
+        MobclickAgent.onPause(this);
     }
 }

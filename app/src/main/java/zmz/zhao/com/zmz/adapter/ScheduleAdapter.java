@@ -3,6 +3,7 @@ package zmz.zhao.com.zmz.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -49,18 +50,17 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         viewHolder.carousel_simple.setImageURI(mScheduleCinemaBeans.get(i).getImageUrl());
         viewHolder.move_name.setText(mScheduleCinemaBeans.get(i).getName());
         viewHolder.move_time.setText(mScheduleCinemaBeans.get(i).getDuration());
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
 
-            private int mId;
 
+
+     /*   viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mId = mScheduleCinemaBeans.get(i).getId();
-                String name = mScheduleCinemaBeans.get(i).getName();
-                mOnClickListener.scuccess(mId,name);
-            }
-        });
 
+            }
+        });*/
+        mOnClickListener.scuccess(mScheduleCinemaBeans.get(i).getId(),mScheduleCinemaBeans.get(i).getName());
+        Log.e("hhhhhhh",mScheduleCinemaBeans.get(i).getId()+"");
     }
 
     @Override

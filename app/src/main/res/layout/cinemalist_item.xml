@@ -58,13 +58,12 @@
             android:id="@+id/xiaoxinxin"
             android:layout_width="@dimen/dp_16"
             android:layout_height="@dimen/dp_16"
-            android:src="@mipmap/com_icon_collection_default"
+            android:src="@mipmap/com_icon_huisexin"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/zxc"
             android:layout_marginRight="@dimen/dp_20"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/dp_10"
-            android:background="#999999"
             />
 
     </RelativeLayout>

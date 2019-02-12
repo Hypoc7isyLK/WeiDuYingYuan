@@ -17,6 +17,7 @@ import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserInfoDao;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -121,6 +122,8 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
     public void onResume() {
 
         super.onResume();
+        MobclickAgent.onPageStart("关注的影院和电影页面");
+        MobclickAgent.onResume(this);
 
         UserInfoDao userInfoDao = DaoMaster.newDevSession(this, UserInfoDao.TABLENAME).getUserInfoDao();
 
@@ -347,5 +350,13 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
         public void fail(ApiException e) {
 
         }
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("关注的影院和电影页面");
+        MobclickAgent.onPause(this);
     }
 }

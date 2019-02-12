@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -229,5 +230,18 @@ public class RegisterActivity extends BaseActivity {
 
 
 
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("注册");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("注册");
+        MobclickAgent.onPause(this);
     }
 }

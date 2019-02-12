@@ -8,6 +8,7 @@ import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.DaoSession;
 import com.greendao.gen.UserInfoDao;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -81,5 +82,18 @@ public class UpdatePwdActivity extends BaseActivity {
         public void fail(ApiException e) {
 
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("修改密码页面");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("修改密码页面");
+        MobclickAgent.onPause(this);
     }
 }

@@ -31,6 +31,7 @@ import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserInfoDao;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.util.List;
@@ -152,7 +153,8 @@ public class MineFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-
+        MobclickAgent.onPageStart("我的fragment");
+        MobclickAgent.onResume(getActivity());
         List<UserInfo> userInfoList = USER_INFODAO.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
 
         if (userInfoList != null && userInfoList.size() > 0) {
@@ -426,5 +428,12 @@ public class MineFragment extends BaseFragment {
         public void fail(ApiException e) {
             Toast.makeText(getContext(), "请先登录！", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("我的fragment");
+        MobclickAgent.onPause(getActivity());
     }
 }

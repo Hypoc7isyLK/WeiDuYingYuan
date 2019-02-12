@@ -9,37 +9,26 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import recycler.coverflow.CoverFlowLayoutManger;
 import recycler.coverflow.RecyclerCoverFlow;
 import zmz.zhao.com.zmz.adapter.ScheduleAdapter;
 import zmz.zhao.com.zmz.adapter.ScheduleListAdapter;
-import zmz.zhao.com.zmz.bean.PayBean;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.ScheduleCinemaBean;
 import zmz.zhao.com.zmz.bean.ScheduleListBean;
 import zmz.zhao.com.zmz.exception.ApiException;
-import zmz.zhao.com.zmz.https.IRequest;
-import zmz.zhao.com.zmz.https.NetworkManager;
-import zmz.zhao.com.zmz.presenter.PlaceanOrderPresenter;
 import zmz.zhao.com.zmz.presenter.ScheduleCinemaPresenter;
 import zmz.zhao.com.zmz.presenter.ScheduleListPresenter;
-import zmz.zhao.com.zmz.util.MD5Utils;
 import zmz.zhao.com.zmz.view.DataCall;
 
 public class CinemaActivity extends BaseActivity {
@@ -62,7 +51,6 @@ public class CinemaActivity extends BaseActivity {
     RecyclerView paiqi;
     private Intent mIntent;
     private String mId;
-    private PlaceanOrderPresenter mPlaceanOrderPresenter;
     private String mSessionId;
     private int mUserId;
     private String mString;
@@ -100,52 +88,64 @@ public class CinemaActivity extends BaseActivity {
         detailsSimple.setImageURI(mLogo);
         detailsTitle.setText(mName);
         detailsMessage.setText(mAddress);
-        list.setAdapter(mScheduleAdapter);
+
+
+
+
 
         list.setOnItemSelectedListener(new CoverFlowLayoutManger.OnSelected() {
             @Override
-            public void onItemSelected(int position) {
+            public void onItemSelected(final int position) {
+                Log.e("轮播图所在的下标为：",position+"");
                 int selectedPos = list.getSelectedPos();
                 ObjectAnimator animator = ObjectAnimator.ofFloat(movieTextDong, "translationX", mCoun * (selectedPos));
                 animator.setDuration(500);
                 animator.start();
-            }
+
+           }
         });
 
 
+
+        mScheduleAdapter.setOnClickListener(new ScheduleAdapter.OnClickListener() {
+            @Override
+            public void scuccess(int id, String name) {
+                String iid = String.valueOf(id);
+                cinemaname = name;
+                paiqi.setAdapter(mScheduleListAdapter);
+                mScheduleListPresenter = new ScheduleListPresenter(new ScheduleListCall());
+                mScheduleListPresenter.reqeust(mId, iid);
+            }
+        });
 
         mScheduleCinemaPresenter = new ScheduleCinemaPresenter(new ScheduleCall());
         mScheduleCinemaPresenter.reqeust(mId);
 
 
-        paiqi.setLayoutManager(new LinearLayoutManager(this,OrientationHelper.VERTICAL,false));
+        paiqi.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
 
-        mScheduleAdapter.setOnClickListener(new ScheduleAdapter.OnClickListener() {
-            @Override
-            public void scuccess(int id,String name) {
-                String iid= String.valueOf(id);
-                cinemaname = name;
-                paiqi.setAdapter(mScheduleListAdapter);
-                mScheduleListPresenter = new ScheduleListPresenter(new ScheduleListCall());
-                mScheduleListPresenter.reqeust(mId,iid);
-            }
-        });
+
 
         mScheduleListAdapter.setOnClickListener(new ScheduleListAdapter.OnClickListener() {
             @Override
-            public void scuccess(int id,String price,String screeningHall) {
-                Log.e("lk","cinid"+id);
-                Intent intent = new Intent(CinemaActivity.this,ChooseActivity.class);
-                intent.putExtra("name",mName);
-                intent.putExtra("address",mAddress);
-                intent.putExtra("id",id+"");
-                intent.putExtra("price",price);
-                intent.putExtra("screeningHall",screeningHall);
-                intent.putExtra("cinemaname",cinemaname);
+            public void scuccess(int id, String price, String screeningHall) {
+                Log.e("lk", "cinid" + id);
+                Intent intent = new Intent(CinemaActivity.this, ChooseActivity.class);
+                intent.putExtra("name", mName);
+                intent.putExtra("address", mAddress);
+                intent.putExtra("id", id + "");
+                intent.putExtra("price", price);
+                intent.putExtra("screeningHall", screeningHall);
+                intent.putExtra("cinemaname", cinemaname);
                 startActivity(intent);
             }
         });
+
+        list.setAdapter(mScheduleAdapter);
+
+
     }
+
 
 
     @Override
@@ -154,14 +154,14 @@ public class CinemaActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.yingyuan)
+
+
+
+
+    @OnClick(R.id.Focus_back)
     public void onViewClicked() {
-
-
-
-
+        finish();
     }
-
 
 
     private class ScheduleCall implements DataCall<Result<List<ScheduleCinemaBean>>> {
@@ -196,5 +196,19 @@ public class CinemaActivity extends BaseActivity {
         public void fail(ApiException e) {
 
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("电影排期页面");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("电影排期页面");
+        MobclickAgent.onPause(this);
     }
 }

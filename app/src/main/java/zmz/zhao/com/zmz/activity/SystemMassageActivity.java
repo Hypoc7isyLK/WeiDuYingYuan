@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.bw.movie.R;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -161,5 +162,18 @@ public class SystemMassageActivity extends BaseActivity implements XRecyclerView
         public void fail(ApiException e) {
 
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("系统消息列表");
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("系统消息列表");
+        MobclickAgent.onPause(this);
     }
 }
