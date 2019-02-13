@@ -12,12 +12,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import zmz.zhao.com.zmz.adapter.CinemaListAdapter;
-import zmz.zhao.com.zmz.adapter.TheatreAdapter;
 import zmz.zhao.com.zmz.bean.CinemaListBean;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.TheatrePresnter;
-import zmz.zhao.com.zmz.util.SpaceItemDecoration;
 import zmz.zhao.com.zmz.view.DataCall;
 
 /**

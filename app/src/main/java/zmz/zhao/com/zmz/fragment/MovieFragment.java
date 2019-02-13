@@ -104,6 +104,7 @@ public class MovieFragment extends BaseFragment {
     }
 
     private void tjyy() {
+        mCinemaListPresenter = new CinemaListPresenter(new CinemalistCall());
         cinemaRadio.check(R.id.cinema_tjyy);
         cinemaRecycleTjyy.setVisibility(View.VISIBLE);//显示
         cinemaTjyy.setTextColor(getResources().getColorStateList(R.color.white));
@@ -111,15 +112,14 @@ public class MovieFragment extends BaseFragment {
         cinemaRecycleFjyy.setVisibility(View.GONE);//隐藏
         cinemaRecycleTjyy.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.VERTICAL, false));
         cinemaRecycleTjyy.setAdapter(mCinemaListAdapter);
-        mCinemaListPresenter = new CinemaListPresenter(new CinemalistCall());
         mCinemaListPresenter.reqeust(0, "", "1", "20");
-
 
     }
 
 
 
     private void fjyy() {
+        mNearbyCinemaPresenter = new NearbyCinemaPresenter(new CinemalistCall());
         cinemaRadio.check(R.id.cinema_fjyy);
         cinemaRecycleFjyy.setVisibility(View.VISIBLE);//显示
         cinemaFjyy.setTextColor(getResources().getColorStateList(R.color.white));
@@ -127,7 +127,6 @@ public class MovieFragment extends BaseFragment {
         cinemaRecycleTjyy.setVisibility(View.GONE);//隐藏
         cinemaRecycleFjyy.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.VERTICAL, false));
         cinemaRecycleFjyy.setAdapter(mCinemaListAdapter);
-        mNearbyCinemaPresenter = new NearbyCinemaPresenter(new CinemalistCall());
         mNearbyCinemaPresenter.reqeust(0, "", "1", "20");
     }
 
@@ -151,8 +150,8 @@ public class MovieFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mCinemaListPresenter = null;
-        mNearbyCinemaPresenter = null;
+        mCinemaListPresenter.unBind();
+        mNearbyCinemaPresenter.unBind();
     }
 
     @Override

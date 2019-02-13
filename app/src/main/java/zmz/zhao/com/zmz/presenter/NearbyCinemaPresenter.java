@@ -21,6 +21,6 @@ public class NearbyCinemaPresenter extends BasePresenter {
     @Override
     protected Observable observable(Object... args) {
         mIRequest = NetworkManager.getInstance().create(IRequest.class);
-        return mIRequest.shownearbyCinema((int) args[0],(String)args[1],(String)args[2],(String)args[3]);
+        return mIRequest.shownearbyCinema((int) args[0],(String)args[1],"116.30551391385724"," 40.04571807462411 ",(String)args[2],(String)args[3]);
     }
 }

@@ -178,13 +178,27 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chooage_time"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/relat"
         android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_height="match_parent">
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="@dimen/dp_20">
 
     </android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_100"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/chooage_time"
+        android:background="@drawable/touming">
 
+        <ImageView
+            android:id="@+id/chooage__back"
+            android:layout_width="@dimen/dp_58"
+            android:layout_height="@dimen/dp_58"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/com_back"/>
+
+    </RelativeLayout>
 </RelativeLayout>
 

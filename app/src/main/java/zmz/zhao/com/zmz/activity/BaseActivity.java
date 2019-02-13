@@ -54,7 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }else {
             setContentView(R.layout.wangluo);
         }
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
     }
