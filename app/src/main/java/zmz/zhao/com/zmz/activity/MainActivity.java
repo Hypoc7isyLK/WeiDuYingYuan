@@ -2,8 +2,11 @@ package zmz.zhao.com.zmz.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
@@ -16,7 +19,7 @@ import butterknife.BindView;
  * @date 2019/1/25
  * 启动页
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
 
     private int time = 3;
     private Handler handler = new Handler() {
@@ -47,13 +50,9 @@ public class MainActivity extends BaseActivity {
     RelativeLayout main;
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_main;
-    }
-
-    @Override
-    protected void initView() {
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         if (time != 0) {
             AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
@@ -61,10 +60,13 @@ public class MainActivity extends BaseActivity {
             main.startAnimation(alphaAnimation);
             handler.sendEmptyMessageDelayed(0, 1000);
         }
+
     }
 
+
     @Override
-    protected void destoryData() {
+    protected void onDestroy() {
+        super.onDestroy();
         handler.removeCallbacks(null);
     }
 
