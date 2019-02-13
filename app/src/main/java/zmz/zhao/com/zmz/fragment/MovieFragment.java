@@ -150,8 +150,8 @@ public class MovieFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mCinemaListPresenter.unBind();
-        mNearbyCinemaPresenter.unBind();
+        mCinemaListPresenter = null;
+        mNearbyCinemaPresenter = null;
     }
 
     @Override
