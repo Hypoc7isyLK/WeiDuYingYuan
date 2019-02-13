@@ -43,18 +43,19 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
         mNetype = WifiUtils.getInstance(this).getNetype();
-        if (mNetype!=-1){
+        if (mNetype != -1) {
+
             setContentView(getLayoutId());
 
             ButterKnife.bind(this);
 
             initView();
+
         }else {
             setContentView(R.layout.wangluo);
         }
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-
 
     }
     /**
@@ -88,17 +89,5 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public static BaseActivity getForegroundActivity() {
         return mForegroundActivity;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
     }
 }

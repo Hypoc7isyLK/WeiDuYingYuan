@@ -68,6 +68,15 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
         }else {
             viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_default);
         }
+
+        viewHolder.xiaoxinxin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnclickFocuslitener.success(mId = mBeanList.get(i).getId());
+            }
+        });
+
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,9 +112,17 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
     public interface Onclicklitener{
         void success(int id);
     }
+    public interface OnclickFocuslitener{
+        void success(int id);
+    }
 
     private Onclicklitener mOnclicklitener;
 
+    private OnclickFocuslitener mOnclickFocuslitener;
+
+    public void setOnclickFocuslitener(OnclickFocuslitener onclickFocuslitener) {
+        mOnclickFocuslitener = onclickFocuslitener;
+    }
     public void setOnclicklitener(Onclicklitener onclicklitener) {
         mOnclicklitener = onclicklitener;
     }

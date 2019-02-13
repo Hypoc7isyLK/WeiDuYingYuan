@@ -84,9 +84,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textSize="@dimen/sp_30"
+            android:textSize="@dimen/sp_36"
             android:text="53.9"
-            android:textColor="#000000"/>
+            android:textColor="#b11450"/>
 
         <TextView
             android:layout_width="wrap_content"

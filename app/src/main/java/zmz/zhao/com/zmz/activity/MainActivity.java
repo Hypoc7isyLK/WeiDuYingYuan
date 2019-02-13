@@ -17,6 +17,8 @@ import butterknife.BindView;
  * 启动页
  */
 public class MainActivity extends BaseActivity {
+    @BindView(R.id.main_activity)
+    RelativeLayout main;
 
     private int time = 3;
     private Handler handler = new Handler() {
@@ -43,8 +45,7 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
-    @BindView(R.id.main)
-    RelativeLayout main;
+
 
     @Override
     protected int getLayoutId() {

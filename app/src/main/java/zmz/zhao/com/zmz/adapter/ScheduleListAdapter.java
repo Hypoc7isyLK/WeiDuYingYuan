@@ -3,6 +3,9 @@ package zmz.zhao.com.zmz.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -46,13 +49,23 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         viewHolder.begin_time.setText(mListBeans.get(i).getBeginTime());
         viewHolder.end_time.setText(mListBeans.get(i).getEndTime());
-        viewHolder.price.setText(mListBeans.get(i).getPrice()+"");
+        SpannableString spannableString = changTVsize(mListBeans.get(i).getPrice() + "");
+        viewHolder.price.setText(spannableString);
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnClickListener.scuccess(mListBeans.get(i).getId(),mListBeans.get(i).getPrice()+"",mListBeans.get(i).getScreeningHall());
             }
         });
+    }
+
+    public static SpannableString changTVsize(String value) {
+        SpannableString spannableString = new SpannableString(value);
+        if (value.contains(".")) {
+            spannableString.setSpan(new RelativeSizeSpan(0.6f), value.indexOf("."), value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return spannableString;
     }
 
     @Override
