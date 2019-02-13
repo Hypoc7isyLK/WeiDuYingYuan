@@ -52,10 +52,11 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
         SpannableString spannableString = changTVsize(mListBeans.get(i).getPrice() + "");
         viewHolder.price.setText(spannableString);
 
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnClickListener.scuccess(mListBeans.get(i).getId(),mListBeans.get(i).getPrice()+"",mListBeans.get(i).getScreeningHall());
+                mOnClickListener.scuccess(mListBeans.get(i).getId(),mListBeans.get(i).getPrice()+"",mListBeans.get(i).getScreeningHall(),mListBeans.get(i).getBeginTime(),mListBeans.get(i).getEndTime());
             }
         });
     }
@@ -87,7 +88,7 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
         }
     }
     public interface OnClickListener{
-        void scuccess(int id,String price,String screeningHall);
+        void scuccess(int id,String price,String screeningHall,String begintime,String endtime);
     }
     private OnClickListener mOnClickListener;
 

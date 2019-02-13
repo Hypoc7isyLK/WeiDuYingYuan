@@ -109,7 +109,7 @@ public class MovieScheduleActivity extends BaseActivity {
 
         mScheduleListAdapter.setOnClickListener(new ScheduleListAdapter.OnClickListener() {
             @Override
-            public void scuccess(int id, String price, String screeningHall) {
+            public void scuccess(int id, String price, String screeningHall,String begintime,String endtime) {
                 Log.e("lk", "cinid" + id);
                 Intent intent = new Intent(MovieScheduleActivity.this, ChooseActivity.class);
                 intent.putExtra("name", title.getText().toString());
@@ -118,6 +118,8 @@ public class MovieScheduleActivity extends BaseActivity {
                 intent.putExtra("price", price);
                 intent.putExtra("screeningHall", screeningHall);
                 intent.putExtra("cinemaname", name);
+                intent.putExtra("begintime", begintime);
+                intent.putExtra("endtime", endtime);
                 startActivity(intent);
             }
         });

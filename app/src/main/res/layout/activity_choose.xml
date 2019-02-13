@@ -44,7 +44,7 @@
             android:layout_marginLeft="@dimen/dp_24"
             android:layout_marginTop="@dimen/dp_10"/>
 
-        <zmz.zhao.com.zmz.view.Marquee
+        <TextView
             android:paddingLeft="@dimen/dp_12"
             android:paddingTop="@dimen/dp_3"
             android:paddingBottom="@dimen/dp_3"
