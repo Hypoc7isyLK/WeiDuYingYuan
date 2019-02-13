@@ -128,13 +128,18 @@
             android:layout_marginLeft="@dimen/dp_24"
             android:src="@mipmap/com_back"/>
 
-        <ImageView
+        <Button
             android:id="@+id/insidetails_buy"
             android:layout_width="@dimen/dp_58"
             android:layout_height="@dimen/dp_58"
-            android:layout_marginRight="@dimen/dp_24"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/btn_circle_color"
+            android:text="购票"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_15"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/publish"/>
+            android:gravity="center"/>
+
 
     </RelativeLayout>
 

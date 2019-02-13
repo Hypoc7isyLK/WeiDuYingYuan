@@ -72,7 +72,7 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
         viewHolder.xiaoxinxin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnclickFocuslitener.success(mId = mBeanList.get(i).getId());
+                mOnclickFocuslitener.success(mId = mBeanList.get(i).getId(),mFollowMovie);
             }
         });
 
@@ -113,7 +113,7 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
         void success(int id);
     }
     public interface OnclickFocuslitener{
-        void success(int id);
+        void success(int id,int state);
     }
 
     private Onclicklitener mOnclicklitener;

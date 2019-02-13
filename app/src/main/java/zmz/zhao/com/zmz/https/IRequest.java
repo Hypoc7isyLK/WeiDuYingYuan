@@ -276,6 +276,17 @@ public interface IRequest {
 
     /**
      * @作者 啊哈
+     * @date 2019/2/13
+     * @method：取消关注
+     */
+    @GET("movie/v1/verify/cancelFollowMovie")
+    Observable<Result> focusoff(@Header("userId") int userId,
+                                @Header("sessionId") String sessionId,
+                                @Query("movieId") int id);
+
+
+    /**
+     * @作者 啊哈
      * @date 2019/1/29
      * @method：影评
      */

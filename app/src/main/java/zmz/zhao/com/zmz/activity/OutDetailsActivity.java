@@ -25,6 +25,8 @@ import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.ShowLunBoBean;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.CommingSunPresenter;
+import zmz.zhao.com.zmz.presenter.FocusMovieOffPresenter;
+import zmz.zhao.com.zmz.presenter.FocusMoviePresenter;
 import zmz.zhao.com.zmz.presenter.HotShowingPresenter;
 import zmz.zhao.com.zmz.presenter.ShowLunBoPresenter;
 import zmz.zhao.com.zmz.view.DataCall;
@@ -52,13 +54,16 @@ public class OutDetailsActivity extends BaseActivity {
     RadioGroup moveRadio;
     @BindView(R.id.details_search)
     SearchView detailsSearch;
-    private String mSessionId;
-    private int mUserId;
+
     private ShowLunBoPresenter mShowLunBoPresenter;
     private OutDetailsAdapter mOutDetailsAdapter;
     private String mHei;
     private HotShowingPresenter mHotShowingPresenter;
     private CommingSunPresenter mCommingSunPresenter;
+    private int userId;
+    private String sessionId;
+    FocusMoviePresenter focusMoviePresenter;
+    FocusMovieOffPresenter focusMovieOffPresenter;
 
     @Override
     protected int getLayoutId() {
@@ -70,6 +75,8 @@ public class OutDetailsActivity extends BaseActivity {
         ButterKnife.bind(this);
         /*mSessionId = USER_INFO.getSessionId();
         mUserId = USER_INFO.getUserId();*/
+        focusMoviePresenter = new FocusMoviePresenter(new FocusCall());
+        focusMovieOffPresenter = new FocusMovieOffPresenter(new FocusMovieOffCall());
         mOutDetailsAdapter = new OutDetailsAdapter(this);
         mHei = getIntent().getStringExtra("hei");
         if (mHei.equals("1")) {
@@ -96,6 +103,20 @@ public class OutDetailsActivity extends BaseActivity {
             }
         });
 
+        mOutDetailsAdapter.setOnclickFocuslitener(new OutDetailsAdapter.OnclickFocuslitener() {
+            @Override
+            public void success(int id, int state) {
+                if(USER_INFO != null){
+
+                    if (state == 2){
+                        focusMoviePresenter.reqeust(userId,sessionId,id);
+                    }else {
+                        focusMovieOffPresenter.reqeust(userId,sessionId,id);
+                    }
+                }
+            }
+        });
+
         mOutDetailsAdapter.setOnclicklitener(new OutDetailsAdapter.Onclicklitener() {
             @Override
             public void success(int id) {
@@ -116,7 +137,16 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleZzry.setVisibility(View.GONE);//隐藏
         movieRecycleJjsy.setVisibility(View.GONE);//隐藏
         mShowLunBoPresenter = new ShowLunBoPresenter(new ShowLunboCall());
-        mShowLunBoPresenter.reqeust(0, "", "1", "20");
+        if (USER_INFO != null){
+
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+            mShowLunBoPresenter.reqeust(userId, sessionId,"1" ,"20");
+        }else {
+            mShowLunBoPresenter.reqeust(0, "", "1", "20");
+        }
+
+
         movieRecycleRmdy.setLayoutManager(new LinearLayoutManager(OutDetailsActivity.this, OrientationHelper.VERTICAL, false));
         movieRecycleRmdy.setAdapter(mOutDetailsAdapter);
     }
@@ -130,7 +160,15 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleRmdy.setVisibility(View.GONE);//隐藏
         movieRecycleJjsy.setVisibility(View.GONE);//隐藏
         mHotShowingPresenter = new HotShowingPresenter(new HotShowingCall());
-        mHotShowingPresenter.reqeust(0, "", "1", "100");
+        if (USER_INFO != null){
+
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+            mHotShowingPresenter.reqeust(userId, sessionId,"1", "20");
+        }else {
+            mHotShowingPresenter.reqeust(0, "", "1", "100");
+        }
+
         movieRecycleZzry.setLayoutManager(new LinearLayoutManager(OutDetailsActivity.this, OrientationHelper.VERTICAL, false));
         movieRecycleZzry.setAdapter(mOutDetailsAdapter);
     }
@@ -144,7 +182,15 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleRmdy.setVisibility(View.GONE);//隐藏
         movieRecycleZzry.setVisibility(View.GONE);//隐藏
         mCommingSunPresenter = new CommingSunPresenter(new CommingSunCall());
-        mCommingSunPresenter.reqeust(0, "", "1", "100");
+        if (USER_INFO != null){
+
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+            mCommingSunPresenter.reqeust(userId, sessionId,"1", "20");
+        }else {
+            mCommingSunPresenter.reqeust(0, "", "1", "100");
+        }
+
         movieRecycleJjsy.setLayoutManager(new LinearLayoutManager(OutDetailsActivity.this, OrientationHelper.VERTICAL, false));
         movieRecycleJjsy.setAdapter(mOutDetailsAdapter);
     }
@@ -229,5 +275,30 @@ public class OutDetailsActivity extends BaseActivity {
         super.onPause();
         MobclickAgent.onPageEnd("电影列表");
         MobclickAgent.onPause(this);
+    }
+    private class FocusCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+
+            if (result.getStatus().equals("0000")){
+                mOutDetailsAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+    private class FocusMovieOffCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+            mOutDetailsAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
     }
 }

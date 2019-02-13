@@ -14,9 +14,17 @@ public class Comment {
     private String commentHeadPic;
     private int hotComment;
     private int isGreat;
-    private String movieComment;
+    private String commentContent;
     private int commentUserId;
     private String commentUserName;
+
+    public String getCommentContent() {
+        return commentContent;
+    }
+
+    public void setCommentContent(String commentContent) {
+        this.commentContent = commentContent;
+    }
 
     public int getCommentId() {
         return commentId;
@@ -72,14 +80,6 @@ public class Comment {
 
     public void setIsGreat(int isGreat) {
         this.isGreat = isGreat;
-    }
-
-    public String getMovieComment() {
-        return movieComment;
-    }
-
-    public void setMovieComment(String movieComment) {
-        this.movieComment = movieComment;
     }
 
     public int getCommentUserId() {

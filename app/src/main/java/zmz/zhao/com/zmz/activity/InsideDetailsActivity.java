@@ -39,6 +39,7 @@ import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.CommentPresenter;
 import zmz.zhao.com.zmz.presenter.DetailsPresenter;
+import zmz.zhao.com.zmz.presenter.FocusMovieOffPresenter;
 import zmz.zhao.com.zmz.presenter.FocusMoviePresenter;
 import zmz.zhao.com.zmz.presenter.StatePresenter;
 import zmz.zhao.com.zmz.util.ExpandableTextView;
@@ -65,8 +66,9 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     @BindView(R.id.movir_back)
     ImageView movir_back;
     @BindView(R.id.insidetails_buy)
-    ImageView insidetailsBuy;
+    Button insidetailsBuy;
     @BindView(R.id.bg)
+
     SimpleDraweeView bg;
     StatePresenter statePresenter;
 
@@ -81,6 +83,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     private String sessionId;
     private CommentAdapter commentAdapter;
     FocusMoviePresenter focusMoviePresenter;
+    FocusMovieOffPresenter focusMovieOffPresenter;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_inside_details;
@@ -99,7 +102,14 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         mDetailsPresenter = new DetailsPresenter(new DetailsCall());
         commentPresenter = new CommentPresenter(new CommentCall());
         focusMoviePresenter = new FocusMoviePresenter(new FocusCall());
-        mDetailsPresenter.reqeust(0, "", mId1);
+        focusMovieOffPresenter = new FocusMovieOffPresenter(new FocusMovieOffCall());
+        if (USER_INFO != null){
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+            mDetailsPresenter.reqeust(userId, sessionId, mId1);
+        }else {
+            mDetailsPresenter.reqeust(0, "", mId1);
+        }
 
     }
 
@@ -108,6 +118,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         mDetailsPresenter.unBind();
         focusMoviePresenter.unBind();
         commentPresenter.unBind();
+        focusMovieOffPresenter.unBind();
     }
 
     @OnClick({R.id.xiaoxin, R.id.insidetails_details, R.id.insidetails_foreshow, R.id.movir_back, R.id.insidetails_photo, R.id.insidetails_discuss, R.id.insidetails_buy})
@@ -117,13 +128,10 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
                 if(USER_INFO != null){
 
-                    userId = USER_INFO.getUserId();
-                    sessionId = USER_INFO.getSessionId();
-                    Toast.makeText(this, "guanzhu", Toast.LENGTH_SHORT).show();
                     if (mResult.getFollowMovie() == 2){
                         focusMoviePresenter.reqeust(userId,sessionId,mResult.getId());
                     }else {
-
+                        focusMovieOffPresenter.reqeust(userId,sessionId,mResult.getId());
                     }
                 }
 
@@ -226,10 +234,16 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             @Override
             public void onClick(View v) {
                 spopWindow.dismiss();
+
+            }
+        });
+        spopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+
                 JZVideoPlayer.releaseAllVideos();
             }
         });
-
 
         if (page == 1){
             XRecyclerView stage = popView.findViewById(R.id.stage);
@@ -266,9 +280,13 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             commentAdapter = new CommentAdapter(this);
 
             comment.setAdapter(commentAdapter);
-
-            commentPresenter.reqeust(0, "",mResult.getId(),true);
-
+            if (USER_INFO != null){
+                userId = USER_INFO.getUserId();
+                sessionId = USER_INFO.getSessionId();
+                commentPresenter.reqeust(userId, sessionId,mResult.getId(),true);
+            }else {
+                commentPresenter.reqeust(0, "",mResult.getId(),true);
+            }
             commentAdapter.setOnItemClickListenter(new CommentAdapter.OnItemClickListenter() {
                 @Override
                 public void onItemClick(int id, int state) {
@@ -362,7 +380,6 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         public void success(Result result) {
 
             if (result.getStatus().equals("0000")){
-                Toast.makeText(InsideDetailsActivity.this, ""+result.getMessage(), Toast.LENGTH_SHORT).show();
                 xiaoxin.setImageResource(R.mipmap.com_icon_collection_selected);
             }
 
@@ -392,6 +409,18 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         @Override
         public void success(Result result) {
 
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+
+    private class FocusMovieOffCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+            xiaoxin.setImageResource(R.mipmap.com_icon_collection_default);
         }
 
         @Override

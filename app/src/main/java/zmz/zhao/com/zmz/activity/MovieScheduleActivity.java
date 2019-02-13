@@ -116,12 +116,12 @@ public class MovieScheduleActivity extends BaseActivity {
             public void scuccess(int id, String price, String screeningHall) {
                 Log.e("lk", "cinid" + id);
                 Intent intent = new Intent(MovieScheduleActivity.this, ChooseActivity.class);
-                intent.putExtra("name", title.getText().toString());
+                intent.putExtra("name",name );
                 intent.putExtra("address", address);
                 intent.putExtra("id", id + "");
                 intent.putExtra("price", price);
                 intent.putExtra("screeningHall", screeningHall);
-                intent.putExtra("cinemaname", name);
+                intent.putExtra("cinemaname",title.getText().toString());
                 startActivity(intent);
             }
         });

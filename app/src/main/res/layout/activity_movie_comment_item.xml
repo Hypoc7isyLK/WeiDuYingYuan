@@ -84,7 +84,6 @@
             android:layout_height="@dimen/dp_16"
             android:textOff=""
             android:textOn=""
-            android:checked="false"
             android:layout_toLeftOf="@+id/comment_praise"
             android:layout_marginRight="@dimen/dp_5"
             android:background="@drawable/sele_praise"/>

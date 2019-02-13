@@ -93,9 +93,9 @@ public class ChooseActivity extends BaseActivity {
         mName = mIntent.getStringExtra("name");
         mCinemaname = mIntent.getStringExtra("cinemaname");
 
-        chooseCinemaName.setText(mCinemaname);
+        chooseCinemaName.setText(mName);
         chooseCinemaAddress.setText(mAddress);
-        chooseMovieName.setText(mName);
+        chooseMovieName.setText(mCinemaname);
 
 
         //初始化影院选座页面对应的影院以及影片信息

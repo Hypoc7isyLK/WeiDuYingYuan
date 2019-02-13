@@ -37,7 +37,7 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
 
     public CommentAdapter(Context context) {
         this.context = context;
-        inflater=LayoutInflater.from(context);
+        inflater = LayoutInflater.from(context);
     }
 
     @NonNull
@@ -53,10 +53,10 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
     @Override
     public void onBindViewHolder(@NonNull final MyHolder hloder, int i) {
         final Comment comment = list.get(i);
-
+        int isGreat = comment.getIsGreat();
         hloder.simple.setImageURI(Uri.parse(comment.getCommentHeadPic()));
         hloder.name.setText(comment.getCommentUserName());
-        hloder.text.setText(comment.getMovieComment());
+        hloder.text.setText(comment.getCommentContent());
         hloder.num.setText(String.valueOf(comment.getReplyNum()));
 
         try {
@@ -66,32 +66,35 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
         }
         hloder.praisenum.setText(String.valueOf(comment.getGreatNum()));
 
-        if (comment.getIsGreat() == 1) {
+
+        if (isGreat == 1) {
             hloder.praise.setChecked(true);
-        } else {
+        }
+        if (isGreat == 0) {
             hloder.praise.setChecked(false);
         }
+
 
         hloder.praise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = comment.getCommentId();
-                if (comment.getIsGreat() == 1){
+                if (comment.getIsGreat() == 1) {
                     int greatNum = comment.getGreatNum();
-                    comment.setIsGreat(2);
-                    comment.setGreatNum(greatNum-1);
-                    Log.e("zmz","=================="+greatNum);
+                    comment.setIsGreat(0);
+                    comment.setGreatNum(greatNum - 1);
+                    Log.e("zmz", "==================" + greatNum);
 
                     hloder.num.setText(String.valueOf(comment.getGreatNum()));
-                }else {
+                } else {
                     int greatNum = comment.getGreatNum();
                     comment.setIsGreat(1);
-                    comment.setGreatNum(greatNum+1);
+                    comment.setGreatNum(greatNum + 1);
 
                     hloder.num.setText(String.valueOf(comment.getGreatNum()));
                 }
 
-                onItemClickListenter.onItemClick(id,comment.getIsGreat());
+                onItemClickListenter.onItemClick(id, comment.getIsGreat());
 
                 notifyDataSetChanged();
             }
@@ -117,11 +120,11 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
 
         SimpleDraweeView simple;
         TextView name,
-                 text,
-                 time,
-                 all,
-                 praisenum,
-                 num;
+                text,
+                time,
+                all,
+                praisenum,
+                num;
         ToggleButton praise;
 
         public MyHolder(@NonNull View itemView) {
@@ -145,7 +148,7 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
         this.onItemClickListenter = onItemClickListenter;
     }
 
-    public interface OnItemClickListenter{
-        void onItemClick(int id,int state);
+    public interface OnItemClickListenter {
+        void onItemClick(int id, int state);
     }
 }
