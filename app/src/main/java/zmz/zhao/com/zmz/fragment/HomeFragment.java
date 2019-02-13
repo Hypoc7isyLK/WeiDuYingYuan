@@ -106,7 +106,6 @@ public class HomeFragment extends BaseFragment {
         list.setAdapter(mCarouselAdapter);
 
 
-
         list.setOnItemSelectedListener(new CoverFlowLayoutManger.OnSelected() {
             @Override
             public void onItemSelected(int position) {

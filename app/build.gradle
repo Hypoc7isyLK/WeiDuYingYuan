@@ -6,7 +6,7 @@ android {
         moviekey {
             keyAlias 'bw_movie'
             keyPassword '123456'
-            storeFile file('C:/Users/xuanlong/Desktop/movie.keystore')
+            storeFile file('D:/DeskTop/movie.keystore')
             storePassword '123456'
         }
     }
@@ -36,7 +36,17 @@ android {
         targetGenDir 'src/main/java'
     }
     productFlavors {
+        kuan {}
+        xiaomi {}
+        qh360 {}
+        baidu {}
+        wandoujia {}
     }
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+    flavorDimensions "default"
+
 }
 
 dependencies {
@@ -75,4 +85,9 @@ dependencies {
     implementation 'com.jaydenxiao:ExpandableTextView:1.0.0'
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.4'
     implementation 'com.github.bumptech.glide:glide:4.3.1'
+    implementation 'com.umeng.analytics:analytics:6.1.4'
+    implementation 'com.tencent.bugly:crashreport:2.8.6.0'
+
+
+
 }

@@ -55,7 +55,7 @@ public class ChooseActivity extends BaseActivity {
     @BindView(R.id.choose_movie_name)
     TextView chooseMovieName;
     @BindView(R.id.choose_cinema_marquee)
-    Marquee chooseCinemaMarquee;
+    TextView chooseCinemaMarquee;
     private Intent mIntent;
     private String mId;
     private String mmPrice;
@@ -69,6 +69,8 @@ public class ChooseActivity extends BaseActivity {
     private int mUserId;
     private String mString;
     private PlaceanOrderPresenter mPlaceanOrderPresenter;
+    private String mEndtime;
+    private String mBegintime;
 
     @Override
     protected int getLayoutId() {
@@ -92,9 +94,12 @@ public class ChooseActivity extends BaseActivity {
         mAddress = mIntent.getStringExtra("address");
         mName = mIntent.getStringExtra("name");
         mCinemaname = mIntent.getStringExtra("cinemaname");
+        mEndtime = mIntent.getStringExtra("endtime");
+        mBegintime = mIntent.getStringExtra("begintime");
 
         chooseCinemaName.setText(mName);
         chooseCinemaAddress.setText(mAddress);
+        chooseCinemaMarquee.setText(mBegintime+"——"+mEndtime+"  "+"中国I Do巨幕全景声听");
         chooseMovieName.setText(mCinemaname);
 
 
