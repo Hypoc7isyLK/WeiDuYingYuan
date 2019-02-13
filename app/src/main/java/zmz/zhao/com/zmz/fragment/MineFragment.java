@@ -272,6 +272,8 @@ public class MineFragment extends BaseFragment {
                         USER_INFO = null;
                         myName.setText("未登录");
                         mySign.setText("签到");
+                        Uri parse = Uri.parse("res://" + getActivity().getPackageName() + "/" + R.mipmap.head);
+                        myPic.setImageURI(parse);
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {

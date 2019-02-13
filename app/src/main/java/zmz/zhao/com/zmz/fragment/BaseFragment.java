@@ -1,5 +1,6 @@
 package zmz.zhao.com.zmz.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.greendao.gen.DaoMaster;
@@ -46,7 +48,7 @@ public abstract class BaseFragment extends Fragment {
         if (userInfoList != null && userInfoList.size()>0) {
             USER_INFO = userInfoList.get(0);
         }
-
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         initView(view);
         initData(view);
         return view;

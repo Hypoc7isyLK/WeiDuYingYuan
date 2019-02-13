@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,32 +29,36 @@ import zmz.zhao.com.zmz.util.DateUtils;
  * author:赵明珠(啊哈)
  * function:
  */
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyHloder> {
+public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolder> {
 
     private Context context;
     List<Comment> list = new ArrayList<>();
+    private LayoutInflater inflater;
 
     public CommentAdapter(Context context) {
         this.context = context;
+        inflater=LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
-    public MyHloder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = View.inflate(context, R.layout.activity_movie_comment_item, null);
+    public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        //View view = View.inflate(context, , null);
+        View view = inflater.inflate(R.layout.activity_movie_comment_item, viewGroup, false);
+        MyHolder myHolder = new MyHolder(view);
 
-        return new MyHloder(view);
+        return myHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHloder hloder, int i) {
-        Comment comment = list.get(i);
-        Log.e("zmz", "=======" + comment.getCommentUserName());
+    public void onBindViewHolder(@NonNull final MyHolder hloder, int i) {
+        final Comment comment = list.get(i);
 
         hloder.simple.setImageURI(Uri.parse(comment.getCommentHeadPic()));
         hloder.name.setText(comment.getCommentUserName());
         hloder.text.setText(comment.getMovieComment());
         hloder.num.setText(String.valueOf(comment.getReplyNum()));
+
         try {
             hloder.time.setText(DateUtils.dateFormat(new Date(comment.getCommentTime()), DateUtils.MINUTE_PATTERN));
         } catch (ParseException e) {
@@ -66,6 +71,31 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyHloder
         } else {
             hloder.praise.setChecked(false);
         }
+
+        hloder.praise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = comment.getCommentId();
+                if (comment.getIsGreat() == 1){
+                    int greatNum = comment.getGreatNum();
+                    comment.setIsGreat(2);
+                    comment.setGreatNum(greatNum-1);
+                    Log.e("zmz","=================="+greatNum);
+
+                    hloder.num.setText(String.valueOf(comment.getGreatNum()));
+                }else {
+                    int greatNum = comment.getGreatNum();
+                    comment.setIsGreat(1);
+                    comment.setGreatNum(greatNum+1);
+
+                    hloder.num.setText(String.valueOf(comment.getGreatNum()));
+                }
+
+                onItemClickListenter.onItemClick(id,comment.getIsGreat());
+
+                notifyDataSetChanged();
+            }
+        });
 
 
     }
@@ -83,7 +113,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyHloder
         list.addAll(comments);
     }
 
-    class MyHloder extends RecyclerView.ViewHolder {
+    class MyHolder extends XRecyclerView.ViewHolder {
 
         SimpleDraweeView simple;
         TextView name,
@@ -94,7 +124,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyHloder
                  num;
         ToggleButton praise;
 
-        public MyHloder(@NonNull View itemView) {
+        public MyHolder(@NonNull View itemView) {
             super(itemView);
 
             simple = itemView.findViewById(R.id.comment_head);
@@ -107,5 +137,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyHloder
             praise = itemView.findViewById(R.id.praise);
 
         }
+    }
+
+    private OnItemClickListenter onItemClickListenter;
+
+    public void setOnItemClickListenter(OnItemClickListenter onItemClickListenter) {
+        this.onItemClickListenter = onItemClickListenter;
+    }
+
+    public interface OnItemClickListenter{
+        void onItemClick(int id,int state);
     }
 }

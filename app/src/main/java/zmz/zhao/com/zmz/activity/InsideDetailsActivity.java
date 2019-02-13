@@ -40,6 +40,7 @@ import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.CommentPresenter;
 import zmz.zhao.com.zmz.presenter.DetailsPresenter;
 import zmz.zhao.com.zmz.presenter.FocusMoviePresenter;
+import zmz.zhao.com.zmz.presenter.StatePresenter;
 import zmz.zhao.com.zmz.util.ExpandableTextView;
 import zmz.zhao.com.zmz.util.SpaceItemDecoration;
 import zmz.zhao.com.zmz.view.DataCall;
@@ -67,7 +68,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     ImageView insidetailsBuy;
     @BindView(R.id.bg)
     SimpleDraweeView bg;
-
+    StatePresenter statePresenter;
 
     private DetailsBean mResult;
     private DetailsPresenter mDetailsPresenter;
@@ -258,17 +259,35 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
             comment = popView.findViewById(R.id.stage);
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            statePresenter = new StatePresenter(new StateCall());
 
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-            comment.setLayoutManager(linearLayoutManager);
+            comment.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
 
             commentAdapter = new CommentAdapter(this);
 
             comment.setAdapter(commentAdapter);
 
             commentPresenter.reqeust(0, "",mResult.getId(),true);
+
+            commentAdapter.setOnItemClickListenter(new CommentAdapter.OnItemClickListenter() {
+                @Override
+                public void onItemClick(int id, int state) {
+                    if (state != 1) {
+                        //如果点赞，则取消点赞
+                        //Toast.makeText(InsideDetailsActivity.this, "不能重复点赞", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        userId = USER_INFO.getUserId();
+                        sessionId = USER_INFO.getSessionId();
+                        statePresenter.reqeust(userId, sessionId,id);
+
+                    }//否则点赞
+
+                    commentAdapter.notifyDataSetChanged();
+
+
+                }
+            });
 
         }
 
@@ -330,10 +349,6 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
                 commentAdapter.notifyDataSetChanged();
             }
-
-            comment.loadMoreComplete();
-
-            comment.refreshComplete();
         }
 
         @Override
@@ -371,5 +386,17 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         super.onPause();
         MobclickAgent.onPageEnd("电影详情");
         MobclickAgent.onPause(this);
+    }
+
+    private class StateCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
     }
 }

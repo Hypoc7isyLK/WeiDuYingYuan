@@ -14,6 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import zmz.zhao.com.zmz.adapter.ScheduleListAdapter;
 import zmz.zhao.com.zmz.bean.DetailsBean;
 import zmz.zhao.com.zmz.bean.Result;
@@ -98,7 +99,10 @@ public class MovieScheduleActivity extends BaseActivity {
         mDetailsPresenter.reqeust(0, "", mid);
 
     }
-
+    @OnClick(R.id.chooage__back)
+    public void Onclick(){
+        finish();
+    }
     private void addAdapter() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
 

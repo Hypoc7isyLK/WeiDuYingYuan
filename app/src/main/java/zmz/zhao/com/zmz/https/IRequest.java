@@ -228,9 +228,11 @@ public interface IRequest {
 
     @GET("cinema/v1/findNearbyCinemas")
     Observable<Result<List<CinemaListBean>>> shownearbyCinema(@Header("userId") int userId,
-                                                        @Header("sessionId") String sessionId,
-                                                        @Query("page") String page,
-                                                        @Query("count") String count);
+                                                              @Header("sessionId") String sessionId,
+                                                              @Query("longitude") String longitude,
+                                                              @Query("latitude") String latitude,
+                                                              @Query("page") String page,
+                                                              @Query("count") String count);
 
     @GET("movie/v1/findMovieListByCinemaId")
     Observable<Result<List<ScheduleCinemaBean>>> showScheduleCinema(@Query("cinemaId") String cinemaId);
@@ -245,7 +247,6 @@ public interface IRequest {
                                         @Field("sign") String sign);
 
 
-
     @POST("movie/v1/verify/pay")
     @FormUrlEncoded
     Observable<PayBean> pay(@Header("userId") int userId,
@@ -256,8 +257,6 @@ public interface IRequest {
     @POST("user/v1/weChatBindingLogin")
     @FormUrlEncoded
     Observable<Result<LoginBean>> wechatlogin(@Field("code") String code);
-
-
 
 
     @GET("movie/v1/findMovieScheduleList")
@@ -286,6 +285,7 @@ public interface IRequest {
                                               @Query("movieId") int id,
                                               @Query("page") int page,
                                               @Query("count") int count);
+
     /**
      * @作者 啊哈
      * @date 2019/1/30
@@ -301,5 +301,16 @@ public interface IRequest {
      */
     @GET("movie/v1/findMovieScheduleList")
     Observable<Result<List<ScheduleListBean>>> filmSche(@Query("cinemasId") int cinemasId, @Query("movieId") int movieId);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/2/13
+     * @method：影评点赞
+     */
+    @POST("movie/v1/verify/movieCommentGreat")
+    @FormUrlEncoded
+    Observable<Result> state(@Header("userId") int userId,
+                             @Header("sessionId") String sessionId,
+                             @Field("commentId") int commentId);
 }
 
