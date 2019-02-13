@@ -109,6 +109,15 @@ public class MineFragment extends BaseFragment {
         } else {
             image = FileUtils.createDirs("/image/bimap");
         }
+        if (USER_INFO == null) {
+            return;
+        } else {
+
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+
+            messagePresenter.reqeust(this.userId, sessionId);
+        }
     }
 
     private void isLogin() {
@@ -134,33 +143,29 @@ public class MineFragment extends BaseFragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
-
+        MobclickAgent.onPageStart("我的fragment");
+        MobclickAgent.onResume(getActivity());
 
         UserInfoDao userInfoDao = DaoMaster.newDevSession(getActivity(), UserInfoDao.TABLENAME).getUserInfoDao();
 
-        List<UserInfo> userInfoList = userInfoDao.queryBuilder().where(UserInfoDao.Properties.Status.eq(1)).list();
-        MobclickAgent.onPageStart("我的fragment");
-        MobclickAgent.onResume(getActivity());
+        List<UserInfo> userInfoList = userInfoDao.loadAll();
 
         if (userInfoList != null && userInfoList.size() > 0) {
 
             USER_INFO = userInfoList.get(0);
 
-            int userids = USER_INFO.getUserId();
+            int userid = USER_INFO.getUserId();
 
-            myPic.setImageURI(Uri.parse(USER_INFO.getHeadPic()));
+            String sessionId = USER_INFO.getSessionId();
 
-            String sessionIds = USER_INFO.getSessionId();
+            messagePresenter.reqeust(userid, sessionId);
 
-            messagePresenter.reqeust(userids, sessionIds);
+            Log.e("zmz", "========" + "返回成功");
 
-            //Log.e("zmz", "========" + "返回成功");
-
-            //Toast.makeText(getActivity(), "返回成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "返回成功", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -186,6 +191,7 @@ public class MineFragment extends BaseFragment {
                 } else {
 
                     View popView = View.inflate(getActivity(), R.layout.activity_mine_heard_image, null);
+
                     popWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT, true);
                     popWindow.setTouchable(true);
@@ -345,8 +351,6 @@ public class MineFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        popWindow.dismiss();
-
         if (resultCode == getActivity().RESULT_OK) {
             switch (requestCode) {
                 case TAKE_PICTURE:
@@ -377,6 +381,7 @@ public class MineFragment extends BaseFragment {
                     break;
             }
         }
+        popWindow.dismiss();
     }
 
     private class SignCall implements DataCall<Result> {
@@ -401,6 +406,9 @@ public class MineFragment extends BaseFragment {
         @Override
         public void success(Result result) {
             result.getResult();
+
+            Log.e("zmz",""+result.getMessage());
+
             USER_INFO.setHeadPic(result.getHeadPath());
 
             USERINFODAO.update(USER_INFO);

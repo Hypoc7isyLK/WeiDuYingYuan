@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
-    android:background="@mipmap/rectangle26"
-    tools:context=".activity.MainActivity">
+    android:id="@+id/main_activity"
+    android:background="@mipmap/rectangle26">
 
     <TextView
         android:id="@+id/buttom"

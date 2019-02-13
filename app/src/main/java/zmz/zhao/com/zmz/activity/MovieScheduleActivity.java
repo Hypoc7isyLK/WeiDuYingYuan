@@ -2,6 +2,10 @@ package zmz.zhao.com.zmz.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.bw.movie.R;
@@ -10,6 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.List;
 
 import butterknife.BindView;
+import zmz.zhao.com.zmz.adapter.ScheduleListAdapter;
 import zmz.zhao.com.zmz.bean.DetailsBean;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.ScheduleListBean;
@@ -53,8 +58,11 @@ public class MovieScheduleActivity extends BaseActivity {
     @BindView(R.id.movie_place)
     TextView place;
 
-    FilmSchePresenter filmSchePresenter;
+    @BindView(R.id.chooage_time)
+    RecyclerView recyclerView;
 
+    FilmSchePresenter filmSchePresenter;
+    ScheduleListAdapter mScheduleListAdapter;
 
     private String cid;
     private DetailsPresenter mDetailsPresenter;
@@ -83,9 +91,36 @@ public class MovieScheduleActivity extends BaseActivity {
 
         cinema_text.setText(address);
 
+        addAdapter();
+
         filmSchePresenter.reqeust(Integer.parseInt(mid),Integer.parseInt(cid));
 
         mDetailsPresenter.reqeust(0, "", mid);
+
+    }
+
+    private void addAdapter() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
+
+        mScheduleListAdapter = new ScheduleListAdapter(this);
+
+        recyclerView.setAdapter(mScheduleListAdapter);
+
+
+        mScheduleListAdapter.setOnClickListener(new ScheduleListAdapter.OnClickListener() {
+            @Override
+            public void scuccess(int id, String price, String screeningHall) {
+                Log.e("lk", "cinid" + id);
+                Intent intent = new Intent(MovieScheduleActivity.this, ChooseActivity.class);
+                intent.putExtra("name", title.getText().toString());
+                intent.putExtra("address", address);
+                intent.putExtra("id", id + "");
+                intent.putExtra("price", price);
+                intent.putExtra("screeningHall", screeningHall);
+                intent.putExtra("cinemaname", name);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -124,7 +159,7 @@ public class MovieScheduleActivity extends BaseActivity {
         public void success(Result<List<ScheduleListBean>> result) {
             if (result.getStatus().equals("0000")){
                 List<ScheduleListBean> scheList = result.getResult();
-
+                mScheduleListAdapter.reset(scheList);
             }
         }
 
