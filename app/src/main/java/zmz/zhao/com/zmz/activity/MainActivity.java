@@ -14,6 +14,8 @@ import com.bw.movie.R;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * @作者 啊哈
  * @date 2019/1/25
@@ -46,14 +48,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    @BindView(R.id.main)
+    @BindView(R.id.main_activity)
     RelativeLayout main;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         if (time != 0) {
             AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
             alphaAnimation.setDuration(3500);
