@@ -2,15 +2,18 @@ package zmz.zhao.com.zmz.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -33,13 +36,19 @@ import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserInfoDao;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import zmz.zhao.com.zmz.activity.FocusActivity;
 import zmz.zhao.com.zmz.activity.LoginActivity;
+import zmz.zhao.com.zmz.activity.MainActivity;
 import zmz.zhao.com.zmz.activity.MineProfileActivity;
 import zmz.zhao.com.zmz.activity.MyOpinion;
 import zmz.zhao.com.zmz.activity.RecordActivity;
@@ -51,6 +60,7 @@ import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.HeadPresenter;
 import zmz.zhao.com.zmz.presenter.MessagePresenter;
 import zmz.zhao.com.zmz.presenter.SignPresenter;
+import zmz.zhao.com.zmz.presenter.VersionsPresenter;
 import zmz.zhao.com.zmz.util.FileUtils;
 import zmz.zhao.com.zmz.view.DataCall;
 
@@ -90,6 +100,8 @@ public class MineFragment extends BaseFragment {
     private String sessionId;
     private boolean image;
     private int userId;
+    VersionsPresenter versionsPresenter;
+    private String info;
 
     @Override
     public void initView(View view) {
@@ -126,7 +138,7 @@ public class MineFragment extends BaseFragment {
         MobclickAgent.onResume(getActivity());
 
         UserInfoDao userInfoDao = DaoMaster.newDevSession(getActivity(), UserInfoDao.TABLENAME).getUserInfoDao();
-
+        versionsPresenter = new VersionsPresenter(new VersionCall());
         List<UserInfo> userInfoList = userInfoDao.loadAll();
 
         if (userInfoList != null && userInfoList.size() > 0) {
@@ -262,6 +274,26 @@ public class MineFragment extends BaseFragment {
                     }
                 });
                 mBuilder.create().show();
+                break;
+            case R.id.my_new_versions:
+                if (USER_INFO != null) {
+
+                    try {
+                        String versionCode = getActivity().getPackageManager().
+                                getPackageInfo(getContext().getPackageName(), 0).versionName;
+
+                        Log.e("zmz","版本："+versionCode);
+                        versionsPresenter.reqeust(userId,sessionId,versionCode);
+
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
                 break;
         }
     }
@@ -433,4 +465,126 @@ public class MineFragment extends BaseFragment {
         MobclickAgent.onPageEnd("我的fragment");
         MobclickAgent.onPause(getActivity());
     }
+
+    private class VersionCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+            if (result.getStatus().equals("0000")) {
+                int flag = result.getFlag();
+
+                if (flag != 1){
+                    Toast.makeText(getContext(), "已是最新版本", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    info = result.getDownloadUrl();
+
+                    showUpdataDialog();
+                    //Toast.makeText(getContext(), "发现新版本", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+
+    protected void showUpdataDialog() {
+        AlertDialog.Builder builer = new AlertDialog.Builder(getContext()) ;
+        builer.setTitle("版本升级");
+        builer.setMessage("新版本");
+        //当点确定按钮时从服务器上下载 新的apk 然后安装
+        builer.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                downLoadApk();
+            }
+        });
+        //当点取消按钮时进行登录
+        builer.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                //LoginMain();
+            }
+        });
+        AlertDialog dialog = builer.create();
+        dialog.show();
+    }
+
+    /*
+     * 从服务器中下载APK
+     */
+    protected void downLoadApk() {
+        final ProgressDialog pd;	//进度条对话框
+        pd = new  ProgressDialog(getContext());
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pd.setMessage("正在下载更新");
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    File file = getFileFromServer(info, pd);
+                    sleep(3000);
+                    installApk(file);
+                    pd.dismiss(); //结束掉进度条对话框
+                } catch (Exception e) {
+
+                }
+            }}.start();
+    }
+
+    //安装apk
+    protected void installApk(File file) {
+        Intent intent = new Intent();
+        //执行动作
+        intent.setAction(Intent.ACTION_VIEW);
+        //执行的数据类型
+        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        startActivity(intent);
+    }
+
+    /*
+     * 进入程序的主界面
+     */
+    private void LoginMain(){
+        Intent intent = new Intent(getContext(),MainActivity.class);
+        startActivity(intent);
+        //结束掉当前的activity
+        getActivity().finish();
+    }
+
+    public static File getFileFromServer(String path, ProgressDialog pd) throws Exception{
+        //如果相等的话表示当前的sdcard挂载在手机上并且是可用的
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            URL url = new URL(path);
+            HttpURLConnection conn =  (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            //获取到文件的大小
+            pd.setMax(conn.getContentLength());
+            InputStream is = conn.getInputStream();
+            File file = new File(Environment.getExternalStorageDirectory(), "updata.apk");
+            FileOutputStream fos = new FileOutputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(is);
+            byte[] buffer = new byte[1024];
+            int len ;
+            int total=0;
+            while((len =bis.read(buffer))!=-1){
+                fos.write(buffer, 0, len);
+                total+= len;
+                //获取当前下载量
+                pd.setProgress(total);
+            }
+            fos.close();
+            bis.close();
+            is.close();
+            return file;
+        }
+        else{
+            return null;
+        }
+    }
+
 }

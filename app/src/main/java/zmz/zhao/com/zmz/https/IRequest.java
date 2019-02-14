@@ -292,8 +292,9 @@ public interface IRequest {
      */
     @GET("cinema/v1/verify/followCinema")
     Observable<Result> focusCinema(@Header("userId") int userId,
-                             @Header("sessionId") String sessionId,
-                             @Query("cinemaId") int id);
+                                   @Header("sessionId") String sessionId,
+                                   @Query("cinemaId") int id);
+
     /**
      * @作者 啊哈
      * @date 2019/2/13
@@ -301,8 +302,8 @@ public interface IRequest {
      */
     @GET("cinema/v1/verify/cancelFollowCinema")
     Observable<Result> focusoffCinema(@Header("userId") int userId,
-                                @Header("sessionId") String sessionId,
-                                @Query("cinemaId") int id);
+                                      @Header("sessionId") String sessionId,
+                                      @Query("cinemaId") int id);
 
     /**
      * @作者 啊哈
@@ -342,6 +343,7 @@ public interface IRequest {
     Observable<Result> state(@Header("userId") int userId,
                              @Header("sessionId") String sessionId,
                              @Field("commentId") int commentId);
+
     /**
      * @作者 啊哈
      * @date 2019/2/14
@@ -354,5 +356,14 @@ public interface IRequest {
                                                         @Query("page") int page,
                                                         @Query("count") int count);
 
+    /**
+     * @作者 啊哈
+     * @date 2019/2/14
+     * @method：检查版本更新
+     */
+    @GET("tool/v1/findNewVersion")
+    Observable<Result> versions(@Header("userId") int userId,
+                                @Header("sessionId") String sessionId,
+                                @Header("ak") String ak);
 }
 
