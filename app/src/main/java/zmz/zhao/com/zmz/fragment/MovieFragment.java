@@ -30,6 +30,8 @@ import zmz.zhao.com.zmz.bean.CinemaListBean;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.CinemaListPresenter;
+import zmz.zhao.com.zmz.presenter.FocusCinemaOffPresenter;
+import zmz.zhao.com.zmz.presenter.FocusCinemaPresenter;
 import zmz.zhao.com.zmz.presenter.NearbyCinemaPresenter;
 import zmz.zhao.com.zmz.view.DataCall;
 
@@ -39,10 +41,12 @@ public class MovieFragment extends BaseFragment {
     ImageView dingwei;
     @BindView(R.id.cinema_search)
     SearchView cinemaSearch;
+
     @BindView(R.id.cinema_tjyy)
     RadioButton cinemaTjyy;
     @BindView(R.id.cinema_fjyy)
     RadioButton cinemaFjyy;
+
     @BindView(R.id.cinema_radio)
     RadioGroup cinemaRadio;
     @BindView(R.id.cinema_recycle_tjyy)
@@ -50,16 +54,22 @@ public class MovieFragment extends BaseFragment {
     @BindView(R.id.cinema_recycle_fjyy)
     RecyclerView cinemaRecycleFjyy;
 
-    private String mSessionId;
-    private int mUserId;
     private CinemaListAdapter mCinemaListAdapter;
     private CinemaListPresenter mCinemaListPresenter;
     private NearbyCinemaPresenter mNearbyCinemaPresenter;
-
+    private int userId;
+    private String sessionId;
+    FocusCinemaOffPresenter focusCinemaOffPresenter;
+    FocusCinemaPresenter focusCinemaPresenter;
     @Override
     public void initView(View view) {
         /*mSessionId = USER_INFO.getSessionId();
         mUserId = USER_INFO.getUserId();*/
+        mNearbyCinemaPresenter = new NearbyCinemaPresenter(new CinemalistCall());
+        focusCinemaOffPresenter = new FocusCinemaOffPresenter(new FocusCinmaCall());
+        focusCinemaPresenter = new FocusCinemaPresenter(new FocusOffCinmaCall());
+        mCinemaListPresenter = new CinemaListPresenter(new CinemalistCall());
+
         mCinemaListAdapter = new CinemaListAdapter(getActivity());
         tjyy();
         cinemaRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -91,6 +101,21 @@ public class MovieFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+
+        mCinemaListAdapter.setOnclickFocuslitener(new CinemaListAdapter.OnclickFocuslitener() {
+            @Override
+            public void success(int id, int state) {
+                if (USER_INFO != null) {
+                    Log.e("zmz","毁掉后"+state);
+
+                    if (state == 1) {
+                        focusCinemaOffPresenter.reqeust(userId, sessionId, id);
+                    } else {
+                        focusCinemaPresenter.reqeust(userId, sessionId, id);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -104,7 +129,6 @@ public class MovieFragment extends BaseFragment {
     }
 
     private void tjyy() {
-        mCinemaListPresenter = new CinemaListPresenter(new CinemalistCall());
         cinemaRadio.check(R.id.cinema_tjyy);
         cinemaRecycleTjyy.setVisibility(View.VISIBLE);//显示
         cinemaTjyy.setTextColor(getResources().getColorStateList(R.color.white));
@@ -112,14 +136,21 @@ public class MovieFragment extends BaseFragment {
         cinemaRecycleFjyy.setVisibility(View.GONE);//隐藏
         cinemaRecycleTjyy.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.VERTICAL, false));
         cinemaRecycleTjyy.setAdapter(mCinemaListAdapter);
-        mCinemaListPresenter.reqeust(0, "", "1", "20");
+
+        if (USER_INFO != null){
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+            mCinemaListPresenter.reqeust(userId, sessionId, "1", "20");
+        }else {
+            mCinemaListPresenter.reqeust(0, "", "1", "20");
+        }
 
     }
 
 
 
     private void fjyy() {
-        mNearbyCinemaPresenter = new NearbyCinemaPresenter(new CinemalistCall());
+
         cinemaRadio.check(R.id.cinema_fjyy);
         cinemaRecycleFjyy.setVisibility(View.VISIBLE);//显示
         cinemaFjyy.setTextColor(getResources().getColorStateList(R.color.white));
@@ -127,7 +158,13 @@ public class MovieFragment extends BaseFragment {
         cinemaRecycleTjyy.setVisibility(View.GONE);//隐藏
         cinemaRecycleFjyy.setLayoutManager(new LinearLayoutManager(getActivity(), OrientationHelper.VERTICAL, false));
         cinemaRecycleFjyy.setAdapter(mCinemaListAdapter);
-        mNearbyCinemaPresenter.reqeust(0, "", "1", "20");
+        if (USER_INFO != null){
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+            mNearbyCinemaPresenter.reqeust(userId, sessionId, "1", "20");
+        }else {
+            mNearbyCinemaPresenter.reqeust(0, "", "1", "20");
+        }
     }
 
     private class CinemalistCall implements DataCall<Result<List<CinemaListBean>>> {
@@ -136,11 +173,11 @@ public class MovieFragment extends BaseFragment {
 
         @Override
         public void success(Result<List<CinemaListBean>> result) {
-            mResult = result.getResult();
-            mCinemaListAdapter.reset(mResult);
-
+            if (result.getStatus().equals("0000")){
+                mResult = result.getResult();
+                mCinemaListAdapter.reset(mResult);
+            }
         }
-
         @Override
         public void fail(ApiException e) {
 
@@ -150,8 +187,10 @@ public class MovieFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mCinemaListPresenter = null;
-        mNearbyCinemaPresenter = null;
+        mCinemaListPresenter.unBind();
+        mNearbyCinemaPresenter.unBind();
+        focusCinemaOffPresenter.unBind();
+        focusCinemaPresenter.unBind();
     }
 
     @Override
@@ -166,5 +205,43 @@ public class MovieFragment extends BaseFragment {
         super.onPause();
         MobclickAgent.onPageEnd("影院fragment");
         MobclickAgent.onPause(getActivity());
+    }
+
+    private class FocusCinmaCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+            if (result.getStatus().equals("0000")){
+                if (cinemaTjyy.isChecked()){
+                    mCinemaListPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+                if (cinemaFjyy.isChecked()){
+                    mNearbyCinemaPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+            }
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+
+    private class FocusOffCinmaCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+            if (result.getStatus().equals("0000")){
+                if (cinemaTjyy.isChecked()){
+                    mCinemaListPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+                if (cinemaFjyy.isChecked()){
+                    mNearbyCinemaPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+            }
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
     }
 }

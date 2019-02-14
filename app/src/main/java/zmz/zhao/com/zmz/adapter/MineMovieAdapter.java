@@ -40,7 +40,7 @@ public class MineMovieAdapter extends XRecyclerView.Adapter<MineMovieAdapter.Min
 
     @Override
     public void onBindViewHolder(@NonNull MineHolder holder, int i) {
-        Attention attention = list.get(i);
+        final Attention attention = list.get(i);
 
         Log.e("zmz","===="+attention.getSummary());
 
@@ -53,6 +53,14 @@ public class MineMovieAdapter extends XRecyclerView.Adapter<MineMovieAdapter.Min
         holder.movie_text.setText(attention.getSummary());
 
         holder.title.setText(attention.getName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = attention.getId();
+                mOnclicklitener.success(id);
+            }
+        });
 
     }
 
@@ -81,5 +89,12 @@ public class MineMovieAdapter extends XRecyclerView.Adapter<MineMovieAdapter.Min
             movie_text = itemView.findViewById(R.id.movie_text);
             date = itemView.findViewById(R.id.date);
         }
+    }
+    private Onclicklitener mOnclicklitener;
+    public void setOnclicklitener(Onclicklitener onclicklitener) {
+        mOnclicklitener = onclicklitener;
+    }
+    public interface Onclicklitener{
+        void success(int id);
     }
 }

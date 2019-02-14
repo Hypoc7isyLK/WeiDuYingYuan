@@ -284,6 +284,24 @@ public interface IRequest {
                                 @Header("sessionId") String sessionId,
                                 @Query("movieId") int id);
 
+    /**
+     * @作者 啊哈
+     * @date 2019/2/14
+     * @method：关注影院
+     */
+    @GET("cinema/v1/verify/followCinema")
+    Observable<Result> focusCinema(@Header("userId") int userId,
+                             @Header("sessionId") String sessionId,
+                             @Query("cinemaId") int id);
+    /**
+     * @作者 啊哈
+     * @date 2019/2/13
+     * @method：取消关注
+     */
+    @GET("cinema/v1/verify/cancelFollowCinema")
+    Observable<Result> focusoffCinema(@Header("userId") int userId,
+                                @Header("sessionId") String sessionId,
+                                @Query("cinemaId") int id);
 
     /**
      * @作者 啊哈

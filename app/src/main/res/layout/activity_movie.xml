@@ -47,6 +47,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="0dp"
+            android:maxWidth="@dimen/dp_220"
             android:background="@drawable/search"
             android:paddingRight="@dimen/dp_10" />
 
@@ -99,6 +100,7 @@
         android:layout_below="@+id/cinema_radio"
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
+        android:layout_marginBottom="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_24"
         android:paddingBottom="@dimen/dp_30">
     </android.support.v7.widget.RecyclerView>
@@ -111,6 +113,7 @@
         android:layout_below="@+id/cinema_radio"
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
+        android:layout_marginBottom="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_24"
         android:paddingBottom="@dimen/dp_30">
     </android.support.v7.widget.RecyclerView>

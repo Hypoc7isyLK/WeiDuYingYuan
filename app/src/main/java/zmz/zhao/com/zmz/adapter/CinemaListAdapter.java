@@ -51,17 +51,20 @@ public class CinemaListAdapter extends RecyclerView.Adapter<CinemaListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+        final CinemaListBean cinemaListBean = mListBeans.get(i);
         viewHolder.details_simple.setImageURI(mListBeans.get(i).getLogo());
         viewHolder.details_title.setText(mListBeans.get(i).getName());
         viewHolder.details_message.setText(mListBeans.get(i).getAddress());
         viewHolder.details_km.setText(mListBeans.get(i).getDistance()+"m");
         mFollowCinema = mListBeans.get(i).getFollowCinema();
-        if (mFollowCinema == 1){
-            viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_selected);
-        }else {
+
+        if (mFollowCinema != 1){
             viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_huisexin);
+        }else {
+            viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_selected);
         }
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -75,7 +78,14 @@ public class CinemaListAdapter extends RecyclerView.Adapter<CinemaListAdapter.Vi
             }
         });
 
-
+        viewHolder.xiaoxinxin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int followCinema = cinemaListBean.getFollowCinema();
+                Log.e("zmz","适配器"+followCinema);
+                mOnclickFocuslitener.success(cinemaListBean.getId(),followCinema);
+            }
+        });
     }
 
     @Override
@@ -108,5 +118,14 @@ public class CinemaListAdapter extends RecyclerView.Adapter<CinemaListAdapter.Vi
 
     public void setOnclicklitener(Onclicklitener onclicklitener) {
         mOnclicklitener = onclicklitener;
+    }
+    public interface OnclickFocuslitener{
+        void success(int id,int state);
+    }
+
+    private OnclickFocuslitener mOnclickFocuslitener;
+
+    public void setOnclickFocuslitener(OnclickFocuslitener onclickFocuslitener) {
+        mOnclickFocuslitener = onclickFocuslitener;
     }
 }

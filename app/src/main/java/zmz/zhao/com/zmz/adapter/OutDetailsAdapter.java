@@ -77,8 +77,7 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
                 int followMovie = showLunBoBean.getFollowMovie();
 
 
-                int item = viewHolder.getLayoutPosition();
-                mOnclickFocuslitener.success(showLunBoBean.getId(),followMovie,item);
+                mOnclickFocuslitener.success(showLunBoBean.getId(),followMovie);
             }
         });
 
@@ -118,7 +117,7 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
         void success(int id);
     }
     public interface OnclickFocuslitener{
-        void success(int id,int state,int item);
+        void success(int id,int state);
     }
 
     private Onclicklitener mOnclicklitener;

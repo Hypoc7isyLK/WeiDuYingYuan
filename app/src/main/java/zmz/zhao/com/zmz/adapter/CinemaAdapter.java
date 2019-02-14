@@ -40,11 +40,22 @@ public class CinemaAdapter extends RecyclerView.Adapter<CinemaAdapter.MineHolder
 
     @Override
     public void onBindViewHolder(@NonNull MineHolder holder, int i) {
-        Address address = list_cinema.get(i);
+        final Address address = list_cinema.get(i);
 
         holder.simple.setImageURI(Uri.parse(address.getLogo()));
         holder.title.setText(address.getName());
         holder.address.setText(address.getAddress());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = address.getId();
+                String mAddress = address.getAddress();
+                String mLogo = address.getLogo();
+                String mName = address.getName();
+
+                mOnclicklitener.success(id,mAddress,mLogo,mName);
+            }
+        });
     }
 
     @Override
@@ -70,5 +81,12 @@ public class CinemaAdapter extends RecyclerView.Adapter<CinemaAdapter.MineHolder
             title = itemView.findViewById(R.id.cinema_title);
             address = itemView.findViewById(R.id.cinema_address);
         }
+    }
+    private Onclicklitener mOnclicklitener;
+    public void setOnclicklitener(Onclicklitener onclicklitener) {
+        mOnclicklitener = onclicklitener;
+    }
+    public interface Onclicklitener{
+        void success(int id, String address, String logo, String name);
     }
 }

@@ -97,7 +97,7 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        movie_recycle.addItemDecoration(new SpaceItemDecoration(20));
+        movie_recycle.addItemDecoration(new SpaceItemDecoration(10));
 
         movie_recycle.setLayoutManager(linearLayoutManager);
 
@@ -109,13 +109,34 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         linearLayoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
 
-        cinema_recycle.addItemDecoration(new SpaceItemDecoration(20));
+        cinema_recycle.addItemDecoration(new SpaceItemDecoration(10));
 
         cinema_recycle.setLayoutManager(linearLayoutManager1);
 
         cinemaAdapter = new CinemaAdapter(FocusActivity.this);
 
         cinema_recycle.setAdapter(cinemaAdapter);
+
+        movieAdapter.setOnclicklitener(new MineMovieAdapter.Onclicklitener() {
+            @Override
+            public void success(int id) {
+                Intent intent = new Intent(FocusActivity.this, InsideDetailsActivity.class);
+                intent.putExtra("id", id + "");
+                Log.e("lk", "outdetailsid" + id);
+                startActivity(intent);
+            }
+        });
+        cinemaAdapter.setOnclicklitener(new CinemaAdapter.Onclicklitener() {
+            @Override
+            public void success(int id, String address, String logo, String name) {
+                Intent intent = new Intent(FocusActivity.this,CinemaActivity.class);
+                intent.putExtra("id",id+"");
+                intent.putExtra("address",address);
+                intent.putExtra("logo",logo);
+                intent.putExtra("name",name);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

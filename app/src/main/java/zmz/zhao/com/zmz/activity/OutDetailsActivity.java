@@ -109,7 +109,7 @@ public class OutDetailsActivity extends BaseActivity {
 
         mOutDetailsAdapter.setOnclickFocuslitener(new OutDetailsAdapter.OnclickFocuslitener() {
             @Override
-            public void success(int id, int state,int item) {
+            public void success(int id, int state) {
                 if (USER_INFO != null) {
                     Log.e("zmz","毁掉后"+state);
 
