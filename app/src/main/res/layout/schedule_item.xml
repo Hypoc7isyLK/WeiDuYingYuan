@@ -9,7 +9,8 @@
         android:id="@+id/carousel_simple"
         app:roundedCornerRadius="@dimen/dp_8"
         android:layout_width="@dimen/dp_158"
-        android:layout_height="@dimen/dp_223" />
+        android:layout_height="@dimen/dp_223"
+        app:placeholderImage="@mipmap/bbitmap"/>
 
     <RelativeLayout
         android:layout_width="@dimen/dp_158"

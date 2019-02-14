@@ -164,8 +164,6 @@ public class MineFragment extends BaseFragment {
             messagePresenter.reqeust(userid, sessionId);
 
             Log.e("zmz", "========" + "返回成功");
-
-            Toast.makeText(getActivity(), "返回成功", Toast.LENGTH_SHORT).show();
         }
 
     }

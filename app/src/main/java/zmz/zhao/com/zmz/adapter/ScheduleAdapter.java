@@ -47,20 +47,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ScheduleAdapter.ViewHolder viewHolder, final int i) {
-        viewHolder.carousel_simple.setImageURI(mScheduleCinemaBeans.get(i).getImageUrl());
-        viewHolder.move_name.setText(mScheduleCinemaBeans.get(i).getName());
-        viewHolder.move_time.setText(mScheduleCinemaBeans.get(i).getDuration());
 
+        if (mScheduleCinemaBeans.get(i).getImageUrl() !=null && mScheduleCinemaBeans.get(i).getName() !=null && mScheduleCinemaBeans.get(i).getDuration() != null){
+            viewHolder.carousel_simple.setImageURI(mScheduleCinemaBeans.get(i).getImageUrl());
+            viewHolder.move_name.setText(mScheduleCinemaBeans.get(i).getName());
+            viewHolder.move_time.setText(mScheduleCinemaBeans.get(i).getDuration());
+            mOnClickListener.scuccess(mScheduleCinemaBeans.get(i).getId(),mScheduleCinemaBeans.get(i).getName());
+        }else {
 
+        }
 
-     /*   viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
-        mOnClickListener.scuccess(mScheduleCinemaBeans.get(i).getId(),mScheduleCinemaBeans.get(i).getName());
-        Log.e("hhhhhhh",mScheduleCinemaBeans.get(i).getId()+"");
     }
 
     @Override

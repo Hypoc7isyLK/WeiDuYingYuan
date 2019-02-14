@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.umeng.analytics.MobclickAgent;
@@ -95,6 +96,29 @@ public class MovieFragment extends BaseFragment {
 
     @Override
     public void initData(View view) {
+        cinemaSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            //输入完成后，提交时触发的方法
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query.isEmpty()){
+                    Toast.makeText(getContext(), "请输入查找内容！", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                Toast.makeText(getContext(), "搜索成功"+query, Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+
+            //在输入时触发的方法，当字符真正显示到searchView中才触发，像是拼音，在输入法组词的时候不会触发
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+
+                return false;
+            }
+        });
 
     }
 
