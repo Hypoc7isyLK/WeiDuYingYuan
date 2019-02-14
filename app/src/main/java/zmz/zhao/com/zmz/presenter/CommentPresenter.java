@@ -13,7 +13,7 @@ import zmz.zhao.com.zmz.view.DataCall;
 public class CommentPresenter extends BasePresenter{
 
     private int page = 1;
-    private int count = 10;
+    private int count = 5;
     private boolean isRefresh = true;
 
     public CommentPresenter(DataCall dataCall) {

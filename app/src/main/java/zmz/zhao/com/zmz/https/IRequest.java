@@ -15,6 +15,7 @@ import zmz.zhao.com.zmz.bean.Address;
 import zmz.zhao.com.zmz.bean.Attention;
 import zmz.zhao.com.zmz.bean.CinemaListBean;
 import zmz.zhao.com.zmz.bean.Comment;
+import zmz.zhao.com.zmz.bean.CommentReply;
 import zmz.zhao.com.zmz.bean.DetailsBean;
 import zmz.zhao.com.zmz.bean.LoginBean;
 import zmz.zhao.com.zmz.bean.MineMassage;
@@ -341,5 +342,17 @@ public interface IRequest {
     Observable<Result> state(@Header("userId") int userId,
                              @Header("sessionId") String sessionId,
                              @Field("commentId") int commentId);
+    /**
+     * @作者 啊哈
+     * @date 2019/2/14
+     * @method：评论回复
+     */
+    @GET("movie/v1/findCommentReply")
+    Observable<Result<List<CommentReply>>> commentReply(@Header("userId") int userId,
+                                                        @Header("sessionId") String sessionId,
+                                                        @Query("commentId") int id,
+                                                        @Query("page") int page,
+                                                        @Query("count") int count);
+
 }
 

@@ -119,30 +119,6 @@ public class MineFragment extends BaseFragment {
             messagePresenter.reqeust(this.userId, sessionId);
         }
     }
-
-    private void isLogin() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("提示");
-        builder.setMessage("请先登录");
-        builder.setPositiveButton("去登陆", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.putExtra("login", true);
-                startActivity(intent);
-
-            }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "取消", Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.create().show();
-    }
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -184,7 +160,8 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.my_pic:
                 if (USER_INFO == null) {
-                    isLogin();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
                     return;
                 } else {
 
@@ -206,11 +183,11 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.my_sign:
                 if (USER_INFO == null) {
-                    isLogin();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
                     return;
                 } else {
                     userId = USER_INFO.getUserId();
-
                     sessionId = USER_INFO.getSessionId();
                     signPresenter.reqeust(userId, sessionId);
                 }
@@ -238,21 +215,25 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.my_tickling:
                 if (USER_INFO == null) {
-                    isLogin();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
                     return;
+                }else {
+                    Intent tickling = new Intent(getContext(), MyOpinion.class);
+                    startActivity(tickling);
                 }
-                Intent tickling = new Intent(getContext(), MyOpinion.class);
-                startActivity(tickling);
-
 
                 break;
             case R.id.system:
                 if (USER_INFO == null) {
-                    isLogin();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
                     return;
+                }else {
+                    Intent intent_system = new Intent(getContext(), SystemMassageActivity.class);
+                    startActivity(intent_system);
                 }
-                Intent intent_system = new Intent(getContext(), SystemMassageActivity.class);
-                startActivity(intent_system);
+
 
                 break;
             case R.id.my_finish:

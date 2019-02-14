@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.umeng.analytics.MobclickAgent;
@@ -111,13 +112,14 @@ public class OutDetailsActivity extends BaseActivity {
             @Override
             public void success(int id, int state) {
                 if (USER_INFO != null) {
-                    Log.e("zmz","毁掉后"+state);
 
                     if (state == 1) {
                         focusMovieOffPresenter.reqeust(userId, sessionId, id);
                     } else {
                         focusMoviePresenter.reqeust(userId, sessionId, id);
                     }
+                }else {
+                    Toast.makeText(OutDetailsActivity.this, "您还未登录", Toast.LENGTH_SHORT).show();
                 }
             }
         });

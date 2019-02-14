@@ -82,20 +82,21 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
         initData();
 
         if (USER_INFO == null) {
-            isLogin();
+            Intent intent = new Intent(RecordActivity.this, LoginActivity.class);
+            startActivity(intent);
             return;
+        }else {
+            userId = USER_INFO.getUserId();
+
+            sessionId = USER_INFO.getSessionId();
+
+            Log.e("zmz" + userId, "==00000000==" + sessionId);
+
+            recordPresenter.reqeust(userId, sessionId, true,1);
+
+            donePresenter.reqeust(userId, sessionId, true,2);
+
         }
-
-        userId = USER_INFO.getUserId();
-
-        sessionId = USER_INFO.getSessionId();
-
-        Log.e("zmz" + userId, "==00000000==" + sessionId);
-
-        recordPresenter.reqeust(userId, sessionId, true,1);
-
-        donePresenter.reqeust(userId, sessionId, true,2);
-
 
     }
 
@@ -186,6 +187,9 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
 
         finish_recycle.setAdapter(doneAdapter);
 
+        finish_recycle.setLoadingListener(this);
+
+        unfinish_recycle.setLoadingListener(this);
 
     }
 
@@ -227,8 +231,14 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
             finish_recycle.refreshComplete();
             return;
         }
+        if (record_unfinished.isChecked()){
+            recordPresenter.reqeust(userId, sessionId, true, 1);
+        }
 
-        recordPresenter.reqeust(userId, sessionId, true, 1);
+        if (record_finish.isChecked()){
+            recordPresenter.reqeust(userId, sessionId, true, 2);
+        }
+
     }
 
     @Override
@@ -240,7 +250,13 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
             finish_recycle.loadMoreComplete();
             return;
         }
-        recordPresenter.reqeust(userId, sessionId, false, 1);
+        if (record_unfinished.isChecked()){
+            recordPresenter.reqeust(userId, sessionId, false, 1);
+        }
+
+        if (record_finish.isChecked()){
+            recordPresenter.reqeust(userId, sessionId, false, 2);
+        }
     }
 
     class RecordCall implements DataCall<Result<List<Record>>> {

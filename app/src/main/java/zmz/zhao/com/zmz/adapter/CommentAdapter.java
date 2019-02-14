@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -100,7 +101,12 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
             }
         });
 
-
+        hloder.comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCommentClickListenter.onItemClick(comment);
+            }
+        });
     }
 
     @Override
@@ -126,6 +132,7 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
                 praisenum,
                 num;
         ToggleButton praise;
+        LinearLayout comments;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -138,6 +145,7 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
             praisenum = itemView.findViewById(R.id.comment_praise);
             num = itemView.findViewById(R.id.comment_num);
             praise = itemView.findViewById(R.id.praise);
+            comments = itemView.findViewById(R.id.comment_massage);
 
         }
     }
@@ -150,5 +158,16 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
 
     public interface OnItemClickListenter {
         void onItemClick(int id, int state);
+    }
+
+
+    private OnCommentClickListenter onCommentClickListenter;
+
+    public interface OnCommentClickListenter {
+        void onItemClick(Comment comment);
+    }
+
+    public void setOnCommentClickListenter(OnCommentClickListenter onCommentClickListenter) {
+        this.onCommentClickListenter = onCommentClickListenter;
     }
 }

@@ -103,6 +103,9 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         commentPresenter = new CommentPresenter(new CommentCall());
         focusMoviePresenter = new FocusMoviePresenter(new FocusCall());
         focusMovieOffPresenter = new FocusMovieOffPresenter(new FocusMovieOffCall());
+
+
+
         if (USER_INFO != null){
             userId = USER_INFO.getUserId();
             sessionId = USER_INFO.getSessionId();
@@ -278,7 +281,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             comment.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
 
             commentAdapter = new CommentAdapter(this);
-
+            comment.setLoadingListener(this);
             comment.setAdapter(commentAdapter);
             if (USER_INFO != null){
                 userId = USER_INFO.getUserId();
@@ -307,6 +310,12 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
                 }
             });
 
+            commentAdapter.setOnCommentClickListenter(new CommentAdapter.OnCommentClickListenter() {
+                @Override
+                public void onItemClick(Comment comment) {
+                    Log.e("zmz","");
+                }
+            });
         }
 
     }
@@ -317,16 +326,31 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             comment.refreshComplete();
             return;
         }
-        commentPresenter.reqeust(0,"",mResult.getId(),true);
+
+        if (USER_INFO != null){
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+            commentPresenter.reqeust(userId,sessionId,mResult.getId(),true);
+        }else {
+            commentPresenter.reqeust(0,"",mResult.getId(),true);
+        }
     }
 
     @Override
     public void onLoadMore() {
         if (commentPresenter.Running()){
             comment.loadMoreComplete();
+            Log.e("zmz",""+"加载");
             return;
         }
-        commentPresenter.reqeust(0,"",mResult.getId(),false);
+        if (USER_INFO != null){
+            userId = USER_INFO.getUserId();
+            sessionId = USER_INFO.getSessionId();
+            commentPresenter.reqeust(userId,sessionId,mResult.getId(),false);
+        }else {
+            commentPresenter.reqeust(0,"",mResult.getId(),false);
+        }
+
     }
 
     private class DetailsCall implements DataCall<Result<DetailsBean>> {
@@ -355,7 +379,8 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     private class CommentCall implements DataCall<Result<List<Comment>>> {
         @Override
         public void success(Result<List<Comment>> result) {
-
+            comment.refreshComplete();
+            comment.loadMoreComplete();
 
             if(result.getStatus().equals("0000")){
                 List<Comment> comments = result.getResult();

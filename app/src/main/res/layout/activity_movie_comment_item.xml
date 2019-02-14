@@ -52,23 +52,27 @@
             android:textColor="@color/colorview"
             android:textSize="@dimen/sp_12"
             android:text="2109"/>
-        
-        <TextView
-            android:id="@+id/comment_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/colorview"
-            android:textSize="@dimen/sp_12"
-            android:text="5000"/>
-        <ImageView
+
+        <LinearLayout
             android:id="@+id/comment_massage"
-            android:layout_width="@dimen/dp_16"
-            android:layout_height="@dimen/dp_16"
-            android:layout_toLeftOf="@+id/comment_num"
-            android:layout_marginRight="@dimen/dp_6"
-            android:src="@mipmap/comment"/>
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:layout_marginRight="@dimen/dp_6"
+                android:src="@mipmap/comment"/>
+            <TextView
+                android:id="@+id/comment_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorview"
+                android:textSize="@dimen/sp_12"
+                android:text="5000"/>
+
+        </LinearLayout>
         <TextView
             android:id="@+id/comment_praise"
             android:layout_width="wrap_content"

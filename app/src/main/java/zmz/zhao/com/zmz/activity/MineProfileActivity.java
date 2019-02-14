@@ -77,15 +77,19 @@ public class MineProfileActivity extends BaseActivity {
         minePresenter = new MinePresenter(new MineCall());
         presenter = new UpdatePresenter(new UpdateCall());
         if (USER_INFO == null) {
-            isLogin();
+            if (USER_INFO == null) {
+                Intent intent = new Intent(MineProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                return;
+            }
             return;
+        }else {
+            userid = USER_INFO.getUserId();
+
+            sessionId = USER_INFO.getSessionId();
+
+            minePresenter.reqeust(userid, sessionId);
         }
-        userid = USER_INFO.getUserId();
-
-        sessionId = USER_INFO.getSessionId();
-
-        minePresenter.reqeust(userid, sessionId);
-
     }
 
     @Override
@@ -107,14 +111,14 @@ public class MineProfileActivity extends BaseActivity {
 
             String sessionIds = USER_INFO.getSessionId();
 
-            Log.e("zmz"+userids,"============="+sessionIds);
+            Log.e("zmz" + userids, "=============" + sessionIds);
 
             minePresenter.reqeust(userids, sessionIds);
         }
 
     }
 
-    @OnClick({R.id.back, R.id.update,R.id.nickpwd})
+    @OnClick({R.id.back, R.id.update, R.id.nickpwd})
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -129,10 +133,7 @@ public class MineProfileActivity extends BaseActivity {
              */
             case R.id.update:
 
-                if (USER_INFO == null) {
-                    isLogin();
-                    return;
-                }
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 final View view1 = View.inflate(this, R.layout.activity_mine_dialog, null);
 
@@ -148,10 +149,10 @@ public class MineProfileActivity extends BaseActivity {
                         RadioButton man = view1.findViewById(R.id.man);
                         RadioButton woman = view1.findViewById(R.id.woman);
 
-                        if (man.isChecked()){
+                        if (man.isChecked()) {
                             sex = 1;
                         }
-                        if (woman.isChecked()){
+                        if (woman.isChecked()) {
                             sex = 2;
                         }
 
@@ -171,47 +172,20 @@ public class MineProfileActivity extends BaseActivity {
                 builder.show();
 
                 break;
-                /**
-                 * @作者 啊哈
-                 * @date 2019/1/25
-                 * 重置密码
-                 */
+            /**
+             * @作者 啊哈
+             * @date 2019/1/25
+             * 重置密码
+             */
             case R.id.nickpwd:
-                if (USER_INFO == null) {
-                    isLogin();
-                    return;
-                }
+
 
                 Intent intent = new Intent(MineProfileActivity.this, UpdatePwdActivity.class);
                 startActivity(intent);
+
                 break;
 
         }
-    }
-
-
-    public void isLogin() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("提示");
-        builder.setMessage("请先登录");
-        builder.setPositiveButton("去登陆", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent intent = new Intent(MineProfileActivity.this, LoginActivity.class);
-                intent.putExtra("login", true);
-                startActivity(intent);
-
-            }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MineProfileActivity.this, "取消了", Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.create().show();
     }
 
     @Override

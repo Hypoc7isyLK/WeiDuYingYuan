@@ -76,18 +76,17 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
 
         initData();
         if (USER_INFO == null) {
-            isLogin();
+            Intent intent = new Intent(FocusActivity.this, LoginActivity.class);
+            startActivity(intent);
             return;
+        }else {
+            userId = USER_INFO.getUserId();
+
+            sessionId = USER_INFO.getSessionId();
+
+            moviePresenter.reqeust(userId, this.sessionId, true);
+            cinemaPresenter.reqeust(userId, sessionId, true);
         }
-
-        userId = USER_INFO.getUserId();
-
-        sessionId = USER_INFO.getSessionId();
-
-        moviePresenter.reqeust(userId, this.sessionId, true);
-        cinemaPresenter.reqeust(userId, sessionId, true);
-
-
 
     }
 
@@ -116,7 +115,8 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
         cinemaAdapter = new CinemaAdapter(FocusActivity.this);
 
         cinema_recycle.setAdapter(cinemaAdapter);
-
+        cinema_recycle.setLoadingListener(this);
+        movie_recycle.setLoadingListener(this);
         movieAdapter.setOnclicklitener(new MineMovieAdapter.Onclicklitener() {
             @Override
             public void success(int id) {
@@ -241,37 +241,6 @@ public class FocusActivity extends BaseActivity implements XRecyclerView.Loading
         });
 
     }
-
-    /**
-     * @作者 啊哈
-     * @date 2019/1/28
-     * @method：
-     */
-    public void isLogin() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("提示");
-        builder.setMessage("请先登录");
-        builder.setPositiveButton("去登陆", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent intent = new Intent(FocusActivity.this, LoginActivity.class);
-                intent.putExtra("login", true);
-                startActivity(intent);
-
-            }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(FocusActivity.this, "取消了", Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.create().show();
-    }
-
-
 
     /**
      * @作者 啊哈
