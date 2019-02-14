@@ -36,12 +36,16 @@ public class OutDetailsActivity extends BaseActivity {
 
     @BindView(R.id.dingwei)
     ImageView dingwei;
+
     @BindView(R.id.move_rmdy)
     RadioButton moveRmdy;
+
     @BindView(R.id.move_zzry)
     RadioButton moveZzry;
+
     @BindView(R.id.move_jjsy)
     RadioButton moveJjsy;
+
     @BindView(R.id.movie_recycle_rmdy)
     RecyclerView movieRecycleRmdy;
     @BindView(R.id.movie_recycle_zzry)
@@ -105,13 +109,14 @@ public class OutDetailsActivity extends BaseActivity {
 
         mOutDetailsAdapter.setOnclickFocuslitener(new OutDetailsAdapter.OnclickFocuslitener() {
             @Override
-            public void success(int id, int state) {
-                if(USER_INFO != null){
+            public void success(int id, int state,int item) {
+                if (USER_INFO != null) {
+                    Log.e("zmz","毁掉后"+state);
 
-                    if (state == 2){
-                        focusMoviePresenter.reqeust(userId,sessionId,id);
-                    }else {
-                        focusMovieOffPresenter.reqeust(userId,sessionId,id);
+                    if (state == 1) {
+                        focusMovieOffPresenter.reqeust(userId, sessionId, id);
+                    } else {
+                        focusMoviePresenter.reqeust(userId, sessionId, id);
                     }
                 }
             }
@@ -120,9 +125,9 @@ public class OutDetailsActivity extends BaseActivity {
         mOutDetailsAdapter.setOnclicklitener(new OutDetailsAdapter.Onclicklitener() {
             @Override
             public void success(int id) {
-                Intent intent = new Intent(OutDetailsActivity.this,InsideDetailsActivity.class);
-                intent.putExtra("id",id+"");
-                Log.e("lk","outdetailsid"+id);
+                Intent intent = new Intent(OutDetailsActivity.this, InsideDetailsActivity.class);
+                intent.putExtra("id", id + "");
+                Log.e("lk", "outdetailsid" + id);
                 startActivity(intent);
             }
         });
@@ -137,12 +142,12 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleZzry.setVisibility(View.GONE);//隐藏
         movieRecycleJjsy.setVisibility(View.GONE);//隐藏
         mShowLunBoPresenter = new ShowLunBoPresenter(new ShowLunboCall());
-        if (USER_INFO != null){
+        if (USER_INFO != null) {
 
             userId = USER_INFO.getUserId();
             sessionId = USER_INFO.getSessionId();
-            mShowLunBoPresenter.reqeust(userId, sessionId,"1" ,"20");
-        }else {
+            mShowLunBoPresenter.reqeust(userId, sessionId, "1", "20");
+        } else {
             mShowLunBoPresenter.reqeust(0, "", "1", "20");
         }
 
@@ -160,12 +165,12 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleRmdy.setVisibility(View.GONE);//隐藏
         movieRecycleJjsy.setVisibility(View.GONE);//隐藏
         mHotShowingPresenter = new HotShowingPresenter(new HotShowingCall());
-        if (USER_INFO != null){
+        if (USER_INFO != null) {
 
             userId = USER_INFO.getUserId();
             sessionId = USER_INFO.getSessionId();
-            mHotShowingPresenter.reqeust(userId, sessionId,"1", "20");
-        }else {
+            mHotShowingPresenter.reqeust(userId, sessionId, "1", "20");
+        } else {
             mHotShowingPresenter.reqeust(0, "", "1", "100");
         }
 
@@ -182,12 +187,12 @@ public class OutDetailsActivity extends BaseActivity {
         movieRecycleRmdy.setVisibility(View.GONE);//隐藏
         movieRecycleZzry.setVisibility(View.GONE);//隐藏
         mCommingSunPresenter = new CommingSunPresenter(new CommingSunCall());
-        if (USER_INFO != null){
+        if (USER_INFO != null) {
 
             userId = USER_INFO.getUserId();
             sessionId = USER_INFO.getSessionId();
-            mCommingSunPresenter.reqeust(userId, sessionId,"1", "20");
-        }else {
+            mCommingSunPresenter.reqeust(userId, sessionId, "1", "20");
+        } else {
             mCommingSunPresenter.reqeust(0, "", "1", "100");
         }
 
@@ -215,7 +220,6 @@ public class OutDetailsActivity extends BaseActivity {
                 break;
         }
     }
-
 
 
     private class ShowLunboCall implements DataCall<Result<List<ShowLunBoBean>>> {
@@ -263,6 +267,7 @@ public class OutDetailsActivity extends BaseActivity {
 
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -276,13 +281,23 @@ public class OutDetailsActivity extends BaseActivity {
         MobclickAgent.onPageEnd("电影列表");
         MobclickAgent.onPause(this);
     }
+
     private class FocusCall implements DataCall<Result> {
         @Override
         public void success(Result result) {
+            if (result.getStatus().equals("0000")) {
 
-            if (result.getStatus().equals("0000")){
-                mOutDetailsAdapter.notifyDataSetChanged();
+                if (moveRmdy.isChecked()){
+                    mShowLunBoPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+                if (moveZzry.isChecked()){
+                    mHotShowingPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+                if (moveJjsy.isChecked()){
+                    mCommingSunPresenter.reqeust(userId, sessionId, "1", "20");
+                }
             }
+
         }
 
         @Override
@@ -290,10 +305,22 @@ public class OutDetailsActivity extends BaseActivity {
 
         }
     }
+
     private class FocusMovieOffCall implements DataCall<Result> {
         @Override
         public void success(Result result) {
-            mOutDetailsAdapter.notifyDataSetChanged();
+            if (result.getStatus().equals("0000")) {
+
+                if (moveRmdy.isChecked()){
+                    mShowLunBoPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+                if (moveZzry.isChecked()){
+                    mHotShowingPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+                if (moveJjsy.isChecked()){
+                    mCommingSunPresenter.reqeust(userId, sessionId, "1", "20");
+                }
+            }
         }
 
         @Override
