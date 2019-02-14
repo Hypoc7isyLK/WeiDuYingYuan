@@ -168,7 +168,6 @@
                     app:maxCollapsedLines="4"
                     app:textCollapse="@string/collapse"
                     app:textExpand="@string/expand">
-
                 </zmz.zhao.com.zmz.util.ExpandableTextView>
 
                 <TextView

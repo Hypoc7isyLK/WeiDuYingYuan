@@ -52,8 +52,10 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+        final ShowLunBoBean showLunBoBean = mBeanList.get(i);
         mImageUrl = mBeanList.get(i).getImageUrl();
+
         mName = mBeanList.get(i).getName();
         viewHolder.details_simple.setImageURI(mImageUrl);
         viewHolder.details_title.setText(mName);
@@ -63,19 +65,22 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
 
         Log.e("lk", "onBindViewHolder: "+mId );
 
-        if (mFollowMovie == 1){
-            viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_selected);
-        }else {
+        if (mFollowMovie != 1){
             viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_default);
+        }else {
+            viewHolder.xiaoxinxin.setImageResource(R.mipmap.com_icon_collection_selected);
         }
 
         viewHolder.xiaoxinxin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnclickFocuslitener.success(mId = mBeanList.get(i).getId(),mFollowMovie);
+                int followMovie = showLunBoBean.getFollowMovie();
+
+
+                int item = viewHolder.getLayoutPosition();
+                mOnclickFocuslitener.success(showLunBoBean.getId(),followMovie,item);
             }
         });
-
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +118,7 @@ public class OutDetailsAdapter extends RecyclerView.Adapter<OutDetailsAdapter.Vi
         void success(int id);
     }
     public interface OnclickFocuslitener{
-        void success(int id,int state);
+        void success(int id,int state,int item);
     }
 
     private Onclicklitener mOnclicklitener;
