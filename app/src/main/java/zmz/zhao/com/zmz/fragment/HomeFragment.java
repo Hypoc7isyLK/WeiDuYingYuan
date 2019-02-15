@@ -77,7 +77,6 @@ public class HomeFragment extends BaseFragment {
     SearchView search;
     @BindView(R.id.location)
     TextView textlocation;
-    Unbinder unbinder;
 
     private ShowLunBoPresenter mShowLunBoPresenter;
     private CarouselAdapter mCarouselAdapter;

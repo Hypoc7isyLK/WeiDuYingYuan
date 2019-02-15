@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dp_10"
-    android:background="@drawable/sele_entry_circular"
+    android:background="@drawable/sele_circular"
     android:fitsSystemWindows="true"
     android:padding="@dimen/dp_10">
 

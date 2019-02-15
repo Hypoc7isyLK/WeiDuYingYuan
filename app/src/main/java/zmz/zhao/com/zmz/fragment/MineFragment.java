@@ -354,7 +354,6 @@ public class MineFragment extends BaseFragment {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
                 startActivityForResult(intent, TAKE_PICTURE);
-
             }
         });
 

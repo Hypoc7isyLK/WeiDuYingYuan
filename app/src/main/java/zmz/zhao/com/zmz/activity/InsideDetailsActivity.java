@@ -405,6 +405,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         public void success(Result result) {
 
             if (result.getStatus().equals("0000")){
+                mResult.setFollowMovie(1);
                 xiaoxin.setImageResource(R.mipmap.com_icon_collection_selected);
             }
 
@@ -445,6 +446,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     private class FocusMovieOffCall implements DataCall<Result> {
         @Override
         public void success(Result result) {
+            mResult.setFollowMovie(2);
             xiaoxin.setImageResource(R.mipmap.com_icon_collection_default);
         }
 
