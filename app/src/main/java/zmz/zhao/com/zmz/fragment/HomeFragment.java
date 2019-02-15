@@ -96,11 +96,6 @@ public class HomeFragment extends BaseFragment {
     private MyLocationListener myListener = new MyLocationListener();
 
 
-
-    public void setBackNum(BackNum backNum) {
-        this.backNum = backNum;
-    }
-
     @Override
     public void initView(View view) {
         mCarouselAdapter = new CarouselAdapter(getActivity());

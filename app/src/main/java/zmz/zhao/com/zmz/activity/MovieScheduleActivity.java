@@ -122,7 +122,6 @@ public class MovieScheduleActivity extends BaseActivity {
                 intent.putExtra("price", price);
                 intent.putExtra("screeningHall", screeningHall);
                 intent.putExtra("cinemaname",title.getText().toString());
-                intent.putExtra("cinemaname", name);
                 intent.putExtra("begintime", begintime);
                 intent.putExtra("endtime", endtime);
                 startActivity(intent);

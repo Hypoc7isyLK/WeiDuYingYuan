@@ -51,6 +51,9 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
         viewHolder.end_time.setText(mListBeans.get(i).getEndTime());
         SpannableString spannableString = changTVsize(mListBeans.get(i).getPrice() + "");
         viewHolder.price.setText(spannableString);
+        if (mListBeans.get(i).getScreeningHall()!= null){
+            viewHolder.hall.setText(mListBeans.get(i).getScreeningHall());
+        }
 
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -80,11 +83,14 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
         private TextView begin_time;
         private TextView end_time;
         private TextView price;
+        private TextView hall;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             begin_time = itemView.findViewById(R.id.begin_time);
             end_time = itemView.findViewById(R.id.end_time);
             price = itemView.findViewById(R.id.price);
+            hall = itemView.findViewById(R.id.quanjing);
         }
     }
     public interface OnClickListener{

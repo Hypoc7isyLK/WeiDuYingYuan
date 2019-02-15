@@ -99,7 +99,7 @@ public class ChooseActivity extends BaseActivity {
 
         chooseCinemaName.setText(mName);
         chooseCinemaAddress.setText(mAddress);
-        chooseCinemaMarquee.setText(mBegintime+"——"+mEndtime+"  "+"中国I Do巨幕全景声听");
+        chooseCinemaMarquee.setText(mBegintime+"——"+mEndtime+"  "+mScreeningHall);
         chooseMovieName.setText(mCinemaname);
 
 
