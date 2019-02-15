@@ -50,7 +50,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/mine_radio"
-        android:layout_margin="@dimen/dp_10">
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20">
 
     </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
@@ -59,7 +61,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/mine_radio"
-        android:layout_margin="@dimen/dp_10">
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20">
 
     </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
