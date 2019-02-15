@@ -172,12 +172,16 @@ public class CinemaActivity extends BaseActivity {
 
         @Override
         public void success(Result<List<ScheduleCinemaBean>> result) {
-            mResult = result.getResult();
-            mScheduleAdapter.reset(mResult);
+            if (result.getStatus().equals("0000")){
+                if (result.getResult() != null){
+                    mResult = result.getResult();
+                    mScheduleAdapter.reset(mResult);
 
-            mWidth = movieTextXian.getWidth();
-            mItemCount = mScheduleAdapter.getItemCount();
-            mCoun = mWidth / mItemCount;
+                    mWidth = movieTextXian.getWidth();
+                    mItemCount = mScheduleAdapter.getItemCount();
+                    mCoun = mWidth / mItemCount;
+                }
+            }
 
         }
 
@@ -190,8 +194,14 @@ public class CinemaActivity extends BaseActivity {
     private class ScheduleListCall implements DataCall<Result<List<ScheduleListBean>>> {
         @Override
         public void success(Result<List<ScheduleListBean>> result) {
-            List<ScheduleListBean> result1 = result.getResult();
-            mScheduleListAdapter.reset(result1);
+            if (result.getStatus().equals("0000")){
+                if (result.getResult() != null){
+                    List<ScheduleListBean> result1 = result.getResult();
+                    mScheduleListAdapter.reset(result1);
+                }
+            }
+
+
         }
 
         @Override

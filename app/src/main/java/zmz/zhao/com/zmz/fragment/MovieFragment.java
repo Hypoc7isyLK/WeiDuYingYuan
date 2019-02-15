@@ -17,6 +17,8 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.bw.movie.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
@@ -29,11 +31,14 @@ import zmz.zhao.com.zmz.activity.CinemaActivity;
 import zmz.zhao.com.zmz.adapter.CinemaListAdapter;
 import zmz.zhao.com.zmz.bean.CinemaListBean;
 import zmz.zhao.com.zmz.bean.Result;
+import zmz.zhao.com.zmz.bean.ShowLunBoBean;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.CinemaListPresenter;
 import zmz.zhao.com.zmz.presenter.FocusCinemaOffPresenter;
 import zmz.zhao.com.zmz.presenter.FocusCinemaPresenter;
 import zmz.zhao.com.zmz.presenter.NearbyCinemaPresenter;
+import zmz.zhao.com.zmz.util.FileUtils;
+import zmz.zhao.com.zmz.util.WifiUtils;
 import zmz.zhao.com.zmz.view.DataCall;
 
 
@@ -76,6 +81,25 @@ public class MovieFragment extends BaseFragment {
         cinemaRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if (WifiUtils.getInstance(getContext()).getNetype() == -1) {
+
+                    String cinemaData = FileUtils.loadDataFromFile(getContext(), "CinemaData");
+                    String nearCinemaData = FileUtils.loadDataFromFile(getContext(), "NearCinemaData");
+                    Gson gson = new Gson();
+                    List<CinemaListBean> cinemaListBeans = gson.fromJson(cinemaData, new TypeToken<List<CinemaListBean>>() {
+                    }.getType());
+                    List<CinemaListBean> nearcinema = gson.fromJson(nearCinemaData, new TypeToken<List<CinemaListBean>>() {
+                    }.getType());
+
+                    if (cinemaTjyy.isChecked()){
+                        mCinemaListAdapter.reset(cinemaListBeans);
+                    }
+                    if (cinemaFjyy.isChecked()){
+                        mCinemaListAdapter.reset(nearcinema);
+                    }
+
+                }
                 switch (checkedId) {
                     case R.id.cinema_tjyy:
                         tjyy();
@@ -117,6 +141,7 @@ public class MovieFragment extends BaseFragment {
                 }
             }
         });
+
     }
 
     @Override
@@ -198,7 +223,18 @@ public class MovieFragment extends BaseFragment {
         @Override
         public void success(Result<List<CinemaListBean>> result) {
             if (result.getStatus().equals("0000")){
+
+                Gson gson = new Gson();
                 mResult = result.getResult();
+                String toJson = gson.toJson(mResult);
+
+                if (cinemaTjyy.isChecked()){
+                    FileUtils.saveDataToFile(getContext(), toJson, "CinemaData");
+                }
+                if (cinemaFjyy.isChecked()){
+                    FileUtils.saveDataToFile(getContext(), toJson, "NearCinemaData");
+                }
+
                 mCinemaListAdapter.reset(mResult);
             }
         }
