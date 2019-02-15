@@ -1,38 +1,34 @@
 package zmz.zhao.com.zmz.fragment;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.bw.movie.R;
-import com.umeng.analytics.MobclickAgent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.umeng.analytics.MobclickAgent;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,7 +37,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import recycler.coverflow.CoverFlowLayoutManger;
 import recycler.coverflow.RecyclerCoverFlow;
-import zmz.zhao.com.zmz.activity.InsideDetailsActivity;
 import zmz.zhao.com.zmz.activity.OutDetailsActivity;
 import zmz.zhao.com.zmz.adapter.CarouselAdapter;
 import zmz.zhao.com.zmz.adapter.HotShowingAdapter;
@@ -80,6 +75,9 @@ public class HomeFragment extends BaseFragment {
     RecyclerView recyclerviewCommingsun;
     @BindView(R.id.details_search)
     SearchView search;
+    @BindView(R.id.location)
+    TextView textlocation;
+    Unbinder unbinder;
 
     private ShowLunBoPresenter mShowLunBoPresenter;
     private CarouselAdapter mCarouselAdapter;
@@ -95,6 +93,10 @@ public class HomeFragment extends BaseFragment {
     private CommingSunPresenter mCommingSunPresenter;
 
     private BackNum backNum;
+    public LocationClient mLocationClient = null;
+    private MyLocationListener myListener = new MyLocationListener();
+
+
 
     public void setBackNum(BackNum backNum) {
         this.backNum = backNum;
@@ -140,22 +142,24 @@ public class HomeFragment extends BaseFragment {
         recyclerviewCommingsun.setAdapter(mCommingSunAdapter);
 
 
-        if (WifiUtils.getInstance(getContext()).getNetype() == -1){
+        if (WifiUtils.getInstance(getContext()).getNetype() == -1) {
 
             String dataBean = FileUtils.loadDataFromFile(getContext(), "DataBean");
             String HotShowBean = FileUtils.loadDataFromFile(getContext(), "HotShowBean");
             String CommingBean = FileUtils.loadDataFromFile(getContext(), "CommingBean");
 
 
-
             Gson gson = new Gson();
 
-            List<ShowLunBoBean> mResult = gson.fromJson(dataBean, new TypeToken<List<ShowLunBoBean>>(){}.getType());
-            List<ShowLunBoBean> mHotShowBean = gson.fromJson(HotShowBean, new TypeToken<List<ShowLunBoBean>>(){}.getType());
-            List<ShowLunBoBean> mCommingBean = gson.fromJson(CommingBean, new TypeToken<List<ShowLunBoBean>>(){}.getType());
+            List<ShowLunBoBean> mResult = gson.fromJson(dataBean, new TypeToken<List<ShowLunBoBean>>() {
+            }.getType());
+            List<ShowLunBoBean> mHotShowBean = gson.fromJson(HotShowBean, new TypeToken<List<ShowLunBoBean>>() {
+            }.getType());
+            List<ShowLunBoBean> mCommingBean = gson.fromJson(CommingBean, new TypeToken<List<ShowLunBoBean>>() {
+            }.getType());
 
 
-            if(mResult != null){
+            if (mResult != null) {
                 mCarouselAdapter.reset(mResult);
 
                 mWidth = movieTextXian.getWidth();
@@ -166,19 +170,19 @@ public class HomeFragment extends BaseFragment {
                 mPopularAdapter.reset(mResult);
                 mPopularAdapter.notifyDataSetChanged();
             }
-            if(mHotShowBean != null){
+            if (mHotShowBean != null) {
                 mHotShowingAdapter.Clear();
                 mHotShowingAdapter.reset(mHotShowBean);
                 mHotShowingAdapter.notifyDataSetChanged();
             }
-            if(mCommingBean != null){
+            if (mCommingBean != null) {
                 mCommingSunAdapter.Clear();
                 mCommingSunAdapter.reset(mCommingBean);
                 mCommingSunAdapter.notifyDataSetChanged();
             }
 
 
-        }else {
+        } else {
             mShowLunBoPresenter.reqeust(0, "", "1", "20");
             mCommingSunPresenter.reqeust(0, "", "1", "100");
             mHotShowingPresenter.reqeust(0, "", "1", "100");
@@ -193,12 +197,12 @@ public class HomeFragment extends BaseFragment {
             //输入完成后，提交时触发的方法
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.isEmpty()){
+                if (query.isEmpty()) {
                     Toast.makeText(getContext(), "请输入查找内容！", Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
-                Toast.makeText(getContext(), "搜索成功"+query, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "搜索成功" + query, Toast.LENGTH_SHORT).show();
 
                 return false;
             }
@@ -238,6 +242,44 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
+        dingwei.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    //权限还没有授予，需要在这里写申请权限的代码
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.CAMERA,
+                                    Manifest.permission.READ_PHONE_STATE}, 0);
+                } else {
+                    mLocationClient = new LocationClient(getContext());
+                    //声明LocationClient类
+                    mLocationClient.registerLocationListener(myListener);
+                    //注册监听函数
+                    LocationClientOption option = new LocationClientOption();
+                    option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
+                    //可选，是否需要位置描述信息，默认为不需要，即参数为false
+                    //如果开发者需要获得当前点的位置信息，此处必须为true
+                    option.setIsNeedLocationDescribe(true);
+                    //可选，设置是否需要地址信息，默认不需要
+                    option.setIsNeedAddress(true);
+                    //可选，默认false,设置是否使用gps
+                    option.setOpenGps(true);
+                    //可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
+                    option.setLocationNotify(true);
+                    mLocationClient.setLocOption(option);
+                    mLocationClient.start();
+                }
+            }
+        });
+
+
+
+
+
     }
 
     @Override
@@ -246,33 +288,31 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-
-
-
-
-    @OnClick({R.id.rmdy, R.id.zzry, R.id.jjsy,R.id.dingwei})
+    @OnClick({R.id.rmdy, R.id.zzry, R.id.jjsy, R.id.dingwei})
     public void onViewClicked(View view) {
-        Intent intent = new Intent(getActivity(),OutDetailsActivity.class);
+        Intent intent = new Intent(getActivity(), OutDetailsActivity.class);
         switch (view.getId()) {
             case R.id.dingwei:
                 break;
             case R.id.rmdy:
 
-                intent.putExtra("hei","1");
+                intent.putExtra("hei", "1");
                 startActivity(intent);
                 break;
             case R.id.zzry:
 
-                intent.putExtra("hei","2");
+                intent.putExtra("hei", "2");
                 startActivity(intent);
                 break;
             case R.id.jjsy:
 
-                intent.putExtra("hei","3");
+                intent.putExtra("hei", "3");
                 startActivity(intent);
                 break;
         }
     }
+
+
 
 
     private class ShowLunboCall implements DataCall<Result<List<ShowLunBoBean>>> {
@@ -361,7 +401,7 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-   @Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         backNum = (BackNum) context;
@@ -374,7 +414,9 @@ public class HomeFragment extends BaseFragment {
         mHotShowingPresenter = null;
         mShowLunBoPresenter = null;
         mCommingSunPresenter = null;
+        unbinder.unbind();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -387,6 +429,22 @@ public class HomeFragment extends BaseFragment {
         super.onPause();
         MobclickAgent.onPageEnd("首页主页fragment");
         MobclickAgent.onPause(getActivity());
+    }
+
+    public class MyLocationListener implements BDLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取地址相关的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+            String locationDescribe = location.getLocationDescribe();    //获取位置描述信息
+            String addr = location.getCity();    //获取详细地址信息
+            textlocation.setText(addr);
+            Toast.makeText(getContext(), addr+"aaa", Toast.LENGTH_SHORT).show();
+
+
+        }
+
     }
 
 
