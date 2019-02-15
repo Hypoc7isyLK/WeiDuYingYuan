@@ -462,6 +462,7 @@ public class MineFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("我的fragment");
+
         MobclickAgent.onPause(getActivity());
     }
 
