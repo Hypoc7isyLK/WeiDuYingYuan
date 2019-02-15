@@ -61,6 +61,7 @@ import zmz.zhao.com.zmz.presenter.HeadPresenter;
 import zmz.zhao.com.zmz.presenter.MessagePresenter;
 import zmz.zhao.com.zmz.presenter.SignPresenter;
 import zmz.zhao.com.zmz.presenter.VersionsPresenter;
+import zmz.zhao.com.zmz.util.DownLoadService;
 import zmz.zhao.com.zmz.util.FileUtils;
 import zmz.zhao.com.zmz.view.DataCall;
 
@@ -492,12 +493,13 @@ public class MineFragment extends BaseFragment {
     protected void showUpdataDialog() {
         AlertDialog.Builder builer = new AlertDialog.Builder(getContext()) ;
         builer.setTitle("版本升级");
-        builer.setMessage("新版本");
+        builer.setMessage("发现新版本");
         //当点确定按钮时从服务器上下载 新的apk 然后安装
-        builer.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        builer.setPositiveButton("下载", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-
-                downLoadApk();
+                Intent intent=new Intent(getContext(),DownLoadService.class);
+                intent.putExtra("download_url",info);
+                getActivity().startService(intent);
             }
         });
         //当点取消按钮时进行登录
@@ -510,80 +512,4 @@ public class MineFragment extends BaseFragment {
         AlertDialog dialog = builer.create();
         dialog.show();
     }
-
-    /*
-     * 从服务器中下载APK
-     */
-    protected void downLoadApk() {
-        final ProgressDialog pd;	//进度条对话框
-        pd = new  ProgressDialog(getContext());
-        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setMessage("正在下载更新");
-        pd.setCanceledOnTouchOutside(false);
-        pd.show();
-        new Thread(){
-            @Override
-            public void run() {
-                try {
-                    File file = getFileFromServer(info, pd);
-                    sleep(3000);
-                    installApk(file);
-                    pd.dismiss(); //结束掉进度条对话框
-                } catch (Exception e) {
-
-                }
-            }}.start();
-    }
-
-    //安装apk
-    protected void installApk(File file) {
-        Intent intent = new Intent();
-        //执行动作
-        intent.setAction(Intent.ACTION_VIEW);
-        //执行的数据类型
-        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-        startActivity(intent);
-    }
-
-    /*
-     * 进入程序的主界面
-     */
-    private void LoginMain(){
-        Intent intent = new Intent(getContext(),MainActivity.class);
-        startActivity(intent);
-        //结束掉当前的activity
-        getActivity().finish();
-    }
-
-    public static File getFileFromServer(String path, ProgressDialog pd) throws Exception{
-        //如果相等的话表示当前的sdcard挂载在手机上并且是可用的
-        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-            URL url = new URL(path);
-            HttpURLConnection conn =  (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(5000);
-            //获取到文件的大小
-            pd.setMax(conn.getContentLength());
-            InputStream is = conn.getInputStream();
-            File file = new File(Environment.getExternalStorageDirectory(), "updata.apk");
-            FileOutputStream fos = new FileOutputStream(file);
-            BufferedInputStream bis = new BufferedInputStream(is);
-            byte[] buffer = new byte[1024];
-            int len ;
-            int total=0;
-            while((len =bis.read(buffer))!=-1){
-                fos.write(buffer, 0, len);
-                total+= len;
-                //获取当前下载量
-                pd.setProgress(total);
-            }
-            fos.close();
-            bis.close();
-            is.close();
-            return file;
-        }
-        else{
-            return null;
-        }
-    }
-
 }
