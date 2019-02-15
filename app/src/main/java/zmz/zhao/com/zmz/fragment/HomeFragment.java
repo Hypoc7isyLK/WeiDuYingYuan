@@ -414,7 +414,6 @@ public class HomeFragment extends BaseFragment {
         mHotShowingPresenter = null;
         mShowLunBoPresenter = null;
         mCommingSunPresenter = null;
-        unbinder.unbind();
     }
 
     @Override

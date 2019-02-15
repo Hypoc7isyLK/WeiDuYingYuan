@@ -3,131 +3,143 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
 
     <LinearLayout
         android:id="@+id/data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_30"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/dp_10"
-        android:paddingTop="@dimen/dp_10"
-        android:paddingRight="@dimen/dp_10"
-        android:background="@drawable/sele_mine_btn_circular"
-        android:paddingBottom="-10dp">
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_35"
-            android:layout_margin="@dimen/dp_10">
+        <android.support.v7.widget.CardView
 
-            <TextView
-                android:id="@+id/old_pwd"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="当前密码:"
-                android:textSize="@dimen/sp_14" />
-
-            <EditText
-                android:id="@+id/oldpwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="5dp"
+            android:layout_margin="@dimen/dp_5">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_toRightOf="@+id/old_pwd"
-                android:gravity="right|center_vertical"
-                android:background="@android:color/transparent"
-                android:hint="请输入当期密码……"
-                android:inputType="textPassword"
-                android:textSize="@dimen/sp_14" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_10">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginTop="-10dp"
-            android:layout_marginRight="@dimen/dp_10"
-            android:background="#ededed" />
+                    <TextView
+                        android:id="@+id/old_pwd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="当前密码:"
+                        android:textSize="@dimen/sp_14"
+                        android:textColor="#333333"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_35"
-            android:layout_margin="@dimen/dp_10">
+                    <EditText
+                        android:id="@+id/oldpwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_toRightOf="@+id/old_pwd"
+                        android:gravity="right|center_vertical"
+                        android:background="@android:color/transparent"
+                        android:hint="请输入当期密码……"
+                        android:inputType="textPassword"
+                        android:textSize="@dimen/sp_14" />
 
-            <TextView
-                android:id="@+id/new_pwd"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="重置密码为："
-                android:textSize="@dimen/sp_14" />
+                </RelativeLayout>
 
-            <EditText
-                android:id="@+id/newpwd"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_toRightOf="@+id/new_pwd"
-                android:gravity="right|center_vertical"
-                android:background="@android:color/transparent"
-                android:hint="请输入新密码……"
-                android:inputType="textPassword"
-                android:textSize="@dimen/sp_14" />
-        </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="#ededed" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginTop="-10dp"
-            android:layout_marginRight="@dimen/dp_10"
-            android:background="#ededed" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_10">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_35"
-            android:layout_margin="@dimen/dp_10">
+                    <TextView
+                        android:id="@+id/new_pwd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="重置密码为："
+                        android:textSize="@dimen/sp_14"
+                        android:textColor="#333333"/>
 
-            <TextView
-                android:id="@+id/new_box"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="请再次输入密码:"
-                android:textSize="@dimen/sp_14" />
+                    <EditText
+                        android:id="@+id/newpwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_toRightOf="@+id/new_pwd"
+                        android:gravity="right|center_vertical"
+                        android:background="@android:color/transparent"
+                        android:hint="请输入新密码……"
+                        android:inputType="textPassword"
+                        android:textSize="@dimen/sp_14" />
+                </RelativeLayout>
 
-            <EditText
-                android:id="@+id/currentpwd"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="right|center_vertical"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_toRightOf="@+id/new_box"
-                android:background="@android:color/transparent"
-                android:hint="请再次输入密码……"
-                android:inputType="textPassword"
-                android:textSize="@dimen/sp_14" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:background="#ededed" />
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_20">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginTop="-10dp"
-            android:layout_marginRight="@dimen/dp_10"
-            android:background="#ededed" />
+                    <TextView
+                        android:id="@+id/new_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="请再次输入密码:"
+                        android:textSize="@dimen/sp_14"
+                        android:textColor="#333333"/>
+
+                    <EditText
+                        android:id="@+id/currentpwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right|center_vertical"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_toRightOf="@+id/new_box"
+                        android:background="@android:color/transparent"
+                        android:hint="请再次输入密码……"
+                        android:inputType="textPassword"
+                        android:textSize="@dimen/sp_14" />
+
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
+
+
 
     <Button
         android:id="@+id/updatePwd"
@@ -135,12 +147,27 @@
         android:layout_height="@dimen/dp_30"
         android:layout_below="@+id/data"
         android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_20"
         android:layout_alignParentRight="true"
         android:textSize="@dimen/sp_12"
-        android:textColor="@color/colorTextColor"
+        android:textColor="@color/white"
         android:background="@drawable/btn_radio"
         android:text="确认修改" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_80"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/touming">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/dp_58"
+            android:layout_height="@dimen/dp_58"
+            android:layout_marginLeft="@dimen/dp_24"
+            android:src="@mipmap/com_back"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>
 

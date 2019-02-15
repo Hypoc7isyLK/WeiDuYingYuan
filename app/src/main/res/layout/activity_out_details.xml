@@ -118,15 +118,25 @@
 
     </RadioGroup>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/move_radio"
+        android:layout_marginTop="@dimen/dp_24"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/movie_recycle_rmdy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/move_radio"
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
-        android:layout_marginTop="@dimen/dp_24"
-        android:paddingBottom="@dimen/dp_30">
+        android:layout_marginBottom="@dimen/dp_40">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -134,11 +144,9 @@
         android:id="@+id/movie_recycle_zzry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/move_radio"
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
-        android:layout_marginTop="@dimen/dp_24"
-        android:paddingBottom="@dimen/dp_30">
+        android:layout_marginBottom="@dimen/dp_40">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -146,14 +154,15 @@
         android:id="@+id/movie_recycle_jjsy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/move_radio"
-
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
-        android:layout_marginTop="@dimen/dp_24"
-        >
+        android:layout_marginBottom="@dimen/dp_40">
 
     </android.support.v7.widget.RecyclerView>
+
+
+        </RelativeLayout>
+    </ScrollView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_80"
