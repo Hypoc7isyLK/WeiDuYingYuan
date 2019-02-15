@@ -77,7 +77,6 @@ public class HomeFragment extends BaseFragment {
     SearchView search;
     @BindView(R.id.location)
     TextView textlocation;
-    Unbinder unbinder;
 
     private ShowLunBoPresenter mShowLunBoPresenter;
     private CarouselAdapter mCarouselAdapter;
@@ -414,7 +413,6 @@ public class HomeFragment extends BaseFragment {
         mHotShowingPresenter = null;
         mShowLunBoPresenter = null;
         mCommingSunPresenter = null;
-        unbinder.unbind();
     }
 
     @Override
