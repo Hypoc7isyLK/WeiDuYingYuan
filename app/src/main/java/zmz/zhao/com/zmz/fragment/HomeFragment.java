@@ -5,12 +5,14 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -239,39 +241,42 @@ public class HomeFragment extends BaseFragment {
         dingwei.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    //权限还没有授予，需要在这里写申请权限的代码
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                                    Manifest.permission.ACCESS_FINE_LOCATION,
-                                    Manifest.permission.CAMERA,
-                                    Manifest.permission.READ_PHONE_STATE}, 0);
-                } else {
-                    mLocationClient = new LocationClient(getContext());
-                    //声明LocationClient类
-                    mLocationClient.registerLocationListener(myListener);
-                    //注册监听函数
-                    LocationClientOption option = new LocationClientOption();
-                    option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
-                    //可选，是否需要位置描述信息，默认为不需要，即参数为false
-                    //如果开发者需要获得当前点的位置信息，此处必须为true
-                    option.setIsNeedLocationDescribe(true);
-                    //可选，设置是否需要地址信息，默认不需要
-                    option.setIsNeedAddress(true);
-                    //可选，默认false,设置是否使用gps
-                    option.setOpenGps(true);
-                    //可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
-                    option.setLocationNotify(true);
-                    mLocationClient.setLocOption(option);
-                    mLocationClient.start();
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    Log.e("zmz", "000");
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        Log.e("zmz", "111");
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.READ_PHONE_STATE
+                        }, 100);
+                    } else {
+                        Log.e("zmz", "222");
+                        mLocationClient = new LocationClient(getContext());
+                        //声明LocationClient类
+                        mLocationClient.registerLocationListener(myListener);
+                        //注册监听函数
+                        LocationClientOption option = new LocationClientOption();
+                        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
+                        //可选，是否需要位置描述信息，默认为不需要，即参数为false
+                        //如果开发者需要获得当前点的位置信息，此处必须为true
+                        option.setIsNeedLocationDescribe(true);
+                        //可选，设置是否需要地址信息，默认不需要
+                        option.setIsNeedAddress(true);
+                        //可选，默认false,设置是否使用gps
+                        option.setOpenGps(true);
+                        //可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
+                        option.setLocationNotify(true);
+                        mLocationClient.setLocOption(option);
+                        mLocationClient.start();
+                    }
                 }
             }
         });
-
-
-
 
 
     }
@@ -305,8 +310,6 @@ public class HomeFragment extends BaseFragment {
                 break;
         }
     }
-
-
 
 
     private class ShowLunboCall implements DataCall<Result<List<ShowLunBoBean>>> {
@@ -432,9 +435,9 @@ public class HomeFragment extends BaseFragment {
             //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
             String locationDescribe = location.getLocationDescribe();    //获取位置描述信息
             String addr = location.getCity();    //获取详细地址信息
-            textlocation.setText(addr);
-            Toast.makeText(getContext(), addr+"aaa", Toast.LENGTH_SHORT).show();
-
+            if (addr != null && addr != "") {
+                textlocation.setText(addr);
+            }
 
         }
 

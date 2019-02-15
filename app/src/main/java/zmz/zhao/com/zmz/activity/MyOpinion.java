@@ -59,11 +59,15 @@ public class MyOpinion extends BaseActivity {
             case R.id.submit:
 
                 String opinion = mine_opinion.getText().toString().trim();
-                int userid = USER_INFO.getUserId();
+                if (opinion.isEmpty()){
+                    Toast.makeText(this, "内容不能为空", Toast.LENGTH_SHORT).show();
+                }else {
+                    int userid = USER_INFO.getUserId();
 
-                String sessionId = USER_INFO.getSessionId();
+                    String sessionId = USER_INFO.getSessionId();
 
-                presenter.reqeust(userid,sessionId,opinion);
+                    presenter.reqeust(userid,sessionId,opinion);
+                }
                 break;
         }
     }

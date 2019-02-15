@@ -83,16 +83,22 @@ public class DownLoadService extends IntentService {
         }
     }
     protected void installApk(File file) {
-        Log.e("zmz","安装！"+file);
+
         Intent intent = new Intent();
+
+        intent.setAction(Intent.ACTION_VIEW);
+
         //执行动作
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= 24) {
             uri = FileProvider.getUriForFile(DownLoadService.this.getApplicationContext(), "zmz.zhao.com.zmz.fileprovider", file);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Log.e("zmz","安装！"+uri);
         }else {
             uri = Uri.fromFile(file);
         }
 
-        intent.setAction(Intent.ACTION_VIEW);
+
         //执行的数据类型
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
 
