@@ -20,8 +20,6 @@
             android:layout_width="@dimen/dp_24"
             android:layout_height="@dimen/dp_24"
             android:padding="@dimen/dp_2"
-
-
             android:src="@mipmap/cinemadetail_icon_location_default"/>
         <TextView
 
@@ -118,7 +116,7 @@
 
     </RadioGroup>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/move_radio"
@@ -162,7 +160,7 @@
 
 
         </RelativeLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_80"

@@ -45,10 +45,10 @@
         android:text="bwejbvjbdejvbjerbjvbjbjvbaejbgjarebjgbref"/>
     <View
         android:layout_width="match_parent"
-        android:layout_height="2px"
+        android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/boby_text"
         android:layout_marginTop="@dimen/dp_5"
         android:layout_marginBottom="@dimen/dp_20"
-        android:background="@color/common"/>
+        android:background="#f2f2f2"/>
 
 </RelativeLayout>
