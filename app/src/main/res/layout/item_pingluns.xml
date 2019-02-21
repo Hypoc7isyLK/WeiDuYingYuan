@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_80"
+    android:background="#dddddd">
+
+
+        <EditText
+            android:id="@+id/discuss_text"
+            android:layout_width="@dimen/dp_284"
+            android:layout_height="@dimen/dp_60"
+            android:hint="写评论"
+            android:textSize="@dimen/sp_14"
+            android:layout_margin="@dimen/dp_10"
+            android:textColor="@color/common"
+            android:gravity="top"
+            android:padding="@dimen/dp_10"
+            android:background="@drawable/editext_discuss"
+            android:layout_marginLeft="@dimen/dp_25" />
+
+        <TextView
+            android:id="@+id/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextColor"
+            android:layout_toRightOf="@+id/discuss_text"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_alignBottom="@+id/discuss_text"
+            android:textSize="@dimen/sp_16"
+            android:text="发送"/>
+
+</RelativeLayout>

@@ -5,43 +5,57 @@
     android:background="@drawable/pop_bg_circle"
     android:layout_height="@dimen/dp_550">
 
-    <TextView
-        android:id="@+id/details_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_20"
-        android:text="剧情介绍" />
-
-    <View
-        android:id="@+id/baioji"
-        android:layout_width="30dp"
-        android:layout_height="3dp"
-        android:layout_marginLeft="@dimen/dp_20"
-
-        android:layout_below="@+id/details_title"
-        android:layout_marginTop="@dimen/dp_6"
-        android:background="@drawable/bg_circle" />
-    <ImageView
-        android:id="@+id/cance"
-        android:layout_width="@dimen/dp_22"
-        android:layout_height="@dimen/dp_18"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_20"
-        android:padding="5dp"
-        android:src="@mipmap/cancel_buttom" />
-
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/stage"
+    <RelativeLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_below="@+id/baioji">
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/details_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="剧情介绍" />
 
-    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+        <View
+            android:id="@+id/baioji"
+            android:layout_width="30dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="@dimen/dp_20"
+
+            android:layout_below="@+id/details_title"
+            android:layout_marginTop="@dimen/dp_6"
+            android:background="@drawable/bg_circle" />
+        <ImageView
+            android:id="@+id/cance"
+            android:layout_width="@dimen/dp_22"
+            android:layout_height="@dimen/dp_18"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
+            android:padding="5dp"
+            android:src="@mipmap/cancel_buttom" />
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/stage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_below="@+id/baioji">
+
+        </com.jcodecraeer.xrecyclerview.XRecyclerView>
+        <ImageView
+            android:id="@+id/discuss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
+            android:src="@mipmap/publish"/>
+    </RelativeLayout>
 
 
 </RelativeLayout>

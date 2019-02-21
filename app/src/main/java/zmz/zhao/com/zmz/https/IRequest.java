@@ -365,5 +365,17 @@ public interface IRequest {
     Observable<Result> versions(@Header("userId") int userId,
                                 @Header("sessionId") String sessionId,
                                 @Header("ak") String ak);
+
+    /**
+     * @作者 啊哈
+     * @date 2019/2/21
+     * @method：发表评论
+     */
+    @POST("movie/v1/verify/movieComment")
+    @FormUrlEncoded
+    Observable<Result> discuss(@Header("userId") int userId,
+                               @Header("sessionId") String sessionId,
+                               @Field("movieId") int movieId,
+                               @Field("commentContent") String commentContent);
 }
 

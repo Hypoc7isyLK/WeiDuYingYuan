@@ -30,7 +30,7 @@ import java.net.URL;
 
 public class DownLoadService extends IntentService {
     private final String TAG="LOGCAT";
-    private int fileLength, downloadLength;//文件大小
+    private long fileLength, downloadLength;//文件大小
     private Handler handler = new Handler();
     private NotificationCompat.Builder builder;
     private NotificationManager manager;
@@ -87,9 +87,8 @@ public class DownLoadService extends IntentService {
         Intent intent = new Intent();
 
         intent.setAction(Intent.ACTION_VIEW);
-
         //执行动作
-        if (Build.VERSION.SDK_INT >= 24) {
+        if (Build.VERSION.SDK_INT >= 20) {
             uri = FileProvider.getUriForFile(DownLoadService.this.getApplicationContext(), "zmz.zhao.com.zmz.fileprovider", file);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -157,6 +156,7 @@ public class DownLoadService extends IntentService {
 
     private Runnable run = new Runnable() {
         public void run() {
+
             int _pec=(int) (downloadLength*100 / fileLength);
 
             Log.e("zmz","======pec:"+_pec+"    downloadLength:"+downloadLength+"     fileLength:"+fileLength);

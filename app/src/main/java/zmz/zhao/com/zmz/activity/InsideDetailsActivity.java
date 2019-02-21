@@ -1,18 +1,19 @@
 package zmz.zhao.com.zmz.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
+
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -27,7 +28,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jzvd.JZVideoPlayer;
 import zmz.zhao.com.zmz.adapter.CommentAdapter;
@@ -39,6 +39,7 @@ import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.CommentPresenter;
 import zmz.zhao.com.zmz.presenter.DetailsPresenter;
+import zmz.zhao.com.zmz.presenter.DiscussPresenter;
 import zmz.zhao.com.zmz.presenter.FocusMovieOffPresenter;
 import zmz.zhao.com.zmz.presenter.FocusMoviePresenter;
 import zmz.zhao.com.zmz.presenter.StatePresenter;
@@ -71,7 +72,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
     SimpleDraweeView bg;
     StatePresenter statePresenter;
-
+    DiscussPresenter discussPresenter;
     private DetailsBean mResult;
     private DetailsPresenter mDetailsPresenter;
     private String mId1;
@@ -84,6 +85,11 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
     private CommentAdapter commentAdapter;
     FocusMoviePresenter focusMoviePresenter;
     FocusMovieOffPresenter focusMovieOffPresenter;
+    private ImageView discuss;
+    private Dialog builder;
+    private Dialog reply;
+
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_inside_details;
@@ -102,15 +108,15 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         mDetailsPresenter = new DetailsPresenter(new DetailsCall());
         commentPresenter = new CommentPresenter(new CommentCall());
         focusMoviePresenter = new FocusMoviePresenter(new FocusCall());
+        discussPresenter = new DiscussPresenter(new DiscussCall());
         focusMovieOffPresenter = new FocusMovieOffPresenter(new FocusMovieOffCall());
 
 
-
-        if (USER_INFO != null){
+        if (USER_INFO != null) {
             userId = USER_INFO.getUserId();
             sessionId = USER_INFO.getSessionId();
             mDetailsPresenter.reqeust(userId, sessionId, mId1);
-        }else {
+        } else {
             mDetailsPresenter.reqeust(0, "", mId1);
         }
 
@@ -129,12 +135,12 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         switch (view.getId()) {
             case R.id.xiaoxin:
 
-                if(USER_INFO != null){
+                if (USER_INFO != null) {
 
-                    if (mResult.getFollowMovie() == 2){
-                        focusMoviePresenter.reqeust(userId,sessionId,mResult.getId());
-                    }else {
-                        focusMovieOffPresenter.reqeust(userId,sessionId,mResult.getId());
+                    if (mResult.getFollowMovie() == 2) {
+                        focusMoviePresenter.reqeust(userId, sessionId, mResult.getId());
+                    } else {
+                        focusMovieOffPresenter.reqeust(userId, sessionId, mResult.getId());
                     }
                 }
 
@@ -146,7 +152,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
                 PopupWindow popWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT, true);
 
-                popWindow.setHeight(height*3/4);
+                popWindow.setHeight(height * 3 / 4);
                 popWindow.setTouchable(true);
                 popWindow.setBackgroundDrawable(new BitmapDrawable());
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -177,8 +183,8 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             case R.id.insidetails_buy:
                 Intent intent = new Intent(this, TheatreActivity.class);
 
-                intent.putExtra("title",mResult.getName());
-                intent.putExtra("id",String.valueOf(mResult.getId()));
+                intent.putExtra("title", mResult.getName());
+                intent.putExtra("id", String.valueOf(mResult.getId()));
                 startActivity(intent);
                 break;
         }
@@ -212,20 +218,21 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
     }
 
-    private void popup(String name,int page) {
+    private void popup(String name, int page) {
         int height = getWindowManager().getDefaultDisplay().getHeight();
         View popView = View.inflate(this, R.layout.activity_mine_btn_pop_item, null);
         spopWindow = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, true);
-        spopWindow.setHeight(height*3/4);
+        spopWindow.setHeight(height * 3 / 4);
         spopWindow.setTouchable(true);
         spopWindow.setBackgroundDrawable(new BitmapDrawable());
         spopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
         TextView details_title = popView.findViewById(R.id.details_title);
-        ImageView cancel= popView.findViewById(R.id.cance);
+        ImageView cancel = popView.findViewById(R.id.cance);
+        discuss = popView.findViewById(R.id.discuss);
 
-
+        discuss.setVisibility(View.GONE);
 
         details_title.setText(name);
 
@@ -248,7 +255,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             }
         });
 
-        if (page == 1){
+        if (page == 1) {
             XRecyclerView stage = popView.findViewById(R.id.stage);
             stage.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
             List<DetailsBean.ShortFilmListBean> shortFilmList = mResult.getShortFilmList();
@@ -257,7 +264,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             dumplingsAdapter.addAll(shortFilmList);
             stage.setAdapter(dumplingsAdapter);
 
-        }else if (page == 2){
+        } else if (page == 2) {
 
             XRecyclerView stag = popView.findViewById(R.id.stage);
             StaggeredGridLayoutManager recyclerViewLayoutManager =
@@ -272,23 +279,67 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             imageAdapter.addAll(posterList);
 
             stag.setAdapter(imageAdapter);
-        }else if(page == 3){
+        } else if (page == 3) {
 
             comment = popView.findViewById(R.id.stage);
 
             statePresenter = new StatePresenter(new StateCall());
 
             comment.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.VERTICAL, false));
-
+            discuss.setVisibility(View.VISIBLE);
             commentAdapter = new CommentAdapter(this);
             comment.setLoadingListener(this);
             comment.setAdapter(commentAdapter);
-            if (USER_INFO != null){
+
+            discuss.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (USER_INFO != null) {
+                        View inflate = View.inflate(InsideDetailsActivity.this, R.layout.item_pingluns, null);
+
+                        final EditText editText = inflate.findViewById(R.id.discuss_text);
+                        builder = new Dialog(InsideDetailsActivity.this, R.style.BottomDialog);
+                        builder.setContentView(inflate);
+                        builder.setCanceledOnTouchOutside(true);
+                        ViewGroup.LayoutParams layoutParamsthreefilmreview = inflate.getLayoutParams();
+                        layoutParamsthreefilmreview.width = getResources().getDisplayMetrics().widthPixels;
+                        inflate.setLayoutParams(layoutParamsthreefilmreview);
+                        builder.getWindow().setGravity(Gravity.BOTTOM);
+                        builder.show();
+
+                        TextView send = inflate.findViewById(R.id.send);
+                        send.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String s = editText.getText().toString().trim();
+
+                                if (s.isEmpty()) {
+                                    Toast.makeText(InsideDetailsActivity.this, "不能为空", Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    userId = USER_INFO.getUserId();
+                                    sessionId = USER_INFO.getSessionId();
+                                    Log.e("zmz", "=====" + s);
+
+                                    discussPresenter.reqeust(userId, sessionId, mResult.getId(), s);
+
+                                }
+                            }
+                        });
+                    } else {
+                        Toast.makeText(InsideDetailsActivity.this, "请先登录！", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+            });
+
+            if (USER_INFO != null) {
                 userId = USER_INFO.getUserId();
                 sessionId = USER_INFO.getSessionId();
-                commentPresenter.reqeust(userId, sessionId,mResult.getId(),true);
-            }else {
-                commentPresenter.reqeust(0, "",mResult.getId(),true);
+                commentPresenter.reqeust(userId, sessionId, mResult.getId(), true);
+            } else {
+                commentPresenter.reqeust(0, "", mResult.getId(), true);
             }
             commentAdapter.setOnItemClickListenter(new CommentAdapter.OnItemClickListenter() {
                 @Override
@@ -300,7 +351,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
                     } else {
                         userId = USER_INFO.getUserId();
                         sessionId = USER_INFO.getSessionId();
-                        statePresenter.reqeust(userId, sessionId,id);
+                        statePresenter.reqeust(userId, sessionId, id);
 
                     }//否则点赞
 
@@ -312,8 +363,40 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
             commentAdapter.setOnCommentClickListenter(new CommentAdapter.OnCommentClickListenter() {
                 @Override
-                public void onItemClick(Comment comment) {
-                    Log.e("zmz","");
+                public void onItemClick(String comment) {
+
+                    View inflate = View.inflate(InsideDetailsActivity.this, R.layout.item_pingluns, null);
+
+                    final EditText editText = inflate.findViewById(R.id.discuss_text);
+                    editText.setText(comment);
+                    reply = new Dialog(InsideDetailsActivity.this, R.style.BottomDialog);
+                    reply.setContentView(inflate);
+                    reply.setCanceledOnTouchOutside(true);
+                    ViewGroup.LayoutParams layoutParamsthreefilmreview = inflate.getLayoutParams();
+                    layoutParamsthreefilmreview.width = getResources().getDisplayMetrics().widthPixels;
+                    inflate.setLayoutParams(layoutParamsthreefilmreview);
+                    reply.getWindow().setGravity(Gravity.BOTTOM);
+                    reply.show();
+
+                    TextView send = inflate.findViewById(R.id.send);
+                    send.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String s = editText.getText().toString().trim();
+
+                            if (s.isEmpty()) {
+                                Toast.makeText(InsideDetailsActivity.this, "不能为空", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                userId = USER_INFO.getUserId();
+                                sessionId = USER_INFO.getSessionId();
+                                Log.e("zmz", "=====" + s);
+
+                                discussPresenter.reqeust(userId, sessionId, mResult.getId(), s);
+
+                            }
+                        }
+                    });
                 }
             });
         }
@@ -322,33 +405,33 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
     @Override
     public void onRefresh() {
-        if (commentPresenter.Running()){
+        if (commentPresenter.Running()) {
             comment.refreshComplete();
             return;
         }
 
-        if (USER_INFO != null){
+        if (USER_INFO != null) {
             userId = USER_INFO.getUserId();
             sessionId = USER_INFO.getSessionId();
-            commentPresenter.reqeust(userId,sessionId,mResult.getId(),true);
-        }else {
-            commentPresenter.reqeust(0,"",mResult.getId(),true);
+            commentPresenter.reqeust(userId, sessionId, mResult.getId(), true);
+        } else {
+            commentPresenter.reqeust(0, "", mResult.getId(), true);
         }
     }
 
     @Override
     public void onLoadMore() {
-        if (commentPresenter.Running()){
+        if (commentPresenter.Running()) {
             comment.loadMoreComplete();
-            Log.e("zmz",""+"加载");
+            Log.e("zmz", "" + "加载");
             return;
         }
-        if (USER_INFO != null){
+        if (USER_INFO != null) {
             userId = USER_INFO.getUserId();
             sessionId = USER_INFO.getSessionId();
-            commentPresenter.reqeust(userId,sessionId,mResult.getId(),false);
-        }else {
-            commentPresenter.reqeust(0,"",mResult.getId(),false);
+            commentPresenter.reqeust(userId, sessionId, mResult.getId(), false);
+        } else {
+            commentPresenter.reqeust(0, "", mResult.getId(), false);
         }
 
     }
@@ -363,9 +446,9 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             insidetailsTitle.setText(mResult.getName());
             bg.setImageURI(mResult.getImageUrl());
 
-            if (mResult.getFollowMovie() == 1){
+            if (mResult.getFollowMovie() == 1) {
                 xiaoxin.setImageResource(R.mipmap.com_icon_collection_selected);
-            }else {
+            } else {
                 xiaoxin.setImageResource(R.mipmap.com_icon_collection_default);
             }
         }
@@ -382,9 +465,9 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
             comment.refreshComplete();
             comment.loadMoreComplete();
 
-            if(result.getStatus().equals("0000")){
+            if (result.getStatus().equals("0000")) {
                 List<Comment> comments = result.getResult();
-                if (commentPresenter.isResresh()){
+                if (commentPresenter.isResresh()) {
                     commentAdapter.clear();
                 }
 
@@ -404,7 +487,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         @Override
         public void success(Result result) {
 
-            if (result.getStatus().equals("0000")){
+            if (result.getStatus().equals("0000")) {
                 mResult.setFollowMovie(1);
                 xiaoxin.setImageResource(R.mipmap.com_icon_collection_selected);
             }
@@ -417,6 +500,7 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
 
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -448,6 +532,26 @@ public class InsideDetailsActivity extends BaseActivity implements XRecyclerView
         public void success(Result result) {
             mResult.setFollowMovie(2);
             xiaoxin.setImageResource(R.mipmap.com_icon_collection_default);
+        }
+
+        @Override
+        public void fail(ApiException e) {
+
+        }
+    }
+
+    private class DiscussCall implements DataCall<Result> {
+        @Override
+        public void success(Result result) {
+            if (result.getStatus().equals("0000")) {
+                commentPresenter.reqeust(userId, sessionId, mResult.getId(), true);
+               if (builder != null ){
+                   builder.dismiss();
+               }
+               if (reply != null){
+                   reply.dismiss();
+               }
+            }
         }
 
         @Override

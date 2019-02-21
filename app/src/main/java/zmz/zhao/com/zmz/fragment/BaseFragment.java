@@ -49,6 +49,7 @@ public abstract class BaseFragment extends Fragment {
             USER_INFO = userInfoList.get(0);
         }
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         initView(view);
         initData(view);
         return view;

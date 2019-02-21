@@ -104,7 +104,8 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
         hloder.comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCommentClickListenter.onItemClick(comment);
+                String commentUserName = comment.getCommentUserName();
+                onCommentClickListenter.onItemClick("回复 @"+commentUserName+"：");
             }
         });
     }
@@ -164,7 +165,7 @@ public class CommentAdapter extends XRecyclerView.Adapter<CommentAdapter.MyHolde
     private OnCommentClickListenter onCommentClickListenter;
 
     public interface OnCommentClickListenter {
-        void onItemClick(Comment comment);
+        void onItemClick(String comment);
     }
 
     public void setOnCommentClickListenter(OnCommentClickListenter onCommentClickListenter) {
