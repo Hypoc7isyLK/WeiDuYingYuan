@@ -123,7 +123,7 @@ public class DownLoadService extends IntentService {
             URL url = new URL(downloadUrl);
             HttpURLConnection _downLoadCon = (HttpURLConnection) url.openConnection();
             _downLoadCon.setRequestMethod("GET");
-            fileLength = Integer.valueOf(_downLoadCon.getHeaderField("Content-Length"));//文件大小
+            fileLength = Integer.valueOf(_downLoadCon.getContentLength());//文件大小
             _inputStream = _downLoadCon.getInputStream();
             int respondCode = _downLoadCon.getResponseCode();//服务器返回的响应码
             if (respondCode == 200) {
@@ -132,7 +132,8 @@ public class DownLoadService extends IntentService {
                 int len;
                 while ((len = _inputStream.read(buffer)) != -1) {
                     _outputStream.write(buffer, 0, len);
-                    downloadLength = downloadLength + len;
+
+                    downloadLength = downloadLength + Math.abs(len);
 //                    Log.d(TAG, downloadLength + "/" + fileLength );
                 }
             } else {
@@ -157,8 +158,10 @@ public class DownLoadService extends IntentService {
     private Runnable run = new Runnable() {
         public void run() {
             int _pec=(int) (downloadLength*100 / fileLength);
+
+            Log.e("zmz","======pec:"+_pec+"    downloadLength:"+downloadLength+"     fileLength:"+fileLength);
             builder.setContentText("下载中……"+_pec+"%");
-            builder.setProgress(100, _pec, false);//显示进度条，参数分别是最大值、当前值、是否显示具体进度（false显示具体进度，true就只显示一个滚动色带）
+            builder.setProgress(100, (int)_pec, false);//显示进度条，参数分别是最大值、当前值、是否显示具体进度（false显示具体进度，true就只显示一个滚动色带）
             manager.notify(_notificationID,builder.build());
             handler.postDelayed(run, 1000);
         }
