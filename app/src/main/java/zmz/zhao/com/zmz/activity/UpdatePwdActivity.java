@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
@@ -18,6 +19,7 @@ import butterknife.OnClick;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.UpdatePwdPresenter;
+import zmz.zhao.com.zmz.util.Validator;
 import zmz.zhao.com.zmz.view.DataCall;
 
 /**
@@ -39,6 +41,9 @@ public class UpdatePwdActivity extends BaseActivity {
     private int userid;
     private String sessionId;
     UpdatePwdPresenter pwdPresenter;
+    private boolean mOldPassword;
+    private boolean mNewPassword;
+    private boolean mCountPassword;
 
 
     @Override
@@ -62,8 +67,25 @@ public class UpdatePwdActivity extends BaseActivity {
         String new_pwd = newpwd.getText().toString().trim();
         String current_pwd = current.getText().toString().trim();
 
+        mOldPassword = Validator.isPassword(old_pwd);
+        mNewPassword = Validator.isPassword(new_pwd);
+        mCountPassword = Validator.isPassword(current_pwd);
         Log.e("zmz", "==========" + sessionId);
-        pwdPresenter.reqeust(userid, sessionId, old_pwd, new_pwd, current_pwd);
+        if (mOldPassword) {
+            if (mNewPassword) {
+                if (mCountPassword && mNewPassword == mCountPassword) {
+                    pwdPresenter.reqeust(userid, sessionId, old_pwd, new_pwd, current_pwd);
+                } else {
+                    Toast.makeText(this, "两次密码要一致", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "密码仅支持数字、字母、6-18位", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "密码仅支持数字、字母、6-18位", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     @Override

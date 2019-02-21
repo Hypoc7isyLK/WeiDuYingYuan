@@ -1,13 +1,18 @@
 package zmz.zhao.com.zmz.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +76,7 @@ public class ChooseActivity extends BaseActivity {
     private PlaceanOrderPresenter mPlaceanOrderPresenter;
     private String mEndtime;
     private String mBegintime;
+    private PopupWindow mPopupWindow;
 
     @Override
     protected int getLayoutId() {
@@ -224,6 +230,9 @@ public class ChooseActivity extends BaseActivity {
     }
 
     private void xiaDan() {
+        int height = getWindowManager().getDefaultDisplay().getHeight();
+        View inflate = LayoutInflater.from(this).inflate(R.layout.choose_pay_dialog, null);
+        mPopupWindow = new PopupWindow(inflate, RelativeLayout.LayoutParams.MATCH_PARENT, height / 100 * 30);
         if (USER_INFO==null){
             Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
         }else {
@@ -232,17 +241,40 @@ public class ChooseActivity extends BaseActivity {
             if (count == 0){
                 Toast.makeText(this, "至少选择一个座位", Toast.LENGTH_SHORT).show();
             }else {
-                String mCOUNT = String.valueOf(count);
-                Log.e("lk","mmmmmmcount"+mCOUNT);
 
-                Log.e("lk","mmmid"+mId);
+                //设置背景,这个没什么效果，不添加会报错
+                mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+                //设置点击弹窗外隐藏自身
+                mPopupWindow.setFocusable(true);
+                mPopupWindow.setOutsideTouchable(true);
+                //设置位置
+                mPopupWindow.showAtLocation(inflate, Gravity.BOTTOM, 0, 0);
+                //设置PopupWindow的View点击事件
+                Button pay = inflate.findViewById(R.id.btn_pay);
+                RelativeLayout relative = inflate.findViewById(R.id.rl_alpay);
+                relative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(ChooseActivity.this, "暂不支持支付宝功能!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                pay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String mCOUNT = String.valueOf(count);
+                        Log.e("lk","mmmmmmcount"+mCOUNT);
+
+                        Log.e("lk","mmmid"+mId);
 
 
-                mString = MD5Utils.md5Password(mUserId +mId + mCOUNT + "movie");
-                int id = Integer.parseInt(mId);
-                mPlaceanOrderPresenter = new PlaceanOrderPresenter(new PlaceOrderCall());
+                        mString = MD5Utils.md5Password(mUserId +mId + mCOUNT + "movie");
+                        int id = Integer.parseInt(mId);
+                        mPlaceanOrderPresenter = new PlaceanOrderPresenter(new PlaceOrderCall());
 
-                mPlaceanOrderPresenter.reqeust(mUserId, mSessionId, id, count, mString);
+                        mPlaceanOrderPresenter.reqeust(mUserId, mSessionId, id, count, mString);
+                    }
+                });
+
             }
 
         }

@@ -29,8 +29,10 @@ import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.dao.UserInfo;
 import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.MinePresenter;
+import zmz.zhao.com.zmz.presenter.RegisterPresenter;
 import zmz.zhao.com.zmz.presenter.UpdatePresenter;
 import zmz.zhao.com.zmz.util.DateUtils;
+import zmz.zhao.com.zmz.util.Validator;
 import zmz.zhao.com.zmz.view.DataCall;
 
 
@@ -83,7 +85,7 @@ public class MineProfileActivity extends BaseActivity {
                 return;
             }
             return;
-        }else {
+        } else {
             userid = USER_INFO.getUserId();
 
             sessionId = USER_INFO.getSessionId();
@@ -141,6 +143,10 @@ public class MineProfileActivity extends BaseActivity {
                 builder.setTitle("修改信息");
                 builder.setView(view1);
                 builder.setPositiveButton("修改", new DialogInterface.OnClickListener() {
+
+                    private boolean mEmail;
+                    private boolean mNickName;
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         EditText newName = view1.findViewById(R.id.newname);
@@ -158,8 +164,18 @@ public class MineProfileActivity extends BaseActivity {
 
                         String name = newName.getText().toString().trim();
                         String box = newBox.getText().toString().trim();
+                        mNickName = Validator.rexCheckNickName(name);
+                        mEmail = Validator.isEmail(box);
+                        if (mNickName) {
+                            if (mEmail) {
+                                presenter.reqeust(userid, sessionId, name, sex, box);
+                            } else {
+                                Toast.makeText(MineProfileActivity.this, "邮箱格式不正确", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(MineProfileActivity.this, "昵称仅支持中英文、数字、减号或下划线", Toast.LENGTH_SHORT).show();
+                        }
 
-                        presenter.reqeust(userid, sessionId, name, sex, box);
 
                     }
                 });

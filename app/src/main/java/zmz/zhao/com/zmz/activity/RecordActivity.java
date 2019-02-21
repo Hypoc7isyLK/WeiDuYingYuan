@@ -3,29 +3,44 @@ package zmz.zhao.com.zmz.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bw.movie.R;
 import com.greendao.gen.DaoMaster;
 import com.greendao.gen.UserInfoDao;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import zmz.zhao.com.zmz.adapter.DoneAdapter;
 import zmz.zhao.com.zmz.adapter.UndoneAdapter;
+import zmz.zhao.com.zmz.bean.PayBean;
 import zmz.zhao.com.zmz.bean.Record;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.bean.dao.UserInfo;
 import zmz.zhao.com.zmz.exception.ApiException;
+import zmz.zhao.com.zmz.https.IRequest;
+import zmz.zhao.com.zmz.https.NetworkManager;
 import zmz.zhao.com.zmz.presenter.RecordPresenter;
 import zmz.zhao.com.zmz.util.SpaceItemDecoration;
 import zmz.zhao.com.zmz.view.DataCall;
@@ -59,6 +74,7 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
     private String sessionId;
     private UndoneAdapter undoneAdapter;
     private DoneAdapter doneAdapter;
+    private IWXAPI api;
 
 
     @Override
@@ -71,6 +87,11 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
     }
     @Override
     protected void initView() {
+        /**
+         * 微信支付
+         */
+        api = WXAPIFactory.createWXAPI(this, "wxb3852e6a6b7d9516");//第二个参数为APPID
+        api.registerApp("wxb3852e6a6b7d9516");
         finish_recycle.setVisibility(View.GONE);
 
         recordPresenter = new RecordPresenter(new RecordCall());
@@ -97,6 +118,8 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
             donePresenter.reqeust(userId, sessionId, true,2);
 
         }
+
+
 
     }
 
@@ -190,6 +213,59 @@ public class RecordActivity extends BaseActivity implements XRecyclerView.Loadin
         finish_recycle.setLoadingListener(this);
 
         unfinish_recycle.setLoadingListener(this);
+
+        undoneAdapter.setOnClickL(new UndoneAdapter.OnClickL() {
+
+            private PopupWindow mPopupWindow;
+
+            @Override
+            public void scuccess(final String orderId) {
+                int height = getWindowManager().getDefaultDisplay().getHeight();
+                View inflate = LayoutInflater.from(RecordActivity.this).inflate(R.layout.choose_pay_dialog, null);
+                mPopupWindow = new PopupWindow(inflate, RelativeLayout.LayoutParams.MATCH_PARENT, height / 100 * 30);
+//设置背景,这个没什么效果，不添加会报错
+                mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+                //设置点击弹窗外隐藏自身
+                mPopupWindow.setFocusable(true);
+                mPopupWindow.setOutsideTouchable(true);
+                //设置位置
+                mPopupWindow.showAtLocation(inflate, Gravity.BOTTOM, 0, 0);
+                //设置PopupWindow的View点击事件
+                Button pay = inflate.findViewById(R.id.btn_pay);
+                RelativeLayout relative = inflate.findViewById(R.id.rl_alpay);
+                relative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(RecordActivity.this, "暂不支持支付宝功能!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                pay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        IRequest interfacea = NetworkManager.getInstance().create(IRequest.class);
+                        interfacea.pay(USER_INFO.getUserId(), USER_INFO.getSessionId() + "", "1", orderId).subscribeOn(Schedulers.newThread())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<PayBean>() {
+                                    @Override
+                                    public void accept(PayBean payBean) throws Exception {
+                                        PayReq req = new PayReq();
+                                        req.appId = payBean.getAppId();
+                                        req.partnerId = payBean.getPartnerId();
+                                        req.prepayId = payBean.getPrepayId();
+                                        req.nonceStr = payBean.getNonceStr();
+                                        req.timeStamp = payBean.getTimeStamp();
+                                        req.packageValue = payBean.getPackageValue();
+                                        req.sign = payBean.getSign();
+                                        // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+                                        //3.调用微信支付sdk支付方法
+                                        api.sendReq(req);
+                                    }
+                                });
+                    }
+                });
+
+            }
+        });
 
     }
 

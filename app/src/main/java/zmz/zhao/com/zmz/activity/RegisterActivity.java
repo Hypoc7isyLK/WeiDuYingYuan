@@ -29,9 +29,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import zmz.zhao.com.zmz.bean.Result;
 import zmz.zhao.com.zmz.exception.ApiException;
+import zmz.zhao.com.zmz.presenter.LoginPresenter;
 import zmz.zhao.com.zmz.presenter.RegisterPresenter;
 import zmz.zhao.com.zmz.util.EncryptUtil;
 import zmz.zhao.com.zmz.util.SystemUtil;
+import zmz.zhao.com.zmz.util.Validator;
 import zmz.zhao.com.zmz.view.DataCall;
 
 public class RegisterActivity extends BaseActivity {
@@ -64,6 +66,10 @@ public class RegisterActivity extends BaseActivity {
     private String mSystemVersion;
     private static double mInch = 0;
     private String edjiami;
+    private boolean mMobile;
+    private boolean mPassword;
+    private boolean mEmail;
+    private boolean mNname;
 
     @Override
     protected int getLayoutId() {
@@ -158,8 +164,30 @@ public class RegisterActivity extends BaseActivity {
         Log.e("lk","型号"+mSystemModel);
         Log.e("lk","版本号"+mSystemVersion);
         Log.e("lk","屏幕尺寸"+String.valueOf(mInch));
-        mRegisterPresenter = new RegisterPresenter(new RegisterCall());
-        mRegisterPresenter.reqeust(edname,edphone,edjiami,edjiami,nan,eddata,mIMEI,mSystemModel,String.valueOf(mInch),mSystemVersion,edemail);
+        mNname = Validator.rexCheckNickName(edname);
+        mMobile = Validator.isMobile(edphone);
+        mPassword = Validator.isPassword(edlogin);
+        mEmail = Validator.isEmail(edemail);
+        if (mNname){
+            if (mMobile){
+                if (mPassword){
+                    if (mEmail){
+                        mRegisterPresenter = new RegisterPresenter(new RegisterCall());
+                        mRegisterPresenter.reqeust(edname,edphone,edjiami,edjiami,nan,eddata,mIMEI,mSystemModel,String.valueOf(mInch),mSystemVersion,edemail);
+                    }else {
+                        Toast.makeText(this, "邮箱格式不正确", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(this, "密码仅支持数字、字母、6-18位", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                Toast.makeText(this, "手机号格式不正确", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(this, "昵称仅支持中英文、数字、减号或下划线", Toast.LENGTH_SHORT).show();
+        }
+
+
 
     }
 

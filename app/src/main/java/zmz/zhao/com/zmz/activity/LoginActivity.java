@@ -29,6 +29,7 @@ import zmz.zhao.com.zmz.exception.ApiException;
 import zmz.zhao.com.zmz.presenter.LoginPresenter;
 
 import zmz.zhao.com.zmz.presenter.WeChatLoginPresenter;
+import zmz.zhao.com.zmz.util.Validator;
 import zmz.zhao.com.zmz.view.DataCall;
 
 public class LoginActivity extends BaseActivity {
@@ -55,6 +56,8 @@ public class LoginActivity extends BaseActivity {
     boolean flag_num = false;
     boolean login_flag = false;
     private WeChatLoginPresenter mWeChatLoginPresenter;
+    private boolean mMobile;
+    private boolean mPassword;
 
     @Override
     protected int getLayoutId() {
@@ -115,8 +118,18 @@ public class LoginActivity extends BaseActivity {
 
         edphone = edittextPhone.getText().toString().trim();
         edpwd = edittextPwd.getText().toString().trim();
-        mLoginPresenter = new LoginPresenter(new LoginCall());
-        mLoginPresenter.reqeust(edphone, edpwd);
+        mMobile = Validator.isMobile(edphone);
+        mPassword = Validator.isPassword(edpwd);
+        if (mMobile){
+            if (mPassword){
+                mLoginPresenter = new LoginPresenter(new LoginCall());
+                mLoginPresenter.reqeust(edphone, edpwd);
+            }else {
+                Toast.makeText(this, "密码格式不正确", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(this, "手机号格式不正确", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
